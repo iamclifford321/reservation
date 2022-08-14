@@ -35,6 +35,7 @@ class Model extends Config{
           }
      }
 
+
      protected function dynamicSLCTQuery( $query ){
           try {
                $pdo      = $this->connect();
@@ -77,7 +78,7 @@ class Model extends Config{
                     ];
                }else{
                     return [
-                         'status'       => 'success',
+                         'status'       => 'error',
                          'message'      => $this->Connect()->errorInfo(),
                          'data'         => null
                     ];

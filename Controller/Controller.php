@@ -148,7 +148,179 @@ class Controller extends Model{
         ];
 
     }
+    public function insertFacility(){
 
+
+        $valid_extensions = array('jpeg', 'jpg', 'png'); // valid 
+        $path = getcwd() . '/public/uploads/images/'; // upload directory
+
+        if(isset($_FILES['file']) && $_FILES['file']){
+            $img = $_FILES['file']['name'];
+            $tmp = $_FILES['file']['tmp_name'];
+
+            $final_image = rand(1000,1000000).$img;
+            $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
+            if(in_array($ext, $valid_extensions)){
+                // valid
+                $path = $path . strtolower($final_image); 
+                if(move_uploaded_file($tmp,$path)){
+                    // Insert
+
+                    $sql = "INSERT 
+                                INTO 
+                                    facility(Facility_name,Price,Image)
+                                VALUES
+                                    (:Facility_name,:Price,:Image)";
+
+
+                    $placeholders = array(
+                        ':Facility_name'    => $_POST['facility_name'],
+                        ':Price'            => $_POST['price'],
+                        ':Image'            => $final_image
+                    );
+
+                    $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
+
+                    return array(
+                        'status' => 'success',
+                        'message' => 'Successfully uploaded!'
+                    );
+                }else{
+                    return array(
+                        'status' => 'error',
+                        'message' => 'Upload error'
+                    );
+                }
+            }else{
+                return array(
+                    'status' => 'error',
+                    'message' => 'Invalid file'
+                );
+            }
+
+        }else{
+                return array(
+                    'status' => 'error',
+                    'message' => 'No file'
+                );
+        }
+
+
+        // return $dml;
+        // print_r($dml['data']->fetchALL( PDO::FETCH_ASSOC ));
+        
+    }
+    public function getFacility(){
+
+        $facility = $this->dynamicSLCTQuery("SELECT * FROM facility ORDER BY Facility_id ASC");
+        return $facility['data']->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getSpecificFacility(){
+        $facility = $this->dynamicSLCTLabeledQuery("SELECT * FROM facility WHERE Facility_id =:facilityId", array(
+            ':facilityId' => $_POST['facilityId']
+        ));
+        return $facility['data']->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateFacility(){
+
+        $valid_extensions = array('jpeg', 'jpg', 'png'); // valid 
+        $path = getcwd() . '/public/uploads/images/'; // upload directory
+        $placeholders = array(
+                    ':Facility_name'    => $_POST['facility_name'],
+                    ':Price'            => $_POST['price'],
+                    ':facilityId'       => $_POST['facilityId']
+                );
+        $sql = "UPDATE facility SET Facility_name = :Facility_name,Price =:Price";
+
+        if(isset($_FILES['file']) && $_FILES['file']){
+
+            $img = $_FILES['file']['name'];
+            $tmp = $_FILES['file']['tmp_name'];
+
+            $final_image = rand(1000,1000000).$img;
+            $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
+            if(in_array($ext, $valid_extensions)){
+                // valid
+                $path = $path . strtolower($final_image); 
+                if(move_uploaded_file($tmp,$path)){
+                    // Insert
+                    $sql .= ", Image =:Image";
+                    $placeholders[':Image'] = $final_image;
+
+                }else{
+                    return array(
+                        'status' => 'error',
+                        'message' => 'Upload error'
+                    );
+                }
+            }else{
+                return array(
+                    'status' => 'error',
+                    'message' => 'Invalid file'
+                );
+            }
+        }
+        $sql .= ' Where Facility_id =:facilityId';
+        $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
+        return array(
+            'status' => 'success',
+            'message' => 'Successfully uploaded!'
+        );
+
+    }
+    public function deletetFacility() {
+
+        $users = $this->dynamicSLCTLabeledQuery("DELETE FROM facility WHERE Facility_id =:facilityId", array(
+            ':facilityId' => $_POST['facilityId']
+        ));
+
+        return [
+                'status'    =>  'success'
+        ];
+
+    }
+    public function insertReservation(){
+        $sql = "INSERT 
+                    INTO 
+                        reservation 
+                        (Customer_id,
+                         Facility_id,
+                         Event, 
+                         Reservation_date, 
+                         Date_in, 
+                         Date_out,
+                         Number_of_guest,
+                         Reservation_status)
+                    VALUES
+                        (:Customer,
+                         :Facility,
+                         :Event,
+                         :Eventdate,
+                         :Eventfrom,
+                         :Eventto,
+                         :Guest ,
+                         :Status)";
+
+        $placeholders = array(
+            ':Customer'      => $_POST['customer'],
+            ':Facility'      => $_POST['facility'],
+            ':Event'         => $_POST['event'],
+            ':Eventdate'     =>  $_POST['eventdate'],
+            ':Eventfrom'     =>  $_POST['eventfrom'],
+            ':Eventto'       =>  $_POST['eventto'],
+            ':Guest'         =>  $_POST['guest'],
+            ':Status'        =>  $_POST['status']
+        );
+        $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
+        return $dml;
+        // print_r($dml['data']->fetchALL( PDO::FETCH_ASSOC ));
+        
+    }
+    public function getReservation(){
+        $reservation = $this->dynamicSLCTQuery("SELECT * FROM reservation ORDER BY Reservation_id ASC");
+        return $reservation['data']->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function login(){
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -159,6 +331,6 @@ class Controller extends Model{
             ':password' => $password
         ));
 
-        return $users['data']->fetchAll(PDO::FETCH_ASSOC);
+        return $users['data']->fetch(PDO::FETCH_ASSOC);
     }
-} 
+}

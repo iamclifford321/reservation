@@ -24,20 +24,20 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-            <table id="example1" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Phone number</th>
-                        <th>Address</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+                <table id="customerTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone number</th>
+                            <th>Address</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
             <!-- /.card-body -->
         </div>
@@ -237,7 +237,7 @@ $(document).ready(function(){
                 timer: 3000
     });
 
-    let table = $("#example1").DataTable({
+    let table = $("#customerTable").DataTable({
                     "responsive"    : true, 
                     // "lengthChange"  : false, 
                     "autoWidth"     : false,

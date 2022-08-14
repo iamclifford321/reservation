@@ -1,5 +1,4 @@
 <?php
-
     session_start();
     if(!isset($_POST['action'])) die('<h1> Opps.. </h1>');
     require_once 'loader.php';
@@ -39,6 +38,34 @@
     }
     if($_POST['action'] == 'delete-user'){
         $rtrn = $controller->deletetUser();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'create-facility'){
+        $rtrn = $controller->insertFacility();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'get-facility'){
+        $rtrn = $controller->getFacility();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'getSpecificFacility'){
+        $rtrn = $controller->getSpecificFacility();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'update-facility'){
+        $rtrn = $controller->updateFacility();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'delete-facility'){
+        $rtrn = $controller->deletetFacility();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'create-reservation'){
+        $rtrn = $controller->insertReservation();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'get-reservation'){
+        $rtrn = $controller->getReservation();
         echo json_encode($rtrn);
     }
     if($_POST['action'] == 'login'){

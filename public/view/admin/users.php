@@ -115,7 +115,7 @@
         <div class="modal-content">
             <form action="" method="POST" name="modal-update-user">
                 <div class="modal-header">
-                  <h4 class="modal-title">New User</h4>
+                  <h4 class="modal-title">Edit user</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -144,7 +144,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6 col-md-6">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="age">Username</label>
                                 <input type="text" name="existing-username" id="existing-username" class="form-control">
@@ -221,12 +221,13 @@
 
         $(document).on('click', '.userName', function(){
 
+            console.log('test');
             getUser($(this).attr('User_id'));
 
         });
 
         function getUser(User_id){
-        $.ajax({
+            $.ajax({
                 method      : 'POST',
                 url         : 'adminAction.php',
                 dataType    : "JSON",

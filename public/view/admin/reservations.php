@@ -39,26 +39,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Clifford Ursabia</td>
-                        <td>Cottage 1</td>
-                        <td>Graduation Celebration</td>
-                        <td>June 30, 2022</td>
-                        <td>8:00 am</td>
-                        <td>5:00 pm</td>
-                        <td>200</td>
-                        <td>Paid</td>
-                    </tr>
-                    <tr>
-                        <td>Apple Guatno</td>
-                        <td>Cottage 3</td>
-                        <td>Birthday Party</td>
-                        <td>June 30, 2022</td>
-                        <td>8:00 am</td>
-                        <td>5:00 pm</td>
-                        <td>225</td>
-                        <td>Pending</td>
-                    </tr>
                 </tbody>
             </table>
             </div>
@@ -75,7 +55,7 @@
 <div class="modal fade" id="modal-new-reservation">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="" method="POST" name="new-user-form">
+            <form action="" method="POST" name="new-reservation-form">
                 <div class="modal-header">
                   <h4 class="modal-title">Default Modal</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -95,50 +75,54 @@
 
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="middlename">Facility</label>
-                                <input type="text" name="middlename" id="middlename" class="form-control">
+                                <label for="facility">Facility</label>
+                                <select name="facility" id="facility" class="form-control" required>
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="lastname">Event</label>
-                                <input type="text" name="lastname" id="lastname" class="form-control" required>
+                                <label for="event">Event</label>
+                                <input type="text" name="event" id="event" class="form-control" required>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="phone">Event Date</label>
-                                <input type="number" name="phone" id="phone" class="form-control" required>
+                                <label for="event-date">Event Date</label>
+                                <input type="text" name="event-date" id="event-date" class="form-control datepicker" required>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="age">From</label>
-                                <input type="number" name="age" id="age" class="form-control">
+                                <label for="event-from">From</label>
+                                <input type="text" name="event-from" id="event-from" class="form-control datepicker" required>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="gender">To</label>
-                                <input type="number" name="age" id="age" class="form-control">
+                                <label for="event-to">To</label>
+                                <input type="text" name="event-to" id="event-to" class="form-control datepicker" required>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="email">No of Guest</label>
-                                <input type="number" name="age" id="age" class="form-control">
+                                <label for="guest">No of Guest</label>
+                                <input type="number" name="guest" id="guest" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="address">Status</label>
-                                <input type="number" name="age" id="age" class="form-control">
+                                <label for="status">Status</label>
+                                <select name="status" id="status" class="form-control" required>
+                                    <option value="paid">Paid</option>
+                                    <option value="pending">Pending</option>
+                                </select>
                             </div>
                         </div>
 
@@ -165,6 +149,8 @@
 // Some Script Here!
     $(document).ready(function(){
 
+        $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
+
         var Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -184,8 +170,38 @@
                             ]
         });
 
-        getCustomersDetails();
+        getReservationDetails();
+        function getReservationDetails(){
+            $.ajax({
+                method      : 'POST',
+                url         : 'adminAction.php',
+                dataType    : "JSON",
+                data        : {
+                    action      : 'get-reservation',
+                }, success: function(res){
+                    console.log('res===> ', res);
+                    if(res.length > 0){
+                        table.clear().draw();
+                        for (let index = 0; index < res.length; index++) {
+                            const element = res[index];
+                            table.row.add([
+                                res[index]['Customer_id'],
+                                res[index]['Facility_id'],
+                                res[index]['Event'],
+                                res[index]['Reservation_date'],
+                                res[index]['Date_in'],
+                                res[index]['Date_out'],
+                                res[index]['Number_of_guest'],
+                                `<a href="#" class="reservationStatus" data-target="#modal-update-status" data-toggle="modal" Reservation_id="${res[index]['Reservation_id']}">${res[index]['Reservation_status']}</a>`
+                            ]).draw();
+                        }
+                    }
+                }
+            });
+            
+        }
 
+        getCustomersDetails();
         function getCustomersDetails(){
 
             $('#customer').html("");
@@ -210,14 +226,44 @@
             });
             
         }
+
+        getFacilityDetails();
+
+        function getFacilityDetails(){
+
+            $('#facility').html("");
+            console.log('test');
+            $.ajax({
+                method      : 'POST',
+                url         : 'adminAction.php',
+                dataType    : "JSON",
+                data        : {
+                    action      : 'get-facility',
+                }, success: function(res){
+
+                    if(res.length > 0){
+                        for (let index = 0; index < res.length; index++) {
+                            $('#facility').append(
+                                `<option value="${res[index]['Facility_id']}">${res[index]['Facility_name']}</option>`
+                            )
+                        }
+                    }
+
+                }
+            });
             
-        $('[name=new-user-form]').on('submit', function(e){
+        }
+            
+        $('[name=new-reservation-form]').on('submit', function(e){
             //alert();
-            let firstname   = $('#firstname').val();
-            let lastname    = $('#lastname').val();
-            let address     = $('#address').val();
-            let username    = $('#username').val();
-            let password    = $('#password').val();
+            let customer     = $('#customer').val();
+            let facility     = $('#facility').val();
+            let event        = $('#event').val();
+            let eventdate    = $('#event-date').val();
+            let eventfrom    = $('#event-from').val();
+            let eventto      = $('#event-to').val();
+            let guest        = $('#guest').val();
+            let status       = $('#status').val();
 
 
 
@@ -229,12 +275,15 @@
                 url         : 'adminAction.php',
                 dataType    : "JSON",
                 data        : {
-                        action      : 'create-user',
-                        firstname   : firstname,
-                        lastname    : lastname,
-                        address     : address,
-                        username    : username,
-                        password    : password
+                        action       : 'create-reservation',
+                        customer     : customer,
+                        facility     : facility,
+                        event        : event,
+                        eventdate    : eventdate,
+                        eventfrom    : eventfrom,
+                        eventto      : eventto,
+                        guest        : guest,
+                        status       : status
                 }, success : function(res){
 
                     if(res['status'] == 'success'){
@@ -243,7 +292,7 @@
                             title: 'Successfully created a new record!'
                         });
                         getTheUser();
-                        $('#modal-new-user').modal('hide');
+                        $('#modal-new-reservation').modal('hide');
                     }
 
                 }

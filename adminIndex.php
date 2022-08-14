@@ -69,6 +69,8 @@
   <link rel="stylesheet" href="public/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Daterange picker -->
   <link rel="stylesheet" href="public/assets/plugins/daterangepicker/daterangepicker.css">
+  <!-- Datepicker -->
+  <link rel="stylesheet" href="public/assets/plugins/datepicker/jquery-ui.css">
   <!-- summernote -->
   <link rel="stylesheet" href="public/assets/plugins/summernote/summernote-bs4.min.css">
   <!-- SweetAlert2 -->
@@ -94,6 +96,9 @@
     <!-- daterangepicker -->
     <script src="public/assets/plugins/moment/moment.min.js"></script>
     <script src="public/assets/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- datepicker -->
+    <script src="public/assets/plugins/datepicker/jquery-3.6.0.js"></script>
+    <script src="public/assets/plugins/datepicker/jquery-ui.js"></script>
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="public/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <!-- Summernote -->
@@ -134,7 +139,8 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      
+
+
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <!-- <a class="nav-link" data-toggle="dropdown" href="#">
@@ -232,7 +238,7 @@
           <img src="public/assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block"><?php echo ucfirst($_SESSION['user_data']['FirstName']) . ' ' . ucfirst($_SESSION['user_data']['LastName']) ?></a>
         </div>
       </div>
 
@@ -314,7 +320,7 @@
             </a>
           </li>
 
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-search"></i>
               <p>
@@ -336,7 +342,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li> -->
 
         </ul>
       </nav>

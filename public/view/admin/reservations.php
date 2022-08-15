@@ -2,17 +2,18 @@
     <div class="container-fluid">
         <div class="row mb-2">
         <div class="col-sm-6">
-            <h1>Name of the tab</h1>
+            <h1>Reservations</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Name of the tab</li>
+            <li class="breadcrumb-item active">Reservations</li>
             </ol>
         </div>
         </div>
     </div><!-- /.container-fluid -->
 </section>
+
 
 <section class="content">
     <div class="container-fluid">
@@ -64,7 +65,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="customer">Customer</label>
@@ -72,50 +72,31 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="facility">Facility</label>
-                                <select name="facility" id="facility" class="form-control" required>
-                                </select>
+                                <select name="facility" id="facility" class="form-control" required></select>
                             </div>
                         </div>
-
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="event">Event</label>
-                                <input type="text" name="event" id="event" class="form-control" required>
+                                <label for="guest">No. of Guest</label>
+                                <input type="number" name="guest" id="guest" class="form-control">
                             </div>
                         </div>
-
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="event-date">Event Date</label>
                                 <input type="text" name="event-date" id="event-date" class="form-control datepicker" required>
                             </div>
                         </div>
-
-                        <div class="col-sm-6 col-md-6">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                <label for="event-from">From</label>
-                                <input type="text" name="event-from" id="event-from" class="form-control datepicker" required>
+                                <label for="event">Event</label>
+                                <input type="text" name="event" id="event" class="form-control" required>
                             </div>
                         </div>
-
-                        <div class="col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <label for="event-to">To</label>
-                                <input type="text" name="event-to" id="event-to" class="form-control datepicker" required>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <label for="guest">No of Guest</label>
-                                <input type="number" name="guest" id="guest" class="form-control">
-                            </div>
-                        </div>
-
+                    <!--
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="status">Status</label>
@@ -125,10 +106,8 @@
                                 </select>
                             </div>
                         </div>
-
-
+                    -->
                     </div>
-
                 </div>
                 <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -149,15 +128,25 @@
 // Some Script Here!
     $(document).ready(function(){
 
-        $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
-
+        $('#event-date').daterangepicker({
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        });
+        // $('#event-date').daterangepicker({
+        //     singleDatePicker: true,
+        //     autoApply: true,
+        //     locale: {
+        //         format: 'YYYY-MM-DD'
+        //     }
+        // })
+        
         var Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 3000
         });
-
         let table = $("#reservation-data").DataTable({
             "responsive"    : true, 
             // "lengthChange"  : false, 
@@ -260,8 +249,6 @@
             let facility     = $('#facility').val();
             let event        = $('#event').val();
             let eventdate    = $('#event-date').val();
-            let eventfrom    = $('#event-from').val();
-            let eventto      = $('#event-to').val();
             let guest        = $('#guest').val();
             let status       = $('#status').val();
 

@@ -213,7 +213,7 @@ $(document).ready(function() {
 
     function getFacilityDetails() {
 
-        $('#customer').html("");
+        //$('#customer').html("");
         $.ajax({
             method: 'POST',
             url: 'adminAction.php',

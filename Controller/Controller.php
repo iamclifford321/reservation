@@ -306,11 +306,11 @@ class Controller extends Model{
             ':Customer'      => $_POST['customer'],
             ':Facility'      => $_POST['facility'],
             ':Event'         => $_POST['event'],
-            ':Eventdate'     =>  $_POST['eventdate'],
+            ':Eventdate'     =>  $_POST['eventfrom'],
             ':Eventfrom'     =>  $_POST['eventfrom'],
             ':Eventto'       =>  $_POST['eventto'],
             ':Guest'         =>  $_POST['guest'],
-            ':Status'        =>  $_POST['status']
+            ':Status'        =>  'Pending'
         );
         $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
         return $dml;
@@ -318,7 +318,7 @@ class Controller extends Model{
         
     }
     public function getReservation(){
-        $reservation = $this->dynamicSLCTQuery("SELECT * FROM reservation ORDER BY Reservation_id ASC");
+        $reservation = $this->dynamicSLCTQuery("SELECT * FROM reservation LEFT JOIN facility ON facility.Facility_id = reservation.Facility_id LEFT JOIN customer ON customer.customer_id = reservation.Customer_id ORDER BY Reservation_id ASC");
         return $reservation['data']->fetchAll(PDO::FETCH_ASSOC);
     }
     public function login(){
@@ -333,4 +333,77 @@ class Controller extends Model{
 
         return $users['data']->fetch(PDO::FETCH_ASSOC);
     }
+    public function insertPayment(){
+
+
+        $valid_extensions = array('jpeg', 'jpg', 'png'); // valid 
+        $path = getcwd() . '/public/uploads/images/'; // upload directory
+
+        if(isset($_FILES['file']) && $_FILES['file']){
+            $img = $_FILES['file']['name'];
+            $tmp = $_FILES['file']['tmp_name'];
+            $date = date("Y-m-d");
+
+            $final_image = rand(1000,1000000).$img;
+            $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
+            if(in_array($ext, $valid_extensions)){
+                // valid
+                $path = $path . strtolower($final_image); 
+                if(move_uploaded_file($tmp,$path)){
+                    // Insert
+
+                    $sql = "INSERT 
+                                INTO 
+                                    payments(Customer_id,Facility_id,Receipt,Reservation_id,Payment_date,Amount,Status)
+                                VALUES
+                                    (:Customer_id,:Facility_id,:Image,:Reservation_id,:Payment_date,:Amount,:Status)";
+
+
+                    $placeholders = array(
+                        ':Customer_id'      => $_POST['customer'],
+                        ':Facility_id'      => $_POST['facility'],
+                        ':Image'            => $final_image,
+                        ':Reservation_id'   => $_POST['reservation'],
+                        ':Payment_date'     => $date,
+                        ':Amount'           => $_POST['amount'],
+                        ':Status'           => 'Pending'
+                    );
+
+                    $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
+
+                    return array(
+                        'status' => 'success',
+                        'message' => 'Successfully uploaded!'
+                    );
+                }else{
+                    return array(
+                        'status' => 'error',
+                        'message' => 'Upload error'
+                    );
+                }
+            }else{
+                return array(
+                    'status' => 'error',
+                    'message' => 'Invalid file'
+                );
+            }
+
+        }else{
+                return array(
+                    'status' => 'error',
+                    'message' => 'No file'
+                );
+        }
+
+
+        // return $dml;
+        // print_r($dml['data']->fetchALL( PDO::FETCH_ASSOC ));
+        
+    }
+
+    public function getPayment(){
+        $payments = $this->dynamicSLCTQuery("SELECT * FROM payments LEFT JOIN facility ON facility.Facility_id = payments.Facility_id LEFT JOIN customer ON customer.customer_id = payments.Customer_id LEFT JOIN reservation ON reservation.Reservation_id = payments.Reservation_id ORDER BY Payment_id ASC");
+        return $payments['data']->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

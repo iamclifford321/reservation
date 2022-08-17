@@ -2,18 +2,17 @@
     <div class="container-fluid">
         <div class="row mb-2">
         <div class="col-sm-6">
-            <h1>Reservations</h1>
+            <h1>Name of the tab</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Reservations</li>
+            <li class="breadcrumb-item active">Name of the tab</li>
             </ol>
         </div>
         </div>
     </div><!-- /.container-fluid -->
 </section>
-
 
 <section class="content">
     <div class="container-fluid">
@@ -32,7 +31,7 @@
                         <th>Customer</th>
                         <th>Facility</th>
                         <th>Event</th>
-                        <th>Event Date</th>
+                        <!-- <th>Event Date</th> -->
                         <th>Event Start</th>
                         <th>Event End</th>
                         <th>Guest Count</th>
@@ -58,13 +57,14 @@
         <div class="modal-content">
             <form action="" method="POST" name="new-reservation-form">
                 <div class="modal-header">
-                  <h4 class="modal-title">Default Modal</h4>
+                  <h4 class="modal-title">Reservation</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
+
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="customer">Customer</label>
@@ -72,42 +72,45 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="facility">Facility</label>
-                                <select name="facility" id="facility" class="form-control" required></select>
+                                <select name="facility" id="facility" class="form-control" required>
+                                </select>
                             </div>
                         </div>
+
                         <div class="col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <label for="guest">No. of Guest</label>
-                                <input type="number" name="guest" id="guest" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <label for="event-date">Event Date</label>
-                                <input type="text" name="event-date" id="event-date" class="form-control datepicker" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="event">Event</label>
                                 <input type="text" name="event" id="event" class="form-control" required>
                             </div>
                         </div>
-                    <!--
+
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="status">Status</label>
-                                <select name="status" id="status" class="form-control" required>
-                                    <option value="paid">Paid</option>
-                                    <option value="pending">Pending</option>
-                                </select>
+                                <label for="guest">No of Guest</label>
+                                <input type="number" name="guest" id="guest" class="form-control">
                             </div>
                         </div>
-                    -->
+
+                        <div class="col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="event-from">From</label>
+                                <input type="text" name="event-from" id="event-from" class="form-control datepicker" required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="event-to">To</label>
+                                <input type="text" name="event-to" id="event-to" class="form-control datepicker" required>
+                            </div>
+                        </div>
+
                     </div>
+
                 </div>
                 <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -128,25 +131,15 @@
 // Some Script Here!
     $(document).ready(function(){
 
-        $('#event-date').daterangepicker({
-            locale: {
-                format: 'YYYY-MM-DD'
-            }
-        });
-        // $('#event-date').daterangepicker({
-        //     singleDatePicker: true,
-        //     autoApply: true,
-        //     locale: {
-        //         format: 'YYYY-MM-DD'
-        //     }
-        // })
-        
+        $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
+
         var Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 3000
         });
+
         let table = $("#reservation-data").DataTable({
             "responsive"    : true, 
             // "lengthChange"  : false, 
@@ -174,14 +167,14 @@
                         for (let index = 0; index < res.length; index++) {
                             const element = res[index];
                             table.row.add([
-                                res[index]['Customer_id'],
-                                res[index]['Facility_id'],
+                                res[index]['FirstName'].charAt(0).toUpperCase() + res[index]['FirstName'].slice(1) + ' ' + res[index]['LastName'].charAt(0).toUpperCase() + res[index]['LastName'].slice(1),
+                                res[index]['Facility_name'],
                                 res[index]['Event'],
-                                res[index]['Reservation_date'],
+                                //res[index]['Reservation_date'],
                                 res[index]['Date_in'],
                                 res[index]['Date_out'],
                                 res[index]['Number_of_guest'],
-                                `<a href="#" class="reservationStatus" data-target="#modal-update-status" data-toggle="modal" Reservation_id="${res[index]['Reservation_id']}">${res[index]['Reservation_status']}</a>`
+                                res[index]['Reservation_status']
                             ]).draw();
                         }
                     }
@@ -248,9 +241,11 @@
             let customer     = $('#customer').val();
             let facility     = $('#facility').val();
             let event        = $('#event').val();
-            let eventdate    = $('#event-date').val();
+            //let eventdate    = $('#event-date').val();
+            let eventfrom    = $('#event-from').val();
+            let eventto      = $('#event-to').val();
             let guest        = $('#guest').val();
-            let status       = $('#status').val();
+            //let status       = $('#status').val();
 
 
 
@@ -266,11 +261,11 @@
                         customer     : customer,
                         facility     : facility,
                         event        : event,
-                        eventdate    : eventdate,
+                        //eventdate    : eventdate,
                         eventfrom    : eventfrom,
                         eventto      : eventto,
                         guest        : guest,
-                        status       : status
+                        //status       : status
                 }, success : function(res){
 
                     if(res['status'] == 'success'){
@@ -278,7 +273,7 @@
                             icon: 'success',
                             title: 'Successfully created a new record!'
                         });
-                        getTheUser();
+                        getReservationDetails();
                         $('#modal-new-reservation').modal('hide');
                     }
 

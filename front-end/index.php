@@ -7,6 +7,195 @@
         <?php include 'header.php'; ?>
         <!--================Header Area =================-->
         
+        <!-- Modal Area -->
+            <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                          <form action="" method="POST" name="booking-form">
+                              <div class="modal-header">
+                                  <h4 class="modal-title">Fill-in Booking info</h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="customer-details">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="firstname">Firstname</label><small>(Required)</small>
+                                                    <input type="text" name="firstname" id="firstname" class="form-control" required>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="middlename">Middlename</label>
+                                                    <input type="text" name="middlename" id="middlename" class="form-control">
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="lastname">Lastname</label><small>(Required)</small>
+                                                    <input type="text" name="lastname" id="lastname" class="form-control" required>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="phone">Phone</label><small>(Required)</small>
+                                                    <input type="number" name="phone" id="phone" class="form-control" required>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="age">Age</label>
+                                                    <input type="number" name="age" id="age" class="form-control">
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                  <div class="d-block">
+                                                      <label for="gender">Gender</label>
+                                                  </div>
+                                                    <label for="genderMale" class="mr-5">Male <input type="radio" name="gender" value="Male" id="genderMale"> </label>
+                                                    <label for="genderFemale">Female <input type="radio" name="gender" value="Female" id="genderFemale"> </label>
+                                                    
+                                                    <!-- <select name="gender" id="gender" class="form-control" required>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                    </select> -->
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" name="email" id="email" class="form-control">
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label for="address">Address</label>
+                                                    <textarea name="address" id="address" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="booking-details d-none">
+
+                                        <div class="row">
+
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="customer">Customer</label>
+                                                    <input type="text" readonly name="customer" id="customer" class="form-control">
+                                                </div>
+                                            </div>
+                    
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="facility">Facility</label><a href="#"><small>(Check Reservation)</small></a>
+                                                    <input type="text" name="facility" id="facility" class="form-control">
+                                                </div>
+                                            </div>
+                    
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="event">Event</label>
+                                                    <input type="text" name="event" id="event" class="form-control">
+                                                </div>
+                                            </div>
+                    
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="guest">No of Guest</label>
+                                                    <input type="number" name="guest" id="guest" class="form-control">
+                                                </div>
+                                            </div>
+                    
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="event-from">From</label>
+                                                    <input type="text" name="event-from" id="event-from" class="form-control datepicker">
+                                                </div>
+                                            </div>
+                    
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="event-to">To</label>
+                                                    <input type="text" name="event-to" id="event-to" class="form-control datepicker">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="sunmitButtonIndicator" value="customer-details">
+                                <div class="modal-footer justify-content-between">
+                                  <button type="button" class="btn btn-default close-modal-booking" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-default prev-modal-booking d-none">Prev</button>
+                                  <button type="submit" class="btn btn-primary" id="submitBook">Next</button>
+                                </div>
+                          </form>
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                </div>
+            </div>
+
+
+
+            <div class="modal fade" id="userRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                          <form action="" method="POST" name="registration-form">
+                              <div class="modal-header">
+                                  <h4 class="modal-title">Fill-in Booking info</h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="customer-details">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="firstname">Firstname</label><small>(Required)</small>
+                                                    <input type="text" name="firstname" id="firstname" class="form-control" required>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="middlename">Middlename</label>
+                                                    <input type="text" name="middlename" id="middlename" class="form-control">
+                                                </div>
+                                            </div>
+                        
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="sunmitButtonIndicator" value="customer-details">
+                                <div class="modal-footer justify-content-between">
+                                  <button type="button" class="btn btn-default close-modal-booking" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-default prev-modal-booking d-none">Prev</button>
+                                  <button type="submit" class="btn btn-primary" id="submitBook">Next</button>
+                                </div>
+                          </form>
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                </div>
+            </div>
+        <!-- Modal -->
+
         <!--================Banner Area =================-->
         <section class="banner_area">
             <div class="booking_table d_flex align-items-center">
@@ -31,46 +220,53 @@
                     <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, </p>
                 </div>
                 <div class="row mb_30">
+
                     <div class="col-lg-3 col-sm-6">
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
                                 <img src="image/room1.jpg" alt="">
-                                <a href="#" class="btn theme_btn button_hover">Book Now</a>
+                                <button class="btn theme_btn button_hover book_btn" facility-Id="1" facility-Name="room 1" data-toggle="modal" data-target="#bookingModal">Book</button>
                             </div>
                             <a href="#"><h4 class="sec_h4">Double Deluxe Room</h4></a>
                             <h5>$250<small>/night</small></h5>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6">
+
+                    <!-- <div class="col-lg-3 col-sm-6">
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
                                 <img src="image/room2.jpg" alt="">
-                                <a href="#" class="btn theme_btn button_hover">Book Now</a>
+                                <a href="#" class="btn theme_btn button_hover">Add to List</a>
                             </div>
                             <a href="#"><h4 class="sec_h4">Single Deluxe Room</h4></a>
                             <h5>$200<small>/night</small></h5>
                         </div>
                     </div>
+
                     <div class="col-lg-3 col-sm-6">
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
                                 <img src="image/room3.jpg" alt="">
-                                <a href="#" class="btn theme_btn button_hover">Book Now</a>
+                                <a href="#" class="btn theme_btn button_hover">Add to List</a>
                             </div>
                             <a href="#"><h4 class="sec_h4">Honeymoon Suit</h4></a>
                             <h5>$750<small>/night</small></h5>
                         </div>
                     </div>
+
+
                     <div class="col-lg-3 col-sm-6">
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
                                 <img src="image/room4.jpg" alt="">
-                                <a href="#" class="btn theme_btn button_hover">Book Now</a>
+                                <a href="#" class="btn theme_btn button_hover">Add to List</a>
                             </div>
                             <a href="#"><h4 class="sec_h4">Economy Double</h4></a>
                             <h5>$200<small>/night</small></h5>
                         </div>
-                    </div>
+                    </div> -->
+
+
                 </div>
             </div>
         </section>
@@ -166,6 +362,107 @@
         
         <!--================ start footer Area  =================-->	
         <?php include 'footer.php'; ?>
-        
     </body>
+    <script>
+        $(document).ready(function(){
+            $('.book_btn').on('click', function(){
+                
+                $('#facility').val( $(this).attr('facility-Name') );
+            });
+            $('[name=booking-form]').on('submit', function(e){
+                if($('#sunmitButtonIndicator').val() == 'customer-details'){
+                    // modal becomes booking
+
+                    $('.prev-modal-booking').removeClass('d-none');
+                    $('.close-modal-booking').addClass('d-none');
+                    $('#sunmitButtonIndicator').val('booking-details');
+                    $('.customer-details').addClass('d-none');
+
+                    
+                    $("#event").attr('required', true);
+                    $("#event-from").attr('required', true);
+                    $("#event-to").attr('required', true);
+                    $('.booking-details').removeClass('d-none');
+                    $('#customer').val($('#firstname').val() + ' ' + $('#lastname').val());
+                    $('#submitBook').text('Submit');
+                }else if($('#sunmitButtonIndicator').val() == 'booking-details'){
+                    // modal becomes booking
+
+                    var firstname = $('#firstname').val();
+                    var lastname = $('#lastname').val();
+                    var phone = $('#phone').val();
+                    var middlename = $('#middlename').val();
+                    var age = $('#age').val();
+                    var gender = $("[name=gender]").val();
+                    var email = $('#email').val();
+                    var address = $('#address').val();
+                    var facility = $('#facility').val();
+                    var event = $('#event').val();
+                    var guest = $('#guest').val();
+                    var eventrom = $('#event-from').val();
+                    var evento = $('#event-to').val();
+                    $.ajax({
+                        url : '../customerAction.php',
+                        method : 'POST',
+                        dataType : "JSON",
+                        data : {
+                            action : 'reserve',
+                            firstname : firstname,
+                            lastname : lastname,
+                            phone : phone,
+                            middlename : middlename,
+                            age : age,
+                            gender : gender,
+                            email : email,
+                            address : address,
+                            facility : facility,
+                            event : event,
+                            guest : guest,
+                            eventrom : eventrom,
+                            evento : evento
+                        },
+                        success : function(res){
+                            console.log('res', res);
+                            if(res.status == 'success'){
+                                $('#bookingModal').modal('hide');
+                                Swal.fire(
+                                    'Good job!',
+                                    'Your reservation has been succesfully Queed',
+                                    'success'
+                                );
+                                setTimeout(() => {
+                                    $('#userRegistrationModal').modal('show');
+                                }, 2000);
+                            }else{
+                                alert(res.message);
+                            }
+                        }
+                    })
+
+                }
+                e.preventDefault();
+
+
+
+            });
+
+            $('.prev-modal-booking').on('click', function(){
+                if($('#sunmitButtonIndicator').val() == 'booking-details'){
+                    // modal becomes booking
+                    $("#event").removeAttr('required');
+                    $("#event-from").removeAttr('required');
+                    $("#event-to").removeAttr('required');
+                    $('#sunmitButtonIndicator').val('customer-details');
+                    $(this).addClass('d-none');
+                    $('.close-modal-booking').removeClass('d-none');
+                    $('.customer-details').removeClass('d-none');
+                    $('.booking-details').addClass('d-none');
+                    $('#submitBook').text('Next');
+                }
+            });
+
+            $('[name=event-from]').datepicker();
+            $('[name=event-to]').datepicker();
+        })
+    </script>
 </html>

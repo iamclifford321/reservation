@@ -100,6 +100,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <script src="js/jquery.validate.min.js"></script>
 <script src="js/contact.js"></script>
 <script src="js/custom.js"></script>
+<script src="../public/assets/plugins/datepicker/jquery-ui.js"></script>
 <script>
     $(document).ready(function(){
         $('li.nav-item:first').ready( function() {

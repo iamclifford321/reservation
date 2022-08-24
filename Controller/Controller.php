@@ -406,4 +406,62 @@ class Controller extends Model{
         return $payments['data']->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function frontEndReserve(){
+        // TODO::
+        // Add the customer, add The reservation, after reservation, let the user register, if not registered or redirect to the reservation details if registered,
+        $qryCustomer = 'INSERT INTO customer(FirstName, MiddleName, LastName, PhoneNumber, Address, Email, Age, Gender)VALUES(:FirstName, :MiddleName, :LastName, :PhoneNumber, :Address, :Email, :Age, :Gender)';
+        
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $phone = $_POST['phone'];
+        $middlename = $_POST['middlename'];
+        $age = $_POST['age'];
+        $gender = $_POST['gender'];
+        $email = $_POST['email'];
+        $address = $_POST['address'];
+        $facility = $_POST['facility'];
+        $event = $_POST['event'];
+        $guest = $_POST['guest'];
+        $eventrom = $_POST['eventrom'];
+        $evento = $_POST['evento'];
+
+        $placeholderCustomer = array(
+            ':FirstName' => $firstname,
+            ':MiddleName' => $middlename, 
+            ':LastName' => $lastname, 
+            ':PhoneNumber' => $phone, 
+            ':Address' => $address, 
+            ':Email' => $email, 
+            ':Age' => $age,
+            ':Gender' => $gender
+        );
+
+        
+        $rtrnCustomer = $this->dynamicDMLLabeledQuery($qryCustomer, $placeholderCustomer);
+        if($rtrnCustomer['status'] == 'success'){
+            $qryReservation = 'INSERT INTO reservation(Customer_id, Facility_id, Reservation_date, Date_in, Date_out, Number_of_guest, Reservation_status, Event)VALUES(:CustomerId, :FacilityId, :ReservationDate, :DateIn, :DateOut, :NumberOfGuest, :ReservationStatus, :Event)';
+            $placeholderReservation = array(
+                ':CustomerId' => $rtrnCustomer['id'],
+                ':FacilityId' => $facility,
+                ':ReservationDate' => $eventrom,
+                ':DateIn' => $eventrom,
+                ':DateOut' => $evento,
+                ':NumberOfGuest' => $guest,
+                ':ReservationStatus' => 'Unpaid',
+                ':Event' => $event
+            );
+            $rtrnReservation = $this->dynamicDMLLabeledQuery($qryReservation, $placeholderReservation);
+            if($rtrnReservation['status']){
+                return array(
+                    'status' => 'success',
+                    'message' => 'Reserved',
+                    'Id' => $rtrnReservation['id']
+                );
+            }else{
+                die('Something went wrong!');
+            }
+        }else{
+            die('something went wrong!');
+        }
+    }
 }

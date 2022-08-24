@@ -15,4 +15,10 @@
         <!-- main css -->
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/responsive.css">
+        <!-- Datepicker -->
+         <link rel="stylesheet" href="../public/assets/plugins/datepicker/jquery-ui.css">
+         <!-- SweetAlert2 -->
+         <!-- SweetAlert2 -->
+        <link rel="stylesheet" href="../public/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+        <script src="../public/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
 </head>

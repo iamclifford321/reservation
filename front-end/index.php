@@ -154,39 +154,57 @@
                 <div class="modal-dialog modal-md" role="document">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                          <form action="" method="POST" name="registration-form">
+                          <form action="" method="POST" name="login-form" id="register-login-form">
                               <div class="modal-header">
-                                  <h4 class="modal-title">Fill-in Booking info</h4>
+                                  <h4 class="modal-title">Login</h4>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="customer-details">
+                                    <div class="login-details">
                                         <div class="row">
-                                            <div class="col-sm-6 col-md-6">
+                                            <div class="col-sm-12 col-md-12">
                                                 <div class="form-group">
-                                                    <label for="firstname">Firstname</label><small>(Required)</small>
-                                                    <input type="text" name="firstname" id="firstname" class="form-control" required>
+                                                    <label for="login-username">Username</label><small></small>
+                                                    <input type="text" name="login-username" id="login-username" class="form-control">
                                                 </div>
                                             </div>
-                        
-                                            <div class="col-sm-6 col-md-6">
+                                            <div class="col-sm-12 col-md-12">
                                                 <div class="form-group">
-                                                    <label for="middlename">Middlename</label>
-                                                    <input type="text" name="middlename" id="middlename" class="form-control">
+                                                    <label for="login-password">Password</label>
+                                                    <input type="password" name="login-password" id="login-password" class="form-control">
                                                 </div>
                                             </div>
-                        
-
                                         </div>
                                     </div>
+
+
+                                    <div class="register-details d-none">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label for="register-username">Username</label><small>(Required)</small>
+                                                    <input type="text" name="register-username" id="register-username" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label for="register-password">Password</label><small>(Required)</small>
+                                                    <input type="password" name="register-password" id="register-password" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
                                 </div>
                                 <input type="hidden" id="sunmitButtonIndicator" value="customer-details">
-                                <div class="modal-footer justify-content-between">
-                                  <button type="button" class="btn btn-default close-modal-booking" data-dismiss="modal">Close</button>
-                                  <button type="button" class="btn btn-default prev-modal-booking d-none">Prev</button>
-                                  <button type="submit" class="btn btn-primary" id="submitBook">Next</button>
+                                <div class="modal-footer">
+                                    <a href="#" class="alreadyHave d-none">I already have an Account</a>
+                                    <a href="#" class="dontHave">I don't have an Account</a>
+                                  <button type="submit" class="btn btn-primary" id="submitLogReg">Login</button>
                                 </div>
                           </form>
                         </div>
@@ -365,6 +383,28 @@
     </body>
     <script>
         $(document).ready(function(){
+
+            $('.alreadyHave').on('click', function(){
+                $('.register-details').addClass('d-none');
+                $('.login-details').removeClass('d-none');
+                $('#userRegistrationModal .modal-title').text('Login')
+                $(this).addClass('d-none');
+                $('.dontHave').removeClass('d-none');
+                $('#register-login-form').attr('name', 'login-form');
+                $('#submitLogReg').text('Login');
+
+            })
+            $('.dontHave').on('click', function(){
+                $('.login-details').addClass('d-none');
+                $('.register-details').removeClass('d-none');
+                $('#userRegistrationModal .modal-title').text('Register');
+                $(this).addClass('d-none');
+                $('.alreadyHave').removeClass('d-none');
+                $('#register-login-form').attr('name', 'register-form');
+                $('#submitLogReg').text('Sign up');
+
+            })
+
             $('.book_btn').on('click', function(){
                 
                 $('#facility').val( $(this).attr('facility-Name') );
@@ -425,11 +465,12 @@
                             console.log('res', res);
                             if(res.status == 'success'){
                                 $('#bookingModal').modal('hide');
-                                Swal.fire(
-                                    'Good job!',
-                                    'Your reservation has been succesfully Queed',
-                                    'success'
-                                );
+                                Swal.fire({
+                                        title: 'Good job!',
+                                        text: 'Your reservation has been succesfully Queed, proceed to payment.',
+                                        type: 'success',
+                                        timer: 2000
+                                });
                                 setTimeout(() => {
                                     $('#userRegistrationModal').modal('show');
                                 }, 2000);

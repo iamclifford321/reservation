@@ -156,7 +156,7 @@
                         <div class="modal-content">
                           <form action="" method="POST" name="login-form" id="register-login-form">
                               <div class="modal-header">
-                                  <h4 class="modal-title">Login</h4>
+                                  <h4 class="modal-title">Login first</h4>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
@@ -383,7 +383,78 @@
     </body>
     <script>
         $(document).ready(function(){
+            // $('#userRegistrationModal').modal('show');
+            $(document).on('submit', '[name=login-form]', function(e){
+                
 
+                $.ajax({
+                        url : '../customerAction.php',
+                        method : 'POST',
+                        dataType : "JSON",
+                        data : {
+                            action : 'login',
+                            password : $('[name=login-password]').val(),
+                            username : $('[name=login-username]').val()
+                        },
+                        success : function(res){
+
+                            if( res['status'] == 'invalid'){
+                                   Swal.fire(
+                                    'Invalid Credentials',
+                                    'The Provided Credential is invalid',
+                                    'error'
+                                   );
+                              }else{
+                                Swal.fire(
+                                    'Login Success',
+                                    'Succesfully logged in',
+                                    'success'
+                                );
+                                //    window.location.href = "./?isAdmin=true";
+                              }
+                        }
+                    });
+
+                e.preventDefault();
+            });
+
+            $(document).on('submit', '[name=register-form]', function(e){
+                $.ajax({
+                        url : '../customerAction.php',
+                        method : 'POST',
+                        dataType : "JSON",
+                        data : {
+                            action : 'create-user',
+                            password : $('[name=register-password]').val(),
+                            username : $('[name=register-username]').val()
+                        },
+                        success : function(res){
+                            if(res.status == 'success'){
+                                Swal.fire({
+                                    title: 'User Created',
+                                    text: 'User Succesfully Created',
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Proceed'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // set location here
+                                    }
+                                })
+
+                            }else{
+                                Swal.fire(
+                                    '',
+                                    '',
+                                    'error'
+                                );
+                            }
+
+                        }
+
+                    });
+                e.preventDefault();
+            })
             $('.alreadyHave').on('click', function(){
                 $('.register-details').addClass('d-none');
                 $('.login-details').removeClass('d-none');
@@ -465,20 +536,23 @@
                             console.log('res', res);
                             if(res.status == 'success'){
                                 $('#bookingModal').modal('hide');
+
                                 Swal.fire({
-                                        title: 'Good job!',
-                                        text: 'Your reservation has been succesfully Queed, proceed to payment.',
-                                        type: 'success',
-                                        timer: 2000
-                                });
-                                setTimeout(() => {
-                                    $('#userRegistrationModal').modal('show');
-                                }, 2000);
+                                    title: 'Good job!',
+                                    text: 'Your reservation has been succesfully Queed, proceed to payment.',
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Proceed'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $('#userRegistrationModal').modal('show');
+                                    }
+                                })
                             }else{
                                 alert(res.message);
                             }
                         }
-                    })
+                    });
 
                 }
                 e.preventDefault();

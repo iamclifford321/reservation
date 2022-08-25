@@ -1,4 +1,5 @@
 <?php
+
 class Controller extends Model{
     public function insertCustomer(){
         $sql = "INSERT 
@@ -16,7 +17,7 @@ class Controller extends Model{
                         (:FirstName,
                          :MiddleName, 
                          :LastName, 
-                         :PhoneNumber, 
+                         :PhoneNumber,
                          :Address, 
                          :Email, 
                          :Age, 
@@ -134,6 +135,7 @@ class Controller extends Model{
                     Username=:Username
                 WHERE
                     User_id=:user_id";
+
         $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
         return $dml;
     }
@@ -451,17 +453,61 @@ class Controller extends Model{
                 ':Event' => $event
             );
             $rtrnReservation = $this->dynamicDMLLabeledQuery($qryReservation, $placeholderReservation);
+            $data = array(
+                'FirstName' => $firstname,
+                'MiddleName' => $middlename, 
+                'LastName' => $lastname, 
+                'PhoneNumber' => $phone, 
+                'Address' => $address, 
+                'Email' => $email, 
+                'Age' => $age,
+                'Gender' => $gender,
+                'Id' => $rtrnCustomer['id']
+            );
+            $_SESSION['customer_session_temp_info'] = $data;
+
             if($rtrnReservation['status']){
                 return array(
                     'status' => 'success',
                     'message' => 'Reserved',
                     'Id' => $rtrnReservation['id']
                 );
+
             }else{
                 die('Something went wrong!');
             }
         }else{
             die('something went wrong!');
         }
+    }
+    public function insertUserFromCUstomer(){
+        $sql = "INSERT 
+                    INTO 
+                        user 
+                        (FirstName,
+                         LastName, 
+                         Address, 
+                         Username, 
+                         Password)
+                    VALUES
+                        (:FirstName,
+                         :LastName,  
+                         :Address, 
+                         :Username, 
+                         :Password)";
+    
+        $placeholders = array(
+            ':FirstName'    =>  $_SESSION['customer_session_temp_info']['FirstName'],
+            ':LastName'     =>  $_SESSION['customer_session_temp_info']['LastName'],
+            ':Address'      =>  $_SESSION['customer_session_temp_info']['Address'],
+            ':Username'     =>  $_POST['username'],
+            ':Password'     =>  $_POST['password']
+        );
+        unset( $_SESSION['customer_session_temp_info'] );
+        $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
+        return $dml;
+        
+        // print_r($dml['data']->fetchALL( PDO::FETCH_ASSOC ));
+        
     }
 }

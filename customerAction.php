@@ -19,3 +19,23 @@
             );
         }
     }
+    if($_POST['action'] == 'login'){
+        $rtrn = $controller->login();
+        if($rtrn){
+
+            $_SESSION['user_data'] = $rtrn;
+            echo json_encode($_SESSION['user_data']);
+
+        }else{
+            echo json_encode(array(
+                'status' => 'invalid',
+                'msg' => 'Invalid credentials',
+
+            ));
+        }
+        
+    }
+    if($_POST['action'] == 'create-user'){
+        $rtrn = $controller->insertUserFromCUstomer();
+        echo json_encode($rtrn);
+    }

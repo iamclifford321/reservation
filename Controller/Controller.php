@@ -318,7 +318,7 @@ class Controller extends Model{
         
     }
     public function getReservation(){
-        $reservation = $this->dynamicSLCTQuery("SELECT * FROM reservation LEFT JOIN facility ON facility.Facility_id = reservation.Facility_id LEFT JOIN customer ON customer.customer_id = reservation.Customer_id ORDER BY Reservation_id ASC");
+        $reservation = $this->dynamicSLCTQuery("SELECT *, reservation.Reservation_id  as resId, facility.Facility_id as fasId, reservation.Reservation_status as stats FROM reservation LEFT JOIN facility ON facility.Facility_id = reservation.Facility_id LEFT JOIN customer ON customer.customer_id = reservation.Customer_id LEFT JOIN payments ON payments.Customer_id = reservation.Customer_id and payments.Facility_id = reservation.Facility_id GROUP BY reservation.Reservation_id ORDER BY reservation.Reservation_id ASC");
         return $reservation['data']->fetchAll(PDO::FETCH_ASSOC);
     }
     public function login(){
@@ -335,14 +335,33 @@ class Controller extends Model{
     }
     public function insertPayment(){
 
-
         $valid_extensions = array('jpeg', 'jpg', 'png'); // valid 
         $path = getcwd() . '/public/uploads/images/'; // upload directory
+        $date = date("Y-m-d");
+        $sql = "INSERT 
+                    INTO 
+                        payments(Customer_id,Facility_id,Reservation_id,Payment_date,Amount,Status,Receipt)
+                    VALUES
+                        (:Customer_id,:Facility_id,:Reservation_id,:Payment_date,:Amount,:Status,:Image)";
+
+
+        $placeholders = array(
+            ':Customer_id'      => $_POST['customer'],
+            ':Facility_id'      => $_POST['facility'],
+            ':Reservation_id'   => $_POST['reservation'],
+            ':Payment_date'     => $date,
+            ':Amount'           => $_POST['amount'],
+            ':Status'           => 'Success'
+        );
+        $reservationplaceholders = array(
+            ':Reserve_Id'    => $_POST['reservation'],
+            ':Status'        => 'Reserved'
+        );
+        $reservationsql = "UPDATE reservation SET Reservation_status =:Status WHERE Reservation_id = :Reserve_Id";
 
         if(isset($_FILES['file']) && $_FILES['file']){
             $img = $_FILES['file']['name'];
             $tmp = $_FILES['file']['tmp_name'];
-            $date = date("Y-m-d");
 
             $final_image = rand(1000,1000000).$img;
             $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
@@ -352,30 +371,16 @@ class Controller extends Model{
                 if(move_uploaded_file($tmp,$path)){
                     // Insert
 
-                    $sql = "INSERT 
-                                INTO 
-                                    payments(Customer_id,Facility_id,Receipt,Reservation_id,Payment_date,Amount,Status)
-                                VALUES
-                                    (:Customer_id,:Facility_id,:Image,:Reservation_id,:Payment_date,:Amount,:Status)";
-
-
-                    $placeholders = array(
-                        ':Customer_id'      => $_POST['customer'],
-                        ':Facility_id'      => $_POST['facility'],
-                        ':Image'            => $final_image,
-                        ':Reservation_id'   => $_POST['reservation'],
-                        ':Payment_date'     => $date,
-                        ':Amount'           => $_POST['amount'],
-                        ':Status'           => 'Pending'
-                    );
-
+                    $placeholders[':Image'] = $final_image;
                     $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
-
+                    $dml = $this->dynamicDMLLabeledQuery($reservationsql, $reservationplaceholders);
                     return array(
                         'status' => 'success',
-                        'message' => 'Successfully uploaded!'
+                        'message' => 'Payment Success!'
                     );
+
                 }else{
+
                     return array(
                         'status' => 'error',
                         'message' => 'Upload error'
@@ -388,13 +393,17 @@ class Controller extends Model{
                 );
             }
 
-        }else{
-                return array(
-                    'status' => 'error',
-                    'message' => 'No file'
-                );
-        }
+        } else {
 
+            $placeholders[':Image'] = '';
+            $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
+            $dml = $this->dynamicDMLLabeledQuery($reservationsql, $reservationplaceholders);
+            return array(
+                'status' => 'success',
+                'message' => 'Payment Success!'
+            );
+
+        }
 
         // return $dml;
         // print_r($dml['data']->fetchALL( PDO::FETCH_ASSOC ));
@@ -402,7 +411,7 @@ class Controller extends Model{
     }
 
     public function getPayment(){
-        $payments = $this->dynamicSLCTQuery("SELECT * FROM payments LEFT JOIN facility ON facility.Facility_id = payments.Facility_id LEFT JOIN customer ON customer.customer_id = payments.Customer_id LEFT JOIN reservation ON reservation.Reservation_id = payments.Reservation_id ORDER BY Payment_id ASC");
+        $payments = $this->dynamicSLCTQuery("SELECT * FROM payments LEFT JOIN facility ON facility.Facility_id = payments.Facility_id LEFT JOIN customer ON customer.customer_id = payments.Customer_id LEFT JOIN reservation ON reservation.Reservation_id = payments.Reservation_id GROUP BY payments.Payment_id ORDER BY payments.Payment_id ASC");
         return $payments['data']->fetchAll(PDO::FETCH_ASSOC);
     }
 

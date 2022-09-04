@@ -119,19 +119,13 @@
                                                 </div>
                                             </div>
                     
-                                            <div class="col-sm-6 col-md-6">
+                                            <div class="col-sm-12 col-md-12">
                                                 <div class="form-group">
                                                     <label for="event-from">From</label>
                                                     <input type="text" name="event-from" id="event-from" class="form-control datepicker">
                                                 </div>
                                             </div>
                     
-                                            <div class="col-sm-6 col-md-6">
-                                                <div class="form-group">
-                                                    <label for="event-to">To</label>
-                                                    <input type="text" name="event-to" id="event-to" class="form-control datepicker">
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +141,66 @@
                       </div>
                 </div>
             </div>
+            
 
+            <div class="modal fade" id="book-details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                          <form action="" method="POST" name="book-form" id="create-book-form">
+                              <div class="modal-header">
+                                  <h4 class="modal-title">Booking details</h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    
+                                <div class="booking-details">
+
+                                    <div class="row">
+
+
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="facility-direct">Facility</label><a href="#"><small>(Check Reservation)</small></a>
+                                                <input type="text" name="facility-direct" id="facility-direct" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <label for="event-direct">Event</label>
+                                                <input type="text" name="event-direct" id="event-direct" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <label for="guest-direct">No of Guest</label>
+                                                <input type="number" name="guest-direct" id="guest-direct" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="event-from-direct">Reservation date</label>
+                                                <input type="text" name="event-from-direct" id="event-from-direct" class="form-control datepicker">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <!-- <input type="hidden" id="sunmitButtonIndicator" value="customer-details"> -->
+                                <div class="modal-footer">
+                                  <button type="submit" class="btn btn-primary" id="">Book</button>
+                                </div>
+                          </form>
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                </div>
+            </div>
 
 
             <div class="modal fade" id="userRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -200,7 +253,7 @@
 
 
                                 </div>
-                                <input type="hidden" id="sunmitButtonIndicator" value="customer-details">
+                                <!-- <input type="hidden" id="sunmitButtonIndicator" value="customer-details"> -->
                                 <div class="modal-footer">
                                     <a href="#" class="alreadyHave d-none">I already have an Account</a>
                                     <a href="#" class="dontHave">I don't have an Account</a>
@@ -228,6 +281,7 @@
 				</div>
             </div>
         </section>
+        <!-- <input type="text" id="rangrpick"> -->
         <!--================Banner Area =================-->
         
         <!--================ Accomodation Area  =================-->
@@ -243,7 +297,7 @@
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
                                 <img src="image/room1.jpg" alt="">
-                                <button class="btn theme_btn button_hover book_btn" facility-Id="1" facility-Name="room 1" data-toggle="modal" data-target="#bookingModal">Book</button>
+                                <button class="btn theme_btn button_hover book_btn" facility-Id="1" facility-Name="room 1">Book</button>
                             </div>
                             <a href="#"><h4 class="sec_h4">Double Deluxe Room</h4></a>
                             <h5>$250<small>/night</small></h5>
@@ -384,6 +438,34 @@
     <script>
         $(document).ready(function(){
             // $('#userRegistrationModal').modal('show');
+            $('[name=book-form]').on('submit', function(e){
+                var facility = $('#facility-direct').val();
+                e.preventDefault();
+                var reserveDate = $('#event-from-direct').val().split('-');
+                var event = $('#event-direct').val();
+                var guest = $('#guest-direct').val();
+                var eventrom = reserveDate[0];
+                var evento = reserveDate[1];
+                // console.log('evento', evento);
+                
+                $.ajax({
+                    url : '../customerAction.php',
+                    method : 'POST',
+                    dataType : "JSON",
+                    data : {
+                        action : 'submitBookLoggedIn',
+                        facility : facility,
+                        event : event,
+                        guest : guest,
+                        eventrom : eventrom,
+                        evento : evento,
+                        customer : $('meta[name=session]').attr('content')
+                    },
+                    success: function(res){
+                        window.location.href="reserved.php?reservedId=" + res.id;
+                    }
+                })
+            });
             $(document).on('submit', '[name=login-form]', function(e){
                 
 
@@ -479,7 +561,16 @@
             $('.book_btn').on('click', function(){
                 
                 $('#facility').val( $(this).attr('facility-Name') );
+                $('#facility-direct').val( $(this).attr('facility-Name') );
+                if($('meta[name=session]').attr('content') != ''){
+                    $('#book-details').modal('show');
+                }else{
+                    $('#bookingModal').modal('show');
+                }
+                
+
             });
+
             $('[name=booking-form]').on('submit', function(e){
                 if($('#sunmitButtonIndicator').val() == 'customer-details'){
                     // modal becomes booking
@@ -510,8 +601,11 @@
                     var facility = $('#facility').val();
                     var event = $('#event').val();
                     var guest = $('#guest').val();
-                    var eventrom = $('#event-from').val();
-                    var evento = $('#event-to').val();
+                    var reserveDate = $('#event-from').val().split('-');
+                    var eventrom = reserveDate[0];
+                    var evento = reserveDate[1];
+
+                    
                     $.ajax({
                         url : '../customerAction.php',
                         method : 'POST',
@@ -530,7 +624,7 @@
                             event : event,
                             guest : guest,
                             eventrom : eventrom,
-                            evento : evento
+                            evento: evento
                         },
                         success : function(res){
                             console.log('res', res);
@@ -554,6 +648,7 @@
                         }
                     });
 
+
                 }
                 e.preventDefault();
 
@@ -573,11 +668,22 @@
                     $('.customer-details').removeClass('d-none');
                     $('.booking-details').addClass('d-none');
                     $('#submitBook').text('Next');
+                    
                 }
             });
 
-            $('[name=event-from]').datepicker();
-            $('[name=event-to]').datepicker();
+            $('[name=event-from]').daterangepicker({
+                locale : {
+                    format : 'YYYY/MM/DD'
+                }
+            });
+            $('[name=event-from-direct]').daterangepicker({
+                locale : {
+                    format : 'YYYY/MM/DD'
+                }
+            });
+
+            // $('#rangrpick').daterangepicker();
         })
     </script>
 </html>

@@ -15,6 +15,16 @@
                     <li class="nav-item"><a class="nav-link" href="about.php">About us</a></li>
                     <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+                    <?php 
+                        // print_r($_SESSION['user_data']);
+                        // die();
+                    ?>
+                    <?php if(isset($_SESSION['user_data'])) : ?>
+                    <li class="nav-item"><a class="nav-link" href="reserved.php">Reserved</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../Config/logout.php">Sign out</a></li>
+                    <?php else : ?>
+                    <li class="nav-item"><a class="nav-link" href="login.php" >Sign In</a></li>
+                    <?php endif;?>
                 </ul>
             </div> 
         </nav>
@@ -23,3 +33,4 @@
 <style type="text/css">
 
 </style>
+

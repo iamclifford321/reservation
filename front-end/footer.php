@@ -101,6 +101,22 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <script src="js/contact.js"></script>
 <script src="js/custom.js"></script>
 <script src="../public/assets/plugins/datepicker/jquery-ui.js"></script>
+
+<script src="../public/assets/plugins/moment/moment.min.js"></script>
+<script src="../public/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../public/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../public/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../public/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../public/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../public/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="../public/assets/plugins/jszip/jszip.min.js"></script>
+<script src="../public/assets/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="../public/assets/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="../public/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="../public/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="../public/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="../public/assets/plugins/daterangepicker/daterangepicker.js"></script>
+
 <script>
     $(document).ready(function(){
         $('li.nav-item:first').ready( function() {

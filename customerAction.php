@@ -7,7 +7,7 @@
         $rtrn = $controller->frontEndReserve();
         if($rtrn['status'] == 'success'){
             if(isset($_SESSION['user_data'])){
-                $rtrn['userId'] = $_SESSION['user_data']['User_id'];
+                $rtrn['userId'] = $_SESSION['user_data']['customer_id'];
             }
             echo json_encode($rtrn);
         }else{
@@ -20,7 +20,7 @@
         }
     }
     if($_POST['action'] == 'login'){
-        $rtrn = $controller->login();
+        $rtrn = $controller->loginCustomer();
         if($rtrn){
 
             $_SESSION['user_data'] = $rtrn;
@@ -36,6 +36,14 @@
         
     }
     if($_POST['action'] == 'create-user'){
-        $rtrn = $controller->insertUserFromCUstomer();
+        $rtrn = $controller->updateFromCUstomer();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'getReservationFrontEnd'){
+        $rtrn = $controller->getReservationSpecific($_SESSION['user_data']['customer_id']);
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'submitBookLoggedIn'){
+        $rtrn = $controller->submitBookLoggedIn();
         echo json_encode($rtrn);
     }

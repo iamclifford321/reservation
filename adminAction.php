@@ -68,6 +68,14 @@
         $rtrn = $controller->getReservation();
         echo json_encode($rtrn);
     }
+    if($_POST['action'] == 'create-payment'){
+        $rtrn = $controller->insertPayment();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'get-payment'){
+        $rtrn = $controller->getPayment();
+        echo json_encode($rtrn);
+    }
     if($_POST['action'] == 'login'){
         $rtrn = $controller->login();
         if($rtrn){
@@ -83,12 +91,4 @@
             ));
         }
         
-    }
-    if($_POST['action'] == 'create-payment'){
-        $rtrn = $controller->insertPayment();
-        echo json_encode($rtrn);
-    }
-    if($_POST['action'] == 'get-payment'){
-        $rtrn = $controller->getPayment();
-        echo json_encode($rtrn);
     }

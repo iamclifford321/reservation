@@ -8,6 +8,7 @@
      $billing       = '';
      $payment       = '';
      $customer      = '';
+     $refund        = '';
 
      if($_GET['page']=='dashboard'){
 
@@ -36,6 +37,10 @@
      }elseif ($_GET['page']=='customer') {
 
         $customer       = 'active';
+
+     }elseif ($_GET['page']=='refund') {
+
+        $refund       = 'active';
 
      }else{
         die("<center><h1 class='text-align: center'>Page not found</h1></center>");
@@ -331,6 +336,15 @@
                                 <i class="nav-icon fas fa-money-bill-alt"></i>
                                 <p>
                                     Payments
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="?page=refund" class="nav-link <?php echo $refund ?>">
+                                <i class="nav-icon fas fa-money-bill-alt"></i>
+                                <p>
+                                    Refund
                                 </p>
                             </a>
                         </li>

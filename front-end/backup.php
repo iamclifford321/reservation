@@ -297,7 +297,7 @@
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
                                 <img src="image/room1.jpg" alt="">
-                                <a class="btn theme_btn button_hover book_btn" facility-Id="1" facility-Name="room 1" href="addBook.php?facilityId=1&facilityName=test&facilityPrice=121">ADD</a>
+                                <button class="btn theme_btn button_hover book_btn" facility-Id="1" facility-Name="room 1">Book</button>
                             </div>
                             <a href="#"><h4 class="sec_h4">Double Deluxe Room</h4></a>
                             <h5>$250<small>/night</small></h5>
@@ -437,7 +437,253 @@
     </body>
     <script>
         $(document).ready(function(){
+            // $('#userRegistrationModal').modal('show');
+            $('[name=book-form]').on('submit', function(e){
+                var facility = $('#facility-direct').val();
+                e.preventDefault();
+                var reserveDate = $('#event-from-direct').val().split('-');
+                var event = $('#event-direct').val();
+                var guest = $('#guest-direct').val();
+                var eventrom = reserveDate[0];
+                var evento = reserveDate[1];
+                // console.log('evento', evento);
+                
+                $.ajax({
+                    url : '../customerAction.php',
+                    method : 'POST',
+                    dataType : "JSON",
+                    data : {
+                        action : 'submitBookLoggedIn',
+                        facility : facility,
+                        event : event,
+                        guest : guest,
+                        eventrom : eventrom,
+                        evento : evento,
+                        customer : $('meta[name=session]').attr('content')
+                    },
+                    success: function(res){
+                        window.location.href="reserved.php?reservedId=" + res.id;
+                    }
+                })
+            });
+            $(document).on('submit', '[name=login-form]', function(e){
+                
 
+                $.ajax({
+                        url : '../customerAction.php',
+                        method : 'POST',
+                        dataType : "JSON",
+                        data : {
+                            action : 'login',
+                            password : $('[name=login-password]').val(),
+                            username : $('[name=login-username]').val()
+                        },
+                        success : function(res){
+
+                            if( res['status'] == 'invalid'){
+                                   Swal.fire(
+                                    'Invalid Credentials',
+                                    'The Provided Credential is invalid',
+                                    'error'
+                                   );
+                              }else{
+                                Swal.fire(
+                                    'Login Success',
+                                    'Succesfully logged in',
+                                    'success'
+                                );
+                                //    window.location.href = "./?isAdmin=true";
+                              }
+                        }
+                    });
+
+                e.preventDefault();
+            });
+
+            $(document).on('submit', '[name=register-form]', function(e){
+                $.ajax({
+                        url : '../customerAction.php',
+                        method : 'POST',
+                        dataType : "JSON",
+                        data : {
+                            action : 'create-user',
+                            password : $('[name=register-password]').val(),
+                            username : $('[name=register-username]').val()
+                        },
+                        success : function(res){
+                            if(res.status == 'success'){
+                                Swal.fire({
+                                    title: 'User Created',
+                                    text: 'User Succesfully Created',
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Proceed'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // set location here
+                                    }
+                                })
+
+                            }else{
+                                Swal.fire(
+                                    '',
+                                    '',
+                                    'error'
+                                );
+                            }
+
+                        }
+
+                    });
+                e.preventDefault();
+            })
+            $('.alreadyHave').on('click', function(){
+                $('.register-details').addClass('d-none');
+                $('.login-details').removeClass('d-none');
+                $('#userRegistrationModal .modal-title').text('Login')
+                $(this).addClass('d-none');
+                $('.dontHave').removeClass('d-none');
+                $('#register-login-form').attr('name', 'login-form');
+                $('#submitLogReg').text('Login');
+
+            })
+            $('.dontHave').on('click', function(){
+                $('.login-details').addClass('d-none');
+                $('.register-details').removeClass('d-none');
+                $('#userRegistrationModal .modal-title').text('Register');
+                $(this).addClass('d-none');
+                $('.alreadyHave').removeClass('d-none');
+                $('#register-login-form').attr('name', 'register-form');
+                $('#submitLogReg').text('Sign up');
+
+            })
+
+            $('.book_btn').on('click', function(){
+                
+                $('#facility').val( $(this).attr('facility-Name') );
+                $('#facility-direct').val( $(this).attr('facility-Name') );
+                if($('meta[name=session]').attr('content') != ''){
+                    $('#book-details').modal('show');
+                }else{
+                    $('#bookingModal').modal('show');
+                }
+                
+
+            });
+
+            $('[name=booking-form]').on('submit', function(e){
+                if($('#sunmitButtonIndicator').val() == 'customer-details'){
+                    // modal becomes booking
+
+                    $('.prev-modal-booking').removeClass('d-none');
+                    $('.close-modal-booking').addClass('d-none');
+                    $('#sunmitButtonIndicator').val('booking-details');
+                    $('.customer-details').addClass('d-none');
+
+                    
+                    $("#event").attr('required', true);
+                    $("#event-from").attr('required', true);
+                    $("#event-to").attr('required', true);
+                    $('.booking-details').removeClass('d-none');
+                    $('#customer').val($('#firstname').val() + ' ' + $('#lastname').val());
+                    $('#submitBook').text('Submit');
+                }else if($('#sunmitButtonIndicator').val() == 'booking-details'){
+                    // modal becomes booking
+
+                    var firstname = $('#firstname').val();
+                    var lastname = $('#lastname').val();
+                    var phone = $('#phone').val();
+                    var middlename = $('#middlename').val();
+                    var age = $('#age').val();
+                    var gender = $("[name=gender]").val();
+                    var email = $('#email').val();
+                    var address = $('#address').val();
+                    var facility = $('#facility').val();
+                    var event = $('#event').val();
+                    var guest = $('#guest').val();
+                    var reserveDate = $('#event-from').val().split('-');
+                    var eventrom = reserveDate[0];
+                    var evento = reserveDate[1];
+
+                    
+                    $.ajax({
+                        url : '../customerAction.php',
+                        method : 'POST',
+                        dataType : "JSON",
+                        data : {
+                            action : 'reserve',
+                            firstname : firstname,
+                            lastname : lastname,
+                            phone : phone,
+                            middlename : middlename,
+                            age : age,
+                            gender : gender,
+                            email : email,
+                            address : address,
+                            facility : facility,
+                            event : event,
+                            guest : guest,
+                            eventrom : eventrom,
+                            evento: evento
+                        },
+                        success : function(res){
+                            console.log('res', res);
+                            if(res.status == 'success'){
+                                $('#bookingModal').modal('hide');
+
+                                Swal.fire({
+                                    title: 'Good job!',
+                                    text: 'Your reservation has been succesfully Queed, proceed to payment.',
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Proceed'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $('#userRegistrationModal').modal('show');
+                                    }
+                                })
+                            }else{
+                                alert(res.message);
+                            }
+                        }
+                    });
+
+
+                }
+                e.preventDefault();
+
+
+
+            });
+
+            $('.prev-modal-booking').on('click', function(){
+                if($('#sunmitButtonIndicator').val() == 'booking-details'){
+                    // modal becomes booking
+                    $("#event").removeAttr('required');
+                    $("#event-from").removeAttr('required');
+                    $("#event-to").removeAttr('required');
+                    $('#sunmitButtonIndicator').val('customer-details');
+                    $(this).addClass('d-none');
+                    $('.close-modal-booking').removeClass('d-none');
+                    $('.customer-details').removeClass('d-none');
+                    $('.booking-details').addClass('d-none');
+                    $('#submitBook').text('Next');
+                    
+                }
+            });
+
+            $('[name=event-from]').daterangepicker({
+                locale : {
+                    format : 'YYYY/MM/DD'
+                }
+            });
+            $('[name=event-from-direct]').daterangepicker({
+                locale : {
+                    format : 'YYYY/MM/DD'
+                }
+            });
+
+            // $('#rangrpick').daterangepicker();
         })
     </script>
 </html>

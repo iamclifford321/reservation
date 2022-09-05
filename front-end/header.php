@@ -15,10 +15,11 @@
                     <li class="nav-item"><a class="nav-link" href="about.php">About us</a></li>
                     <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-                    <?php 
-                        // print_r($_SESSION['user_data']);
-                        // die();
-                    ?>
+
+                    <?php if(isset($_SESSION['Facilities'])) : ?>
+                        <li class="nav-item"><a class="nav-link" href="bookfacilities.php">Facilities <span class="badge badge-danger"><?php echo count($_SESSION['Facilities']); ?></span></a></li>
+                    <?php endif; ?>
+
                     <?php if(isset($_SESSION['user_data'])) : ?>
                     <li class="nav-item"><a class="nav-link" href="reserved.php">Reserved</a></li>
                     <li class="nav-item"><a class="nav-link" href="../Config/logout.php">Sign out</a></li>

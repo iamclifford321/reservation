@@ -16,7 +16,7 @@
                     <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
 
-                    <?php if(isset($_SESSION['Facilities'])) : ?>
+                    <?php if(isset($_SESSION['Facilities']) && count($_SESSION['Facilities']) > 0) : ?>
                         <li class="nav-item"><a class="nav-link" href="bookfacilities.php">Facilities <span class="badge badge-danger"><?php echo count($_SESSION['Facilities']); ?></span></a></li>
                     <?php endif; ?>
 

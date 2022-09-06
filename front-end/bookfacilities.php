@@ -34,48 +34,62 @@
                 width: 120px;
             }
 
-            .card-content-divider .card-content a{
-                font-size: 15px;
+            .card-content-divider .card-content a, .card-content-divider .card-content label{
+                font-size: 16px;
             }
         </style>
+        
         <section class="contact_area section_gap">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-12 col-md-9">
+                    <div class="col-sm-12 col-md-8">
                     <?php 
-                        foreach ($_SESSION['Facilities'] as $facility) {
-                            ?>
-                            <div class="mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-content-divider">
-                                            <div class="card-image">
-                                                <img class="card-img-top d-block" src="image/gallery/02.jpg" alt="Card image cap">
-                                            </div>
-                                            <div class="card-content pl-3">
-                                                <h5 class="card-title">Card title</h5>
-                                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                <label for="">$100 | </label><a href="#" class="text-danger"><i class="fa fa-trash"></i></a>
-                                            </div>
+                        
+                        $total = 0;
+                        if(count($_SESSION['Facilities']) > 0){
+                            foreach ($_SESSION['Facilities'] as $key => $facility) {
+                                $total += $facility['facilityPrice'];
+                                ?>
+                                    <div class="mb-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="card-content-divider">
+                                                    <div class="card-image">
+                                                        <img class="card-img-top d-block" src="image/gallery/02.jpg" alt="Card image cap">
+                                                    </div>
+                                                    <div class="card-content pl-3">
+                                                        <h5 class="card-title"><?php echo $facility['facilityName']; ?></h5>
+                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                                        <label for="" class="mr-2">₱<?php echo $facility['facilityPrice']; ?> </label> | <a href="removeFacility.php?key=<?php echo $key; ?>" class="text-secondary ml-2"><i class="fa fa-trash"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>  
                                         </div>
-
-
                                     </div>
-                                </div>
-
-                            </div>
-                                <!-- <div class="card" style="width: 18rem;">
-                                    <img class="card-img-top d-block" src="image/gallery/02.jpg" alt="Card image cap">
-                                    <div class="card-body">
-                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    </div>
-                                </div> -->
+                                <?php
+                            }
+                        }else{
+                            ?>
+                                <p>No record found, add reservation <a href="index.php#reservation-section">Here</a></p>
                             <?php
                         }
                     ?>
                     </div>
-                    <div class="col-sm-12 col-md-3">
-                        here
+                    <div class="col-sm-12 col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <label>Booking info</label>
+                            </div>
+                            <div class="card-body">
+                                <form action="">
+                                    <div class="form-group">
+                                        <label for="">Total</label>
+                                        <input type="text" class="form-control" readonly value="₱<?php echo number_format($total, 2); ?>">
+                                        <input type="hidden" name="total" value="₱<?php echo $total; ?>">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 if(isset($_GET['facilityId'])){
     if(isset($_SESSION['Facilities'])){
@@ -18,6 +19,8 @@ if(isset($_GET['facilityId'])){
     }
 
 }
-echo '<pre>';
-print_r($_SESSION['Facilities']);
-die();
+// session_destroy();
+
+// echo '<pre>';
+// print_r($_SESSION['Facilities']);
+header('location:index.php');

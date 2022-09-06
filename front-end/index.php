@@ -285,7 +285,7 @@
         <!--================Banner Area =================-->
         
         <!--================ Accomodation Area  =================-->
-        <section class="accomodation_area section_gap">
+        <section class="accomodation_area section_gap" id="reservation-section">
             <div class="container">
                 <div class="section_title text-center">
                     <h2 class="title_color">Hotel Accomodation</h2>

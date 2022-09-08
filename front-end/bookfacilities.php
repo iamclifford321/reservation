@@ -77,18 +77,37 @@
                     </div>
                     <div class="col-sm-12 col-md-4">
                         <div class="card">
-                            <div class="card-header">
-                                <label>Booking info</label>
-                            </div>
-                            <div class="card-body">
-                                <form action="">
+                            <form action="../customerAction.php" method="POST">
+
+                                <div class="card-header">
+                                    <label>Booking info</label>
+                                </div>
+                                <div class="card-body">
                                     <div class="form-group">
                                         <label for="">Total</label>
                                         <input type="text" class="form-control" readonly value="₱<?php echo number_format($total, 2); ?>">
                                         <input type="hidden" name="total" value="₱<?php echo $total; ?>">
                                     </div>
-                                </form>
-                            </div>
+                                    <div class="form-group">
+                                        <label for="">Date</label>
+                                        <input type="text" class="form-control" name="date">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Event</label>
+                                        <input type="text" class="form-control" name="event">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">No. of Guest</label>
+                                        <input type="number" class="form-control" name="guestNumber">
+                                    </div>
+
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" name="submitReservation" class="btn btn-secondary" <?php ?> >Submit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -97,41 +116,23 @@
         <!--================Contact Area =================-->
         
         <!--================ start footer Area  =================-->	
-        <?php // include 'footer.php'; ?>
+        <?php include 'footer-links.php'; ?>
         
     </body>
 
     <script>
         $(document).ready(function(){
-            // alert();
-            getTheReserved();
-            function getTheReserved(){
-                $.ajax({
-                url: "../customerAction.php",
-                method : "POST",
-                dataType : "JSON",
-                data: {
-                    action : 'getReservationFrontEnd'
+            
+            $('[name=date]').daterangepicker({
+                locale : {
+                    format : 'YYYY/MM/DD'
                 },
-                success: function(res){
-                    var table = $('.res-table').DataTable();
-                    table.clear().draw();
-
-                    for (let index = 0; index < res.length; index++) {
-                            const element = res[index];
-                            table.row.add([
-                                element['Date_in'] + ' to ' + element['Date_in'],
-                                element['FirstName'] + ' ' + element['LastName'],
-                                element['Number_of_guest'],
-                                element['Facility_name'],
-                                element['Reservation_status'],
-                                300,
-                                'asd'
-                            ]).draw();
-                        }
+                isInvalidDate: function(ele) {
+                    var currDate = moment(ele._d).format('YY-MM-DD');
+                    console.log('currDate', currDate);
+                    return ["22-09-09", "22-09-10", "22-09-11"].indexOf(currDate) != -1;
                 }
             });
-            }
 
         })
     </script>

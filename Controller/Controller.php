@@ -345,7 +345,7 @@ class Controller extends Model{
         ));
         $custRes = $customers['data']->fetch(PDO::FETCH_ASSOC);
         
-        if(isset($_SESSION['reservationIdTemp']) || isset($_SESSION['customer_session_temp_info'])){
+        if(isset($_SESSION['reservationIdTemp'])){
             if($custRes){
                 $updateResrv = "UPDATE reservation set Customer_id =:customerId WHERE Reservation_id =:resrvId";
                 $param = array(
@@ -354,7 +354,6 @@ class Controller extends Model{
                 );
                 // echo $_SESSION['reservationIdTemp'];
                 if(isset($_SESSION['reservationIdTemp'])) unset($_SESSION['reservationIdTemp']);
-                if(isset($_SESSION['customer_session_temp_info'])) unset($_SESSION['customer_session_temp_info']);
                 $updateRes = $this->dynamicSLCTLabeledQuery($updateResrv, $param);
             }
         }
@@ -443,10 +442,10 @@ class Controller extends Model{
         return $payments['data']->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function frontEndReserve(){
+    public function customerReg(){
         // TODO::
         // Add the customer, add The reservation, after reservation, let the user register, if not registered or redirect to the reservation details if registered,
-        $qryCustomer = 'INSERT INTO customer(FirstName, MiddleName, LastName, PhoneNumber, Address, Email, Age, Gender)VALUES(:FirstName, :MiddleName, :LastName, :PhoneNumber, :Address, :Email, :Age, :Gender)';
+        $qryCustomer = 'INSERT INTO customer(FirstName, MiddleName, LastName, PhoneNumber, Address, Email, Age, Gender, Password, username)VALUES(:FirstName, :MiddleName, :LastName, :PhoneNumber, :Address, :Email, :Age, :Gender, :Password, :username)';
         
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
@@ -455,12 +454,9 @@ class Controller extends Model{
         $age = $_POST['age'];
         $gender = $_POST['gender'];
         $email = $_POST['email'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
         $address = $_POST['address'];
-        $facility = $_POST['facility'];
-        $event = $_POST['event'];
-        $guest = $_POST['guest'];
-
-
 
         $placeholderCustomer = array(
             ':FirstName' => $firstname,
@@ -470,47 +466,32 @@ class Controller extends Model{
             ':Address' => $address, 
             ':Email' => $email, 
             ':Age' => $age,
-            ':Gender' => $gender
+            ':Gender' => $gender,
+            ':Password' => $password,
+            ':username' => $username
         );
 
         
         $rtrnCustomer = $this->dynamicDMLLabeledQuery($qryCustomer, $placeholderCustomer);
         if($rtrnCustomer['status'] == 'success'){
-            $qryReservation = 'INSERT INTO reservation(Customer_id, Facility_id, Reservation_date, Date_in, Date_out, Number_of_guest, Reservation_status, Event)VALUES(:CustomerId, :FacilityId, :ReservationDate, :DateIn, :DateOut, :NumberOfGuest, :ReservationStatus, :Event)';
-            $placeholderReservation = array(
-                ':CustomerId' => $rtrnCustomer['id'],
-                ':FacilityId' => $facility,
-                ':ReservationDate' => str_replace("/", "-", $_POST['eventrom']),
-                ':DateIn' => str_replace("/", "-", $_POST['eventrom']),
-                ':DateOut' => str_replace("/", "-", $_POST['evento']),
-                ':NumberOfGuest' => $guest,
-                ':ReservationStatus' => 'Unpaid',
-                ':Event' => $event
-            );
-            $rtrnReservation = $this->dynamicDMLLabeledQuery($qryReservation, $placeholderReservation);
-            $data = array(
-                'FirstName' => $firstname,
-                'MiddleName' => $middlename, 
-                'LastName' => $lastname, 
-                'PhoneNumber' => $phone, 
-                'Address' => $address, 
-                'Email' => $email, 
-                'Age' => $age,
-                'Gender' => $gender,
-                'customer_id' => $rtrnCustomer['id']
-            );
-            $_SESSION['customer_session_temp_info'] = $data;
 
-            if($rtrnReservation['status']){
-                $_SESSION['reservationIdTemp'] = $rtrnReservation['id'];
-                return array(
-                    'status' => 'success',
-                    'message' => 'Reserved',
-                    'Id' => $rtrnReservation['id']
+            $_SESSION['user_data'] = array(
+                                            'FirstName' => $_POST['firstname'],
+                                            'MiddleName' => $_POST['middlename'],
+                                            'LastName' => $_POST['lastname'],
+                                            'customer_id' => $rtrnCustomer['id']
+                                        );
+
+            if(isset($_SESSION['reservationIdTemp'])){
+
+                $updateResrv = "UPDATE reservation set Customer_id =:customerId WHERE Reservation_id =:resrvId";
+                $param = array(
+                    ':resrvId' => $_SESSION['reservationIdTemp'],
+                    ':customerId' => $rtrnCustomer['id']
                 );
-                
-            }else{
-                die('Something went wrong!');
+                if(isset($_SESSION['reservationIdTemp'])) unset($_SESSION['reservationIdTemp']);
+                $updateRes = $this->dynamicSLCTLabeledQuery($updateResrv, $param);
+
             }
         }else{
             die('something went wrong!');
@@ -570,4 +551,73 @@ class Controller extends Model{
         return $rtrnReservation;
         // provide the needed logic
     }
+
+    public function getTheFicilities(){
+        $str = "SELECT * FROM facility";
+        $facilities = $this->dynamicSLCTQuery($str);
+        $dataRet = $facilities['data']->fetchAll(PDO::FETCH_ASSOC);
+        return $dataRet;
+    }
+
+    public function getFacilityReservation(){
+        $query = "SELECT * FROM reservation_facility WHERE facilityId = :facilityId";
+        $dataReserved = [];
+        $param = array(
+            ':facilityId' => $_POST['faciltyId']
+        );
+        $reservedFacilities = $this->dynamicSLCTLabeledQuery($query, $param);
+        $reservedFacilitiesData = $reservedFacilities['data']->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($reservedFacilitiesData as $reservedFacility) {
+
+            $dateIn = strtotime($reservedFacility['dateIn']);
+            $dateOut = strtotime($reservedFacility['dateOut']);
+            $dateDiff = $dateOut - $dateIn;
+            
+            $daysDiff = round($dateDiff / (60 * 60 * 24));
+            array_push($dataReserved, $reservedFacility['dateIn']);
+            for ($i=1; $i <= $daysDiff; $i++) {
+                $dateStr = $reservedFacility['dateIn'];
+                $tobePushed = date('Y-m-d', strtotime($dateStr . '+ ' . $i . ' days'));
+                array_push($dataReserved, $tobePushed);
+            }
+
+        }
+        return $dataReserved;
+    }
+    public function submitReservation(){
+        echo "<pre>";
+        $insertReservationQry = "INSERT INTO reservation (Number_of_guest, Reservation_status, Event, Customer_id)VALUES(:Number_of_guest, :Reservation_status, :Event, :CustomerId)";
+        $customerId = (!isset($_SESSION['user_data'])) ? '' : $_SESSION['user_data']['customer_id'];
+        $placeholderReservation = array(
+            ':Number_of_guest' => $_POST['guestNumber'],
+            ':Reservation_status' => 'Unpaid',
+            ':Event' => $_POST['event'],
+            ':CustomerId' => $customerId
+        );
+        $rtrnReservation = $this->dynamicDMLLabeledQuery($insertReservationQry, $placeholderReservation);
+        if($rtrnReservation['status'] == 'success'){
+            
+            foreach ($_SESSION['Facilities'] as $facility) {
+                $insertReservationFacility = "INSERT INTO reservation_facility(facilityId, reservationId, dateIn, dateOut) VALUES (:facilityId, :reservationId, :dateIn, :dateOut)";
+                $placeholderReservationFacility = array(
+                    ':facilityId' => $facility['facilityId'],
+                    ':reservationId' => $rtrnReservation['id'],
+                    ':dateIn' => $facility['dateFrom'],
+                    ':dateOut' => $facility['dateTo']
+                );
+                $rtrnReservationFacility = $this->dynamicDMLLabeledQuery($insertReservationFacility, $placeholderReservationFacility);
+            
+            }
+
+            if(!isset($_SESSION['user_data'])){
+                unset($_SESSION['Facilities']);
+                $_SESSION['reservationIdTemp'] = $rtrnReservation['id'];
+                header('Location:front-end/login.php');
+            }
+        }
+        // print_r($rtrnReservation);
+        echo "</pre>";
+
+    }
+
 }

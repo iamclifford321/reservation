@@ -6,14 +6,20 @@ if(isset($_GET['facilityId'])){
         array_push($_SESSION['Facilities'], array(
             'facilityId' => $_GET['facilityId'],
             'facilityName' => $_GET['facilityName'],
-            'facilityPrice' => $_GET['facilityPrice']
+            'facilityPrice' => $_GET['facilityPrice'],
+            'description' => $_GET['facilityDescription'],
+            'dateFrom' => $_GET['fromDate'],
+            'dateTo' => $_GET['toDate']
         ));
     }else{
         $_SESSION['Facilities'] = [
             array(
                 'facilityId' => $_GET['facilityId'],
                 'facilityName' => $_GET['facilityName'],
-                'facilityPrice' => $_GET['facilityPrice']
+                'facilityPrice' => $_GET['facilityPrice'],
+                'description' => $_GET['facilityDescription'],
+                'dateFrom' => $_GET['fromDate'],
+                'dateTo' => $_GET['toDate']
             )
         ];
     }
@@ -23,4 +29,4 @@ if(isset($_GET['facilityId'])){
 
 // echo '<pre>';
 // print_r($_SESSION['Facilities']);
-header('location:index.php');
+header('location:index.php#reservation-section');

@@ -3,8 +3,8 @@
     if(!isset($_POST['action'])) die('<h1> Opps.. </h1>');
     require_once 'loader.php';
     $controller = new Controller();
-    if($_POST['action'] == 'reserve'){
-        $rtrn = $controller->frontEndReserve();
+    if($_POST['action'] == 'registerCustomer'){
+        $rtrn = $controller->customerReg();
         if($rtrn['status'] == 'success'){
             if(isset($_SESSION['user_data'])){
                 $rtrn['userId'] = $_SESSION['user_data']['customer_id'];
@@ -45,5 +45,13 @@
     }
     if($_POST['action'] == 'submitBookLoggedIn'){
         $rtrn = $controller->submitBookLoggedIn();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'getFacilityReservation'){
+        $rtrn = $controller->getFacilityReservation();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'submitReservation'){
+        $rtrn = $controller->submitReservation();
         echo json_encode($rtrn);
     }

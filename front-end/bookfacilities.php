@@ -31,7 +31,10 @@
                 align-items: center;
             }
             .card-content-divider .card-image{
-                width: 120px;
+                width: 120px; flex: 1;
+            }
+            .card-content-divider .card-content{
+                flex: 3;
             }
 
             .card-content-divider .card-content a, .card-content-divider .card-content label{
@@ -46,9 +49,11 @@
                     <?php 
                         
                         $total = 0;
+                        $disabled = 'disabled';
                         if(count($_SESSION['Facilities']) > 0){
+                            $disabled = null;
                             foreach ($_SESSION['Facilities'] as $key => $facility) {
-                                $total += $facility['facilityPrice'];
+                                $total += floatval($facility['facilityPrice']);
                                 ?>
                                     <div class="mb-3">
                                         <div class="card">
@@ -59,8 +64,9 @@
                                                     </div>
                                                     <div class="card-content pl-3">
                                                         <h5 class="card-title"><?php echo $facility['facilityName']; ?></h5>
-                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                        <label for="" class="mr-2">₱<?php echo $facility['facilityPrice']; ?> </label> | <a href="removeFacility.php?key=<?php echo $key; ?>" class="text-secondary ml-2"><i class="fa fa-trash"></i></a>
+                                                        <p class="card-text"><?php echo $facility['description'] ?></p>
+                                                        <p><?php echo date('M , d Y',strtotime($facility['dateFrom'])); ?> - <?php echo date('M , d Y',strtotime($facility['dateTo'])); ?></p>
+                                                        <label for="" class="mr-2">₱<?php echo number_format($facility['facilityPrice'], 2); ?> </label> | <a href="removeFacility.php?key=<?php echo $key; ?>" class="text-secondary ml-2"><i class="fa fa-trash"></i></a>
                                                     </div>
                                                 </div>
                                             </div>  
@@ -89,23 +95,16 @@
                                         <input type="hidden" name="total" value="₱<?php echo $total; ?>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="">Date</label>
-                                        <input type="text" class="form-control" name="date">
-                                    </div>
-
-                                    <div class="form-group">
                                         <label for="">Event</label>
-                                        <input type="text" class="form-control" name="event">
+                                        <input type="text" class="form-control" name="event" required>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="">No. of Guest</label>
-                                        <input type="number" class="form-control" name="guestNumber">
+                                        <input type="number" class="form-control" name="guestNumber" required>
                                     </div>
-
                                 </div>
                                 <div class="card-footer">
-                                    <button type="submit" name="submitReservation" class="btn btn-secondary" <?php ?> >Submit</button>
+                                    <button type="submit" name="action" value="submitReservation" class="btn btn-secondary" <?php echo $disabled; ?>>Submit</button>
                                 </div>
                             </form>
                         </div>

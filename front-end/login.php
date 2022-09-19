@@ -131,13 +131,11 @@
                         success : function(res){
 
                             if( res['status'] == 'invalid'){
-
                                    Swal.fire(
                                     'Invalid Credentials',
                                     'The Provided Credential is invalid',
                                     'error'
                                    );
-
                               }else{
 
                                    Swal.fire({
@@ -148,7 +146,11 @@
                                         confirmButtonText: 'Proceed'
                                    }).then((result) => {
                                         if (result.isConfirmed) {
-                                             window.location.href = 'index.php'
+                                             var header = `index.php`; 
+                                             if(res.reservationIdTemp != null){
+                                                  header = `makePayment.php?reservationId=${res.reservationIdTemp}&customerId=${res.customerId}`; 
+                                             }
+                                             window.location.href = header;
                                         }
                                    });
                               }

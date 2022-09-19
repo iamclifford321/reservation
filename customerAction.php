@@ -6,10 +6,12 @@
     if($_POST['action'] == 'registerCustomer'){
         $rtrn = $controller->customerReg();
         if($rtrn['status'] == 'success'){
-            if(isset($_SESSION['user_data'])){
-                $rtrn['userId'] = $_SESSION['user_data']['customer_id'];
+            
+            $locationHeader = 'location:front-end/index.php';
+            if(isset($_SESSION['user_data']['resrvId']) ){
+                $locationHeader = 'location:front-end/makePayment.php?reservationId=' . $_SESSION['user_data']['resrvId'] . '&customerId=' . $_SESSION['user_data']['customer_id'] . '';
             }
-            echo json_encode($rtrn);
+            header($locationHeader);
         }else{
             echo json_encode(
                 array(
@@ -54,4 +56,19 @@
     if($_POST['action'] == 'submitReservation'){
         $rtrn = $controller->submitReservation();
         echo json_encode($rtrn);
+    }
+
+    if($_POST['action'] == 'makePayment'){
+        $rtrn = $controller->makePayment();
+        echo json_encode($rtrn);
+        header('Location:front-end/reserved.php');
+    }
+    if($_POST['action'] == 'getTheResInDate'){
+        $rtrn = $controller->getTheResInDate();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'cancelReservation'){
+        $rtrn = $controller->cancelReservation();
+        echo json_encode($rtrn);
+        header('location:front-end/reserved.php?msg=Cancelled');
     }

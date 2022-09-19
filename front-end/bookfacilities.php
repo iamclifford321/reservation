@@ -50,10 +50,10 @@
                         
                         $total = 0;
                         $disabled = 'disabled';
-                        if(count($_SESSION['Facilities']) > 0){
+                        if( isset($_SESSION['Facilities']) && count($_SESSION['Facilities']) > 0){
                             $disabled = null;
                             foreach ($_SESSION['Facilities'] as $key => $facility) {
-                                $total += floatval($facility['facilityPrice']);
+                                $total += floatval($facility['totalAmount']);
                                 ?>
                                     <div class="mb-3">
                                         <div class="card">
@@ -66,7 +66,7 @@
                                                         <h5 class="card-title"><?php echo $facility['facilityName']; ?></h5>
                                                         <p class="card-text"><?php echo $facility['description'] ?></p>
                                                         <p><?php echo date('M , d Y',strtotime($facility['dateFrom'])); ?> - <?php echo date('M , d Y',strtotime($facility['dateTo'])); ?></p>
-                                                        <label for="" class="mr-2">₱<?php echo number_format($facility['facilityPrice'], 2); ?> </label> | <a href="removeFacility.php?key=<?php echo $key; ?>" class="text-secondary ml-2"><i class="fa fa-trash"></i></a>
+                                                        <label for="" class="mr-2">₱<?php echo number_format($facility['totalAmount'], 2); ?> </label> | <a href="removeFacility.php?key=<?php echo $key; ?>" class="text-secondary ml-2"><i class="fa fa-trash"></i></a>
                                                     </div>
                                                 </div>
                                             </div>  

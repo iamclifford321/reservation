@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 09, 2022 at 09:34 AM
+-- Generation Time: Sep 23, 2022 at 09:32 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `billing` (
   `InvoiceNo` int(11) NOT NULL,
-  `PaymentDate` date NOT NULL,
+  `PaymentDate` date NOT NULL DEFAULT current_timestamp(),
   `PaymentMode` varchar(50) NOT NULL,
   `CottagePrice` int(11) NOT NULL,
   `RoomPrice` int(11) NOT NULL,
@@ -37,8 +37,23 @@ CREATE TABLE `billing` (
   `CustomerId` varchar(50) NOT NULL,
   `ReservationId` varchar(50) NOT NULL,
   `TotalBill` int(11) NOT NULL,
-  `createdDate` datetime NOT NULL DEFAULT current_timestamp()
+  `createdDate` datetime NOT NULL DEFAULT current_timestamp(),
+  `isRefund` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `billing`
+--
+
+INSERT INTO `billing` (`InvoiceNo`, `PaymentDate`, `PaymentMode`, `CottagePrice`, `RoomPrice`, `videokeRent`, `CustomerId`, `ReservationId`, `TotalBill`, `createdDate`, `isRefund`) VALUES
+(65, '2022-09-22', 'Manual', 0, 0, 0, '72', '70', 2584, '2022-09-22 22:13:40', 0),
+(66, '2022-09-22', 'Gcash', 0, 0, 0, '72', '70', -2067, '2022-09-22 22:14:52', 1),
+(67, '2022-09-22', 'Manual', 0, 0, 0, '72', '71', 4, '2022-09-22 22:19:32', 0),
+(68, '2022-09-22', 'Manual', 0, 0, 0, '72', '71', 60, '2022-09-22 22:38:24', 0),
+(69, '2022-09-22', 'Gcash', 0, 0, 0, '72', '71', -51, '2022-09-22 23:17:51', 1),
+(70, '2022-09-23', 'Manual', 0, 0, 0, '72', '72', 3230, '2022-09-23 07:39:25', 0),
+(71, '2022-09-23', 'Gcash', 0, 0, 0, '72', '74', 646, '2022-09-23 07:57:48', 0),
+(72, '2022-09-23', 'Gcash', 0, 0, 0, '72', '75', 0, '2022-09-23 14:05:56', 0);
 
 -- --------------------------------------------------------
 
@@ -61,6 +76,21 @@ CREATE TABLE `customer` (
   `username` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`customer_id`, `FirstName`, `MiddleName`, `LastName`, `PhoneNumber`, `Address`, `Email`, `Age`, `Gender`, `createdDate`, `Password`, `username`) VALUES
+(72, 'CLifford', 'Monterola', 'Ursabia', '09094373300', '', '', '', 'Male', '2022-09-14 20:22:29', 'asdasd', 'asdasd'),
+(77, 'Clifford', 'CASIPONG', 'Ursabia', '322133', 'Level 5, 352 Kent St', 'clifford@alphasys.com.au', '3', 'Male', '2022-09-18 22:05:13', 'dsadsa', 'dsadsa'),
+(78, 'Alpha', '', 'Test 4', '2312', 'Purok - 5', 'iamclifford321@gmail.com', '23', 'Male', '2022-09-18 22:05:48', 'qweqwe', 'qweqwe'),
+(79, 'Clifford', 'CASIPONG', 'Ursabia', '3213', 'Level 5, 352 Kent St', 'clifford@alphasys.com.au', '321', 'Male', '2022-09-18 22:06:48', 'qweqwe', 'qweqwe'),
+(80, 'Clifford', 'CASIPONG', 'Ursabia', '23423', 'Level 5, 352 Kent St', 'clifford@alphasys.com.au', '3', 'Male', '2022-09-18 22:07:56', 'qweqwe', 'qweqwe'),
+(81, 'Clifford', '', 'Ursabi', '213', 'Purok - 1, Embargo', 'iamclifford321@gmail.com', '', 'Male', '2022-09-18 22:08:47', '123123', '123123'),
+(82, 'Clifford', 'CASIPONG', 'Ursabia', '123123', 'Level 5, 352 Kent St', 'clifford@alphasys.com.au', '32', 'Male', '2022-09-18 22:09:34', 'sdasd', 'dsaasd'),
+(83, 'Clifford', 'CASIPONG', 'Ursabia', '21', 'Level 5, 352 Kent St', 'clifford@alphasys.com.au', '2', 'Male', '2022-09-22 11:27:29', '', ''),
+(84, 'Clifford', 'CASIPONG', 'Ursabia', '3213', 'Level 5, 352 Kent St', 'clifford@alphasys.com.au', '32', 'Male', '2022-09-22 23:52:58', '', '');
+
 -- --------------------------------------------------------
 
 --
@@ -74,6 +104,7 @@ CREATE TABLE `facility` (
   `Price` int(11) NOT NULL,
   `description` text NOT NULL,
   `Image` text NOT NULL,
+  `status` varchar(255) NOT NULL,
   `createDate` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -81,9 +112,9 @@ CREATE TABLE `facility` (
 -- Dumping data for table `facility`
 --
 
-INSERT INTO `facility` (`Facility_name`, `Facility_id`, `Facility_type`, `Price`, `description`, `Image`, `createDate`) VALUES
-('Room 1', 9, 0, 3123, 'Lo', '810582Screenshot 2022-02-28 090205.png', '2022-08-14 15:36:09'),
-('dsadasd', 10, 0, 32, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '531092Screenshot 2022-01-18 103823.png', '2022-08-14 15:36:09');
+INSERT INTO `facility` (`Facility_name`, `Facility_id`, `Facility_type`, `Price`, `description`, `Image`, `status`, `createDate`) VALUES
+('dsadas', 11, 0, 323, 'ewqewqe', '645655Screenshot 2022-09-14 072941.png', 'Activate', '2022-09-09 15:54:26'),
+('Test', 12, 0, 32, 'ewqeqw', '215934Screenshot 2022-02-28 090205.png', 'Activate', '2022-09-09 15:54:26');
 
 -- --------------------------------------------------------
 
@@ -95,10 +126,30 @@ CREATE TABLE `payments` (
   `Payment_id` int(11) NOT NULL,
   `Customer_id` varchar(50) NOT NULL,
   `Gcash_number` varchar(50) NOT NULL,
-  `Payment_date` date NOT NULL,
+  `Payment_date` date NOT NULL DEFAULT current_timestamp(),
   `Reservation_id` varchar(50) NOT NULL,
-  `createdDate` datetime NOT NULL DEFAULT current_timestamp()
+  `Status` varchar(255) NOT NULL,
+  `createdDate` datetime NOT NULL DEFAULT current_timestamp(),
+  `Amount` decimal(10,0) NOT NULL,
+  `Receipt` text NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `isPartial` tinyint(1) NOT NULL,
+  `isRefund` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`Payment_id`, `Customer_id`, `Gcash_number`, `Payment_date`, `Reservation_id`, `Status`, `createdDate`, `Amount`, `Receipt`, `type`, `isPartial`, `isRefund`) VALUES
+(60, '72', '', '2022-09-22', '70', 'Success', '2022-09-22 22:13:40', '2584', '', 'Manual', 0, 0),
+(61, '72', '432', '2022-09-22', '70', 'Success', '2022-09-22 22:14:52', '2067', '70Screenshot 2022-09-14 072941.png', 'Electronic Pay', 0, 1),
+(62, '72', '', '2022-09-22', '71', 'Success', '2022-09-22 22:19:32', '4', '', 'Manual', 1, 0),
+(63, '72', '', '2022-09-22', '71', 'Success', '2022-09-22 22:38:24', '60', '', 'Manual', 0, 0),
+(64, '72', '31242343', '2022-09-22', '71', 'Success', '2022-09-22 23:17:51', '51', '71Screenshot 2022-09-15 210038.png', 'Electronic Pay', 0, 1),
+(65, '72', '', '2022-09-23', '72', 'Success', '2022-09-23 07:39:25', '3230', '', 'Manual', 0, 0),
+(66, '72', '2321', '2022-09-23', '74', 'Success', '2022-09-23 07:57:48', '646', '74Screenshot 2022-09-14 072941.png', 'Electronic Pay', 0, 0),
+(67, '72', '21123', '2022-09-23', '75', 'Success', '2022-09-23 14:05:56', '0', '75Screenshot 2022-09-14 072941.png', 'Electronic Pay', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -115,6 +166,17 @@ CREATE TABLE `reservation` (
   `createdDate` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `reservation`
+--
+
+INSERT INTO `reservation` (`Reservation_id`, `Customer_id`, `Number_of_guest`, `Reservation_status`, `Event`, `createdDate`) VALUES
+(70, '72', 3, 'Cencelled', '32', '2022-09-22 22:13:31'),
+(71, '72', 4, 'Cencelled', 'Test', '2022-09-22 22:19:14'),
+(73, '72', 2, 'Cencelled', 'Test', '2022-09-23 07:43:29'),
+(74, '72', 2, 'Reserved', 'Birthday to you', '2022-09-23 07:57:32'),
+(75, '72', 3, 'Reserved', 'Birthday to you', '2022-09-23 08:06:40');
+
 -- --------------------------------------------------------
 
 --
@@ -126,9 +188,22 @@ CREATE TABLE `reservation_facility` (
   `reservationId` varchar(11) NOT NULL,
   `dateIn` date NOT NULL,
   `dateOut` date NOT NULL,
+  `totalAmout` int(11) NOT NULL,
   `createdDate` datetime NOT NULL DEFAULT current_timestamp(),
   `reservationFacilityId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `reservation_facility`
+--
+
+INSERT INTO `reservation_facility` (`facilityId`, `reservationId`, `dateIn`, `dateOut`, `totalAmout`, `createdDate`, `reservationFacilityId`) VALUES
+('11', '70', '2022-09-19', '2022-09-26', 2584, '2022-09-22 22:13:31', 71),
+('12', '71', '2022-09-29', '2022-09-30', 64, '2022-09-22 22:19:14', 72),
+('11', '72', '2022-10-04', '2022-10-13', 3230, '2022-09-22 22:45:48', 73),
+('12', '73', '2022-09-23', '2022-09-24', 64, '2022-09-23 07:43:29', 74),
+('11', '74', '2022-09-19', '2022-09-20', 646, '2022-09-23 07:57:32', 75),
+('13', '75', '2022-10-12', '2022-10-14', 69, '2022-09-23 08:06:40', 76);
 
 -- --------------------------------------------------------
 
@@ -207,37 +282,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `billing`
 --
 ALTER TABLE `billing`
-  MODIFY `InvoiceNo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `InvoiceNo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `facility`
 --
 ALTER TABLE `facility`
-  MODIFY `Facility_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `Facility_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `Payment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `Reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `Reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `reservation_facility`
 --
 ALTER TABLE `reservation_facility`
-  MODIFY `reservationFacilityId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `reservationFacilityId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `user`

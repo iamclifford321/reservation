@@ -66,7 +66,10 @@
                 <table class="table res-table table-bordered">
                     <thead>
                         <th>Payment Date</th>
+                        <th>Payment Type</th>
+                        <th>Gcash No.</th>
                         <th>Receipt</th>
+                        <th>Is Refund</th>
                         <th>Status</th>
                         <th>Amount</th>
                     </thead>
@@ -78,6 +81,8 @@
                                 ?>
                                     <tr>
                                         <td><?php echo date('M d, Y', strtotime($payment['createdDate'])); ?></td>
+                                        <td><?php echo $payment['type']; ?></td>
+                                        <td><?php echo $payment['Gcash_number']; ?></td>
                                         <td>
                                             <div class="custom-file" style="width:100px; height: 100%;">
                                                 <label class="custom-file-label" for="payment-receipt" style="width:100%; height: 100%;">
@@ -85,6 +90,8 @@
                                                 </label>
                                             </div>
                                         </td>
+                                        <td><?php echo ($payment['isRefund']) ? 'Yes' : 'No'; ?></td>
+
                                         
                                         <td><?php echo $payment['Status']; ?></td>
                                         <td>₱<?php echo number_format($payment['Amount'], 2); ?></td>
@@ -93,18 +100,18 @@
                             }    
                         ?>
                         <tr>
-                            <td colspan="2" style="test-align:right"></td>
+                            <td colspan="5" style="test-align:right"></td>
                             <td>Total paid</td>
                             <td>₱<?php echo number_format($totalAmount, 2); ?></td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="test-align:right"></td>
+                            <td colspan="5" style="test-align:right"></td>
                             <td>Total reservation fee</td>
                             <td>₱<?php echo number_format($_GET['totalAmountFac'], 2); ?></td>
                         </tr>
                         <?php $bal = $_GET['totalAmountFac'] - $totalAmount; ?>
                         <tr>
-                            <td colspan="2" style="test-align:right"></td>
+                            <td colspan="5" style="test-align:right"></td>
                             <td><b>Balance</b></td>
                             <td>₱<?php echo number_format($bal, 2); ?></td>
                         </tr>

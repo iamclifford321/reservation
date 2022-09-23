@@ -1,4 +1,6 @@
 <?php
 session_start();
 session_destroy();
-header('LOCATION:../front-end/index.php');
+$location = 'LOCATION:../front-end/index.php';
+if(isset($_GET['isAdmin'])) $location = 'LOCATION:../login.php';
+header($location);

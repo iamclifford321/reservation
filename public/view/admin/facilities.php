@@ -226,12 +226,17 @@ $(document).ready(function() {
                 if (res.length > 0) {
                     table.clear().draw();
                     for (let index = 0; index < res.length; index++) {
+                        // <button class="btn btn-secondary"><i class="nav-icon far fa-calendar-alt"></i></button>
+                        var deac = `<button type="submit" class="btn btn-danger deleteRecord" Facility_id="${res[index]['Facility_id']}">Delete</button>`;
+                        if(res[index]['status'] == 'Deactivate'){
+                            deac = `<button type="submit" class="btn btn-danger activateRecord" Facility_id="${res[index]['Facility_id']}">Activate</button>`;
+                        }
                         const element = res[index];
                         table.row.add([
                             `<a href="#" img-src="${res[index]['Image']}" class="facilityName" data-target="#modal-update-facility" data-toggle="modal" Facility_id="${res[index]['Facility_id']}">${res[index]['Facility_name']}</a>`,
                             res[index]['Price'],
                             `<img src="public/uploads/images/${res[index]['Image']}" style="height: 35px;"/>`,
-                            `<button type="submit" class="btn btn-danger deleteRecord" Facility_id="${res[index]['Facility_id']}">Delete</button> <button class="btn btn-secondary"><i class="nav-icon far fa-calendar-alt"></i></button>`
+                            deac
                         ]).draw();
                     }
                 }
@@ -380,7 +385,34 @@ $(document).ready(function() {
         e.preventDefault();
 
     });
+    $(document).on('click', '.activateRecord', function(){
+        var Id = $(this).attr('Facility_id');
+        $('#facilityId').val(Id);
+        $.ajax({
+            method: 'POST',
+            url: 'adminAction.php',
+            dataType: "JSON",
+            data: {
+                action: 'activate-facility',
+                facilityId: Id
+            },
+            success: function(res) {
+                console.log(res);
+                if (res['status'] == 'success') {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Successfully activated the Facility!'
+                    });
 
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+
+                }
+
+            }
+        });
+    })
     $(document).on('click', '.deleteRecord', function(e) {
 
         var Id = $(this).attr('Facility_id');
@@ -405,6 +437,15 @@ $(document).ready(function() {
                         window.location.reload();
                     }, 1000);
 
+                }else{
+                    Swal.fire(
+                        'Invalid action',
+                        'You can\'t delete a Facility with related Reservation, the Facility has been deactivated instead',
+                        'warning'
+                    );
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 }
 
             }

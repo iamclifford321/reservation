@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
         <div class="col-sm-6">
-            <h1>Name of the tab</h1>
+            <h1>Billings</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -18,8 +18,12 @@
     <div class="container-fluid">
 
         <!-- Main content here -->
-        sdafs
-
+        
+        <table class="table">
+          <thead>
+            <th></th>
+          </thead>
+        </table>
 
         <!-- /.Main content here -->
 

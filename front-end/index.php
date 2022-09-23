@@ -16,7 +16,11 @@
         <!--================Header Area =================-->
         <?php include 'header.php'; ?>
         <!--================Header Area =================-->
-        
+        <style>
+            .hotel_img {
+                height: 330px;
+            }
+        </style>
         <!-- Modal Area -->
             <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                 <div class="modal-dialog modal-sm" role="document">
@@ -215,22 +219,24 @@
                             }
                         }
                         foreach ($getTheFacilities as $getTheFacility) {
-                            ?>
-                                <div class="col-lg-3 col-sm-6">
-                                    <div class="accomodation_item text-center">
-                                        <div class="hotel_img">
-                                            <img src="image/room1.jpg" alt="">
-                                            <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
-                                                <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
-                                            <?php else : ?>
-                                                <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>">ADD</button>
-                                            <?php endif; ?>
+                            if($getTheFacility['status'] == 'Activate'){
+                                ?>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="accomodation_item text-center">
+                                            <div class="hotel_img">
+                                                <img src="../public/uploads/images/<?php echo $getTheFacility['Image'] ?>" alt="">
+                                                <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
+                                                    <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
+                                                <?php else : ?>
+                                                    <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>">ADD</button>
+                                                <?php endif; ?>
+                                            </div>
+                                            <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
+                                            <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
                                         </div>
-                                        <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
-                                        <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
                                     </div>
-                                </div>
-                            <?php
+                                <?php
+                            }
                         }
                     ?>
                 </div>

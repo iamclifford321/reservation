@@ -8,6 +8,7 @@
         require_once '../Controller/Controller.php'; 
         $controller = new Controller(); 
         $resrvations = $controller->getSpecificReservation($_GET['reservationId']);
+        $payments = $controller->getSpecificPays($_GET['reservationId']);
         // echo '<pre>';
         // print_r($resrvation);
         // die();
@@ -55,7 +56,7 @@
         <section class="contact_area section_gap">
             <div class="container">
                 <div class="row" style="justify-content:center;">
-                    <div class="col-sm-12 col-md-8">
+                    <div class="col-sm-12 col-md-10">
 
                         <div class="alert alert-info" role="alert">
                             <h4 class="alert-heading">How does this work?</h4>
@@ -94,9 +95,9 @@
                                                         <th>Total Price</th>
                                                     </thead>
                                                     <tbody>
-                                                        <?php $dateScheds = array(); $facilityIds = []; $total = 0; foreach( $resrvations as $resrvation) : ?>
+                                                        <?php $dateScheds = array(); $facilityIds = []; $totalAll = 0; foreach( $resrvations as $resrvation) : ?>
                                                         <?php
-                                                            $total += $resrvation['totalAmout']; 
+                                                            $totalAll += $resrvation['totalAmout']; 
 
                                                             $dateScheds[$resrvation['facilityId']] = array(
                                                                 'dateIn' => $resrvation['dateIn'],
@@ -117,7 +118,7 @@
                                                         <?php endforeach; ?>
                                                         <tr>
                                                             <td colspan="3" class="text-bold"><b>Total</b></td>
-                                                            <td colspan="">₱<?php echo number_format($total, 2) ?></td>
+                                                            <td colspan="">₱<?php echo number_format($totalAll, 2) ?></td>
                                                         </tr>
                                                         <?php $serialized = serialize($dateScheds); //echo $serialized; ?>
                                                         <?php // echo serialize($facilityIds); ?>
@@ -125,7 +126,51 @@
                                                 </table>
                                             </div>
 
-                                            <div class="col-sm-12 col-md-12 margin bottom">
+                                            <div class="col-sm-12 col-md-6 margin bottom">
+                                                <label for="">Payment history</label>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <th>Paid date</th>
+                                                        <th>Mode</th>
+                                                        <th>Amount</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php $total = 0; foreach($payments as $payment) : ?>
+                                                        <?php $total += $payment['Amount']; ?>
+                                                        <tr>
+                                                            <td><?php echo $payment['Payment_date'] ?></td>
+                                                            <td><?php echo $payment['type'] ?></td>
+                                                            <td>₱<?php echo number_format($payment['Amount'], 2) ?></td>
+                                                        </tr>
+                                                        <?php endforeach; ?>
+                                                        <tr>
+                                                            <td colspan="2"> <label for="">Total Fee</label> </td>
+                                                            <td>₱<?php echo number_format($totalAll, 2); ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2"> <label for="">Total Paid</label> </td>
+                                                            <td>₱<?php echo number_format($total, 2); ?></td>
+                                                        </tr>
+                                                        <?php 
+                                                            $balance = $totalAll - $total;
+                                                            $disabled = ''; 
+                                                            if($balance <= 0){
+                                                                $disabled = 'disabled';
+                                                            }
+                                                        ?>
+        
+                                                        <tr>
+                                                            <td colspan="2"> <label for="">Balance</label> </td>
+                                                            <td>₱<?php echo number_format($balance, 2); ?></td>
+                                                        </tr>
+        
+                                                    </tbody>
+                                                </table>
+        
+                                            </div>
+
+
+                                            <div class="col-sm-12 col-md-6 margin bottom">
 
                                                 <div class="form-group">
                                                     <label for="gcash-numner">Gcash number</label>
@@ -204,6 +249,7 @@
 
             });
 
+
             $('#patial').on('change', function(){
                 if($(this).prop('checked')){
                     $('#payment-amount').prop('readonly', false);
@@ -217,6 +263,7 @@
                     // $('#payment-amount').removeAttr('readonly');
                 }
             })
+            
             var sheds = '<?php echo json_encode(unserialize($serialized)); ?>';
             var parsedJson = JSON.parse(sheds);
                         // console.log( isDateBetween('2022-10-11', '2022-10-15', '2022-10-14') );

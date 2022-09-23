@@ -1,12 +1,14 @@
 <?php
         session_start();
-        
+        // echo "<pre>";
+        // print_r( $_SESSION['user_data'] );
+        // die();
 ?>
 <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="session" content="<?php echo (isset($_SESSION['user_data'])) ? $_SESSION['user_data']['customer_id']: ''; ?>">
+        <meta name="session" content="<?php echo (isset($_SESSION['user_data']['customer_id'])) ? $_SESSION['user_data']['customer_id']: ''; ?>">
         <link rel="icon" href="image/favicon.png" type="image/png">
         <title>G-EM'S POOL PARK</title>
         <!-- Bootstrap CSS -->

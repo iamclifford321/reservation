@@ -35,7 +35,6 @@ class Model extends Config{
           }
      }
 
-
      protected function dynamicSLCTQuery( $query ){
           try {
                $pdo      = $this->connect();

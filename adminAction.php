@@ -92,3 +92,22 @@
         }
         
     }
+    if($_POST['action'] == 'makePayment'){
+
+        $rtrn = $controller->makePaymentManual();
+        header("Location:" . $_SERVER['HTTP_REFERER'] . "&message=Payment added!");
+    }
+
+    if($_POST['action'] == 'makeRefund'){
+
+        $rtrn = $controller->makeRefund();
+        header("Location:adminIndex.php?page=reservations&message=Payment added!");
+        
+    }
+
+    if($_POST['action'] == 'activate-facility'){
+        $rtrn = $controller->activateFacility();
+        echo json_encode($rtrn);
+    }
+
+    

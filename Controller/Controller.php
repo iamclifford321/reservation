@@ -750,7 +750,7 @@ class Controller extends Model{
     public function submitReservation(){
 
         $insertReservationQry = "INSERT INTO reservation (Number_of_guest, Reservation_status, Event, Customer_id)VALUES(:Number_of_guest, :Reservation_status, :Event, :CustomerId)";
-        $customerId = (!isset($_SESSION['user_data'])) ? '' : $_SESSION['user_data']['customer_id'];
+        $customerId = (!isset($_SESSION['user_data']['customer_id'])) ? '' : $_SESSION['user_data']['customer_id'];
         $placeholderReservation = array(
             ':Number_of_guest' => $_POST['guestNumber'],
             ':Reservation_status' => 'Unpaid',
@@ -772,7 +772,7 @@ class Controller extends Model{
                 $rtrnReservationFacility = $this->dynamicDMLLabeledQuery($insertReservationFacility, $placeholderReservationFacility);
             }
 
-            if(!isset($_SESSION['user_data'])){
+            if(!isset($_SESSION['user_data']['customer_id'])){
                 unset($_SESSION['Facilities']);
                 $_SESSION['reservationIdTemp'] = $rtrnReservation['id'];
                 header('Location:front-end/login.php');

@@ -21,8 +21,12 @@
         
         <table class="table">
           <thead>
-            <th></th>
+            <th>Reservation Id</th>
+            <th>Customer</th>
           </thead>
+          <tbody>
+            
+          </tbody>
         </table>
 
         <!-- /.Main content here -->

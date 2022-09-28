@@ -40,7 +40,7 @@
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Name of the tab</li>
+            <li class="breadcrumb-item active">Approve Cancel</li>
             </ol>
         </div>
         </div>
@@ -77,11 +77,9 @@
 
                                         <div class="col-sm-12 col-lg-12">
                                             <div class="form-group">
-
                                                 <label for="">Amount <small></small></label>
                                                 <input type="text" class="form-control" value="₱<?php echo number_format($amountDiscounted, 2); ?>" readonly>
                                                 <input type="hidden" name="amount" value="<?php echo $amountDiscounted ?>">
-                                            
                                             </div>
                                         </div>
                                         <input type="hidden" name="resId" value="<?php echo $_GET['reservationId']; ?>">
@@ -89,7 +87,8 @@
                                         <label for="reciept">
                                             <img src="public/images/gcash-qr-ss.jpg" alt="" width="100%" height="100%" id="reciept-img">
                                         </label>
-                                        <input type="file" class="d-none" name="reciept" id="reciept" required>
+                                        <input type="file" class="" name="reciept" id="reciept" required="true" style="opacity: 0; height:1px;">
+                                        <input type="checkbox" id="isManualPayment" name="isManualPayment"> <label for="isManualPayment">This is a manual payment</label> &nbsp; 
                                     </div>
                                 </div>
                             </div>
@@ -134,6 +133,18 @@
 
 <script>
     $(document).ready(function(){
+        $('#isManualPayment').on('change', function(){
+            if($(this).prop('checked')){
+                $('#reciept-img').addClass('d-none');
+                $('#reciept').prop('required', false);
+                $('[name=gcashNumber]').prop('required', false).addClass('d-none').val(null).prev().addClass('d-none');
+            }else{
+                $('#reciept').prop('required', true);
+                $('#reciept-img').removeClass('d-none');
+                $('[name=gcashNumber]').prop('required', true).removeClass('d-none').prev().removeClass('d-none');;
+            }
+            
+        });
 
         $('#reciept').on('change', function(){
             

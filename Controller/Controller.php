@@ -1004,46 +1004,50 @@ class Controller extends Model{
         // Update the Billing
         // Update Reservation
         // INSERT Payment
-
-        $srcStr = 'public/uploads/images/';
-        $fileName = $_POST['resId'] . basename($_FILES["reciept"]["name"]);
-        $target_file = $srcStr . $fileName;
-        $uploadReceipt = move_uploaded_file($_FILES["reciept"]["tmp_name"], $target_file);
-        
-        
-        if($uploadReceipt){
-            $insertPaymentSQL = "INSERT INTO payments(Customer_id, Gcash_number, Reservation_id, Status, Amount, Receipt, type, isRefund)VALUES(:Customer_id, :Gcash_number, :Reservation_id, :Status, :Amount, :Receipt, :type, :isRefund)";
-            $paymentSQLParam = array(
-                ':Customer_id' => $_POST['cusId'], 
-                ':Gcash_number' => $_POST['gcashNumber'], 
-                ':Reservation_id' => $_POST['resId'], 
-                ':Status' => 'Success',
-                ':Amount' => $_POST['amount'], 
-                ':Receipt' => $fileName, 
-                ':type' => 'Electronic Pay', 
-                ':isRefund' => true
-            );
-
-            $insertPayment = $this->dynamicDMLLabeledQuery($insertPaymentSQL, $paymentSQLParam);
-            $totalBill = $_POST['amount'] * -1;
-            $insertBillingSql = "INSERT into billing(PaymentMode, CustomerId, ReservationId, TotalBill, isRefund)VALUES(:PaymentMode, :CustomerId, :ReservationId, :TotalBill, :isRefund)";
-            $insertBillingParam = array(
-                ':PaymentMode' => 'Gcash',
-                ':CustomerId' => $_POST['cusId'],
-                ':ReservationId' => $_POST['resId'],
-                ':TotalBill' => $totalBill,
-                ':isRefund' => true
-            );
-            
-            $insertBilling = $this->dynamicDMLLabeledQuery($insertBillingSql, $insertBillingParam);
-
-            $updateReservationSql = "UPDATE reservation set Reservation_status = :reservationStatus WHERE Reservation_id =:reservationId";
-            $updateReservationParam = array(
-                'reservationStatus' => 'Cencelled',
-                'reservationId' => $_POST['resId']
-            );
-            $uodateReservation = $this->dynamicDMLLabeledQuery($updateReservationSql, $updateReservationParam);
+        $fileName = '';
+        $paymentType = 'Manual';
+        $PaymentMode = '';
+        if(!isset($_POST['isManualPayment'])){
+            $srcStr = 'public/uploads/images/';
+            $fileName = $_POST['resId'] . basename($_FILES["reciept"]["name"]);
+            $target_file = $srcStr . $fileName;
+            $uploadReceipt = move_uploaded_file($_FILES["reciept"]["tmp_name"], $target_file);
+            $paymentType = 'Electronic Pay';
+            $PaymentMode = 'Gcash';
         }
+
+        $insertPaymentSQL = "INSERT INTO payments(Customer_id, Gcash_number, Reservation_id, Status, Amount, Receipt, type, isRefund)VALUES(:Customer_id, :Gcash_number, :Reservation_id, :Status, :Amount, :Receipt, :type, :isRefund)";
+        $paymentSQLParam = array(
+            ':Customer_id' => $_POST['cusId'], 
+            ':Gcash_number' => $_POST['gcashNumber'], 
+            ':Reservation_id' => $_POST['resId'], 
+            ':Status' => 'Success',
+            ':Amount' => $_POST['amount'], 
+            ':Receipt' => $fileName, 
+            ':type' => $paymentType, 
+            ':isRefund' => true
+        );
+
+        $insertPayment = $this->dynamicDMLLabeledQuery($insertPaymentSQL, $paymentSQLParam);
+        $totalBill = $_POST['amount'] * -1;
+        $insertBillingSql = "INSERT into billing(PaymentMode, CustomerId, ReservationId, TotalBill, isRefund)VALUES(:PaymentMode, :CustomerId, :ReservationId, :TotalBill, :isRefund)";
+        $insertBillingParam = array(
+            ':PaymentMode' => $PaymentMode,
+            ':CustomerId' => $_POST['cusId'],
+            ':ReservationId' => $_POST['resId'],
+            ':TotalBill' => $totalBill,
+            ':isRefund' => true
+        );
+        
+        $insertBilling = $this->dynamicDMLLabeledQuery($insertBillingSql, $insertBillingParam);
+
+        $updateReservationSql = "UPDATE reservation set Reservation_status = :reservationStatus WHERE Reservation_id =:reservationId";
+        $updateReservationParam = array(
+            'reservationStatus' => 'Cencelled',
+            'reservationId' => $_POST['resId']
+        );
+        $uodateReservation = $this->dynamicDMLLabeledQuery($updateReservationSql, $updateReservationParam);
+    
 
     }
     public function updateSpecificRes($resId){

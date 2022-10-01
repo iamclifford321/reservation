@@ -1060,4 +1060,28 @@ class Controller extends Model{
         $uodateReservation = $this->dynamicDMLLabeledQuery($updateReservationSql, $updateReservationParam);
     
     }
+
+    public function getEarnings($earningsPer){
+        $getRerserved = "SELECT 
+                                *
+                            FROM 
+                                billing
+                            WHERE 
+                                MONTH(createdDate) = MONTH(CURRENT_DATE())
+                            AND 
+                                YEAR(createdDate) = YEAR(CURRENT_DATE())";
+        if( $earningsPer == 'Annualy'){
+            $getRerserved = "SELECT 
+                                    *
+                                FROM 
+                                    billing
+                                WHERE
+                                    YEAR(createdDate) = YEAR(CURRENT_DATE())";
+        }
+
+        $getRecs = $this->dynamicSLCTQuery($getRerserved);
+
+        $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+     }
 }

@@ -1,4 +1,4 @@
-Able to cancel even without gcash
+Able to cancel even without gcash - ok
 Display all Billing
-Fix the dashboard
+Fix the dashboard - in progress
 display image in checkout page

@@ -441,7 +441,7 @@
                             var facilities = ``;
                             element.facilities.forEach(iterator => {
                                 facilities += `<li>
-                                                    <a href="facilityInfo.php?id=${iterator.facilityId}"><small>${iterator.faclityName} (${iterator.facilityDate})</small></a>
+                                                    <a href="#"><small>${iterator.faclityName} (${iterator.facilityDate})</small></a>
                                                 </li>`;
                             });
                             table.row.add([

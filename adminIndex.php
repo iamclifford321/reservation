@@ -45,7 +45,11 @@
 
         $refund       = 'active';
 
-     }else{
+     }elseif ($_GET['page']=='SalesReport') {
+
+
+     }
+     else{
         die("<center><h1 class='text-align: center'>Page not found</h1></center>");
      }
      

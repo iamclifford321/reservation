@@ -50,7 +50,7 @@
                         
                         $total = 0;
                         $disabled = 'disabled';
-                        if( isset($_SESSION['Facilities']) && count($_SESSION['Facilities']) > 0){
+                        if(isset($_SESSION['Facilities']) && count($_SESSION['Facilities']) > 0){
                             $disabled = null;
                             foreach ($_SESSION['Facilities'] as $key => $facility) {
                                 $total += floatval($facility['totalAmount']);
@@ -89,19 +89,40 @@
                                     <label>Booking info</label>
                                 </div>
                                 <div class="card-body">
+                                    <!-- <div class="form-group">
+                                        <h4>Entrance fee</h4>
+                                        <label for="">Adult: ₱30</label> <br>
+                                        <label for="">Children: ₱20</label>
+                                    </div> -->
                                     <div class="form-group">
-                                        <label for="">Total</label>
-                                        <input type="text" class="form-control" readonly value="₱<?php echo number_format($total, 2); ?>">
-                                        <input type="hidden" name="total" value="₱<?php echo $total; ?>">
+                                        <label for="">Facility Reservation fee</label>
+                                        <input type="text" class="form-control totalReadOnly" readonly value="₱<?php echo number_format($total, 2); ?>">
+                                        <input type="hidden" name="total" value="<?php echo $total; ?>">
                                     </div>
                                     <div class="form-group">
                                         <label for="">Event</label>
                                         <input type="text" class="form-control" name="event" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="">No. of Guest</label>
-                                        <input type="number" class="form-control" name="guestNumber" required>
+                                        <label for="">No. of Guests</label>
+                                        <input type="number" class="form-control" name="numberOfGuest" required>
                                     </div>
+
+                                    <!-- <div class="form-group">
+                                        <label for="hasChildren">Has Children</label>
+                                        <input type="checkbox" name="hasChildren" id="hasChildren" checked>
+                                    </div> -->
+
+                                    <!-- <div class="form-group childNumber">
+                                        <label for="">No. of Children</label>
+                                        <input type="number" class="form-control" name="childNumber" required="true">
+                                    </div> -->
+
+                                    <!-- <div class="form-group">
+                                        <label for="">Total Entrance Fee</label>
+                                        <input type="text" class="form-control" readonly name="entranceFee">
+                                    </div> -->
+
                                 </div>
                                 <div class="card-footer">
                                     <button type="submit" name="action" value="submitReservation" class="btn btn-secondary" <?php echo $disabled; ?>>Submit</button>
@@ -121,7 +142,48 @@
 
     <script>
         $(document).ready(function(){
+            $('#hasChildren').on('change', function(){
+                if($(this).prop('checked')){
+                    $('.childNumber').removeClass('d-none');
+                    $('[name=childNumber]').prop('required', true);
+                }else{
+                    $('.childNumber').addClass('d-none');
+                    $('[name=childNumber]').prop('required', false);
+                    $('[name=childNumber]').val(null);
+                }
+            });
             
+
+            $('[name=childNumber]').on('change', function(){
+                var numberOfChild = parseInt($(this).val());
+                var paymentForChild = numberOfChild * 20;
+
+                var numberAdult = 0; 
+                if($('[name=adultNumber]').val() != null && $('[name=adultNumber]').val() != ''){
+                    alert($('[name=adultNumber]').val())
+                    numberAdult = parseInt($('[name=adultNumber]').val()) * 30;
+                }
+
+                var totalAmount = paymentForChild + numberAdult;
+
+                $('[name=entranceFee]').val('₱' + totalAmount.toFixed(2).toLocaleString('en-US'));
+
+            });
+
+            $('[name=adultNumber]').on('change', function(){
+                var adultNum = parseInt($(this).val());
+                var paymentForAdult= adultNum * 30;
+
+                var numberOfChild = 0;
+                if($('[name=childNumber]').val() != null && $('[name=childNumber]').val() != ''){
+                    numberOfChild = parseInt($('[name=childNumber]').val()) * 20;
+                }
+                var totalAmount = paymentForAdult + numberOfChild;
+                $('[name=entranceFee]').val('₱' + totalAmount.toFixed(2).toLocaleString('en-US'));
+
+            })
+
+
             $('[name=date]').daterangepicker({
                 locale : {
                     format : 'YYYY/MM/DD'

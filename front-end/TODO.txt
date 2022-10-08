@@ -1,4 +1,13 @@
 Able to cancel even without gcash - ok
-Display all Billing
-Fix the dashboard - in progress
-display image in checkout page
+Display all Billing - not neccesary
+Fix the dashboard - in progress - ok
+
+
+payment for entrance - Prio
+Add Manual payment for entrance - Prio
+Display report(WeekLy, Monthly, Yearly)
+display image in checkout page - not yet
+Amount dapat dili dako kaisa sa balance
+
+
+

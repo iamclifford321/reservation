@@ -1,3 +1,13 @@
+<?php
+    require_once 'Config/Config.php'; 
+
+    require_once 'Model/Model.php'; 
+
+    require_once 'Controller/Controller.php'; 
+
+    $controller = new Controller(); 
+    $getTheFacilities = $controller->salesReports();
+?>
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">

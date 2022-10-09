@@ -749,12 +749,12 @@ class Controller extends Model{
     }
     public function submitReservation(){
         
-        $insertReservationQry = "INSERT INTO reservation (Number_of_guest, number_of_adults, number_of_children, Reservation_status, Event, Customer_id)VALUES(:Number_of_guest, :numberOfAdults, :numberOfChildren, :Reservation_status, :Event, :CustomerId)";
+        $insertReservationQry = "INSERT INTO reservation (Number_of_guest, Reservation_status, Event, Customer_id)VALUES(:Number_of_guest, :Reservation_status, :Event, :CustomerId)";
         $customerId = (!isset($_SESSION['user_data']['customer_id'])) ? '' : $_SESSION['user_data']['customer_id'];
         $placeholderReservation = array(
             ':Number_of_guest' => 0,
-            ':numberOfAdults' => 0, 
-            ':numberOfChildren' => 0,
+            // ':numberOfAdults' => 0, 
+            // ':numberOfChildren' => 0,
             ':Reservation_status' => 'Unpaid',
             ':Event' => $_POST['event'],
             ':CustomerId' => $customerId
@@ -1085,5 +1085,8 @@ class Controller extends Model{
 
         $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
         return $data;
+     }
+     public function salesReports(){
+        
      }
 }

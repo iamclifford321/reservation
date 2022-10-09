@@ -176,7 +176,7 @@
                                                     <label for="gcash-numner">Gcash number</label>
                                                     <input type="text" name="gcash-numner" id="gcash-numner" required class="form-control">
                                                 </div>
-
+                                                <input type="hidden" value="<?php echo $balance; ?>" name="balance">
                                                 <div class="form-group">
                                                     <label for="payment-amount">Amount</label>
                                                     <input type="text" required id="payment-amount" readonly="true" value="₱<?php echo number_format($balance, 2) ?>" class="form-control" totalAll=<?php echo $balance; ?>>
@@ -290,27 +290,34 @@
            });
 
 
-        //    $('[name=booking-form]').on('submit', function(e){
-        //         e.preventDefault();
-        //         $.ajax({
-        //             url : '../customerAction.php',
-        //             method: 'POST',
-        //             dataType : 'JSON',
-        //             data: {
-        //                 action : 'getTheResInDate',
-        //                 facilityIds : $('[name=facilityIds]').val()
-        //             },
-        //             success: function(res){
-        //                 console.log('res', res);
-        //                 for (const ids in parsedJson) {
-        //                     console.log('res', res[ids]);
-        //                     console.log( isDateBetween() );
-        //                 }
+           $('[name=booking-form]').on('submit', function(e){
+                
+                var bal = parseInt($('[name=balance]').val());
+                var payment = parseInt($('#payment-amount-hidden').val());
+                
+                if(bal < payment){
+                    alert('Payment should be lesser or equal to the current balance');
+                    e.preventDefault();
+                }
+                // $.ajax({
+                //     url : '../customerAction.php',
+                //     method: 'POST',
+                //     dataType : 'JSON',
+                //     data: {
+                //         action : 'getTheResInDate',
+                //         facilityIds : $('[name=facilityIds]').val()
+                //     },
+                //     success: function(res){
+                //         console.log('res', res);
+                //         for (const ids in parsedJson) {
+                //             console.log('res', res[ids]);
+                //             console.log( isDateBetween() );
+                //         }
 
-        //             }
+                //     }
 
-        //         })
-        //    })
+                // })
+           })
 
         })
     </script>

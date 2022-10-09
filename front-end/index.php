@@ -219,7 +219,7 @@
                             }
                         }
                         foreach ($getTheFacilities as $getTheFacility) {
-                            if($getTheFacility['status'] == 'Activate'){
+                            if($getTheFacility['status'] == 'Activate' || $getTheFacility['status'] == ''){
                                 ?>
                                     <div class="col-lg-3 col-sm-6">
                                         <div class="accomodation_item text-center">

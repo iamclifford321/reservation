@@ -1086,7 +1086,34 @@ class Controller extends Model{
         $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
         return $data;
      }
-     public function salesReports(){
-        
+     public function salesReports($value, $type){
+
+        $sql = "SELECT * FROM billing";
+        $getRecs;
+        if( $type == 'Monthly' ){
+            # Montly report
+            $sql .= " WHERE MONTH(createdDate) = MONTH(CURRENT_DATE()) AND YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Yearly') {
+            # Yearly report
+            $sql .= " WHERE YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }else{
+            # custom date select
+            # date1-date2
+            $exploded = explode(",", $value);
+            $dateFrom = $exploded[0];
+            $dateTo = $exploded[1];
+            $sql .= " WHERE createdDate >= :dateFrom AND createdDate <= :dateTo ORDER BY createdDate ASC";
+
+            $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
+                ':dateFrom' => $dateFrom,
+                ':dateTo' => $dateTo
+            ));
+        }
+        $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
      }
 }

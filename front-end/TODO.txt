@@ -8,6 +8,3 @@ Add Manual payment for entrance - Prio
 Display report(WeekLy, Monthly, Yearly)
 display image in checkout page - not yet
 Amount dapat dili dako kaisa sa balance
-
-
-

@@ -328,15 +328,15 @@
                                 </p>
                             </a>
                         </li>
-<!-- 
+
                         <li class="nav-item">
-                            <a href="?page=billing" class="nav-link <?php echo $billing ?>">
+                            <a href="?page=SalesReport" class="nav-link">
                                 <i class="nav-icon fas fa-file-invoice"></i>
                                 <p>
-                                    Billing
+                                    Report
                                 </p>
                             </a>
-                        </li> -->
+                        </li>
 
 
                         <!-- <li class="nav-item">

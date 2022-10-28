@@ -39,6 +39,7 @@
                                     <input type="hidden" name="facilityPrice">
                                     <input type="hidden" name="facilityName">
                                     <input type="hidden" name="facilityDescription">
+                                    <input type="hidden" name="faclityImg">
                                     <input type="hidden" name="fromDate">
                                     <input type="hidden" name="toDate">
 
@@ -228,7 +229,7 @@
                                                 <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
                                                     <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
                                                 <?php else : ?>
-                                                    <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>">ADD</button>
+                                                    <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>" faclity-img="<?php echo $getTheFacility['Image'] ?>">ADD</button>
                                                 <?php endif; ?>
                                             </div>
                                             <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
@@ -355,11 +356,13 @@
                 var facility_name = $(this).attr('facility-name');
                 var facility_price = $(this).attr('facility-price');
                 var facilityDescription = $(this).attr('facility-description');
-
+                var faclityImg = $(this).attr('faclity-img');
+                
                 $('[name=facilityId]').val(facility_id);
                 $('[name=facilityPrice]').val(facility_price);
                 $('[name=facilityName]').val(facility_name);
                 $('[name=facilityDescription]').val(facilityDescription);
+                $('[name=faclityImg]').val(faclityImg);
                 $('#bookingModal').modal('show');
                 $.ajax({
                     url : "../customerAction.php",
@@ -408,9 +411,7 @@
                                                                     $('[name=reserveDate]').val(strtDate + ' to ' + endDate);
                                                                 });
                     }
-                })
-
-
+                });
             });
         })
     </script>

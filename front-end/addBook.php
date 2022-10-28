@@ -15,6 +15,7 @@ if(isset($_GET['facilityId'])){
             'facilityName' => $_GET['facilityName'],
             'facilityPrice' => $_GET['facilityPrice'],
             'description' => $_GET['facilityDescription'],
+            'faclityImg' => $_GET['faclityImg'],
             'dateFrom' => $_GET['fromDate'],
             'dateTo' => $_GET['toDate'],
             'totalAmount' => $totalAmount
@@ -26,6 +27,7 @@ if(isset($_GET['facilityId'])){
                 'facilityName' => $_GET['facilityName'],
                 'facilityPrice' => $_GET['facilityPrice'],
                 'description' => $_GET['facilityDescription'],
+                'faclityImg' => $_GET['faclityImg'],
                 'dateFrom' => $_GET['fromDate'],
                 'dateTo' => $_GET['toDate'],
                 'totalAmount' => $totalAmount

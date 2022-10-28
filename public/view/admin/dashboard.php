@@ -28,6 +28,13 @@
 	foreach ($getEarningsYear as $key => $getEarning) {
 		$thisYear  += $getEarning['TotalBill'];
 	}
+
+	$getEarningsWeek = $controller->getEarnings('Weekly');
+	$thisWeek = 0;
+	foreach ($getEarningsWeek as $key => $getEarning) {
+		$thisWeek  += $getEarning['TotalBill'];
+	}
+
 ?>
 <div class="container-fluid" style="">
 
@@ -59,7 +66,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-6 col-xl-3 mb-4">
+				<!-- <div class="col-lg-6 col-xl-3 mb-4">
 					<div class="card bg-warning text-white h-100">
 						<div class="card-body">
 							<div class="d-flex justify-content-between align-items-center">
@@ -72,6 +79,24 @@
 						</div>
 						<div class="card-footer d-flex align-items-center justify-content-between small">
 							<a class="text-white stretched-link" href="?page=SalesReport&type=Yearly&value=This Year">View</a>
+							<div class="text-white"><svg class="svg-inline-fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg> <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com</div>
+						</div>
+					</div>
+				</div> -->
+
+				<div class="col-lg-6 col-xl-3 mb-4">
+					<div class="card bg-warning text-white h-100">
+						<div class="card-body">
+							<div class="d-flex justify-content-between align-items-center">
+								<div class="me-3">
+									<div class="text-white-75 small">Earnings (Weekly)</div>
+									<div class="text-lg fw-bold">₱<?php echo number_format($thisWeek, 2); ?></div>
+								</div>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign feather-xl text-white-50"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+							</div>
+						</div>
+						<div class="card-footer d-flex align-items-center justify-content-between small">
+							<a class="text-white stretched-link" href="?page=SalesReport&type=Weekly&value=This Week">View</a>
 							<div class="text-white"><svg class="svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com --></div>
 						</div>
 					</div>

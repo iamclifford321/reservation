@@ -5,6 +5,6 @@ Fix the dashboard - in progress - ok
 
 payment for entrance - Prio
 Add Manual payment for entrance - Prio
-Display report(WeekLy, Monthly, Yearly)
-display image in checkout page - not yet
-Amount dapat dili dako kaisa sa balance
+Display report(WeekLy, Monthly, Yearly) - ok
+display image in checkout page - ok
+Amount dapat dili dako kaisa sa balance - ok

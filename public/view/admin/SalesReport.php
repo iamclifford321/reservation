@@ -38,20 +38,38 @@
 
 <section class="content">
     <div class="container-fluid">
-        <h5>Filtered by: <?php echo $_GET['value']; ?></h5>
+        <h5 class="filter-by">Filtered by:
+          <select name="filteredBy" id="">
+            <?php // echo $_GET['value']; ?>
+            <?php foreach (['Weekly', 'Yearly', 'Monthly'] as $key => $value) : ?>
+              <?php 
+                
+                $selected = '';
+                if( $_GET['type'] == $value){
+                  $selected = 'Selected';
+                }
+              ?>
+              <option value="<?php echo $value; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+            <?php endforeach; ?>
+          </select>
+        </h5> 
+
         <!-- Main content here -->
         <div class="card">
           <div class="card-header">
-            <button class="btn btn-secondary">Print</button>
-            <div class="row print-details">
-              <div class="col-md-6">
-                <p><label for="">Name: </label> <?php echo ucfirst($_SESSION['user_data']['FirstName']) . ' ' . ucfirst($_SESSION['user_data']['LastName'])?></p>
-                <p><label for="">Report filter: </label> <?php echo $_GET['value']; ?></p>
+            <button class="btn btn-secondary" id="print-btn">Print</button>
+            <div class="print-details">
+              <div class="row">
+                <div class="col-md-6">
+                  <p><label for="">Name: </label> <?php echo ucfirst($_SESSION['user_data']['FirstName']) . ' ' . ucfirst($_SESSION['user_data']['LastName'])?></p>
+                  <p><label for="">Report filter: </label> <?php echo $_GET['value']; ?></p>
+                </div>
+                <div class="col-md-6">
+                  <p><label for="">Date: </label> <?php echo date("Y-m-d"); ?></p>
+                  <p><label for="">Signature: </label></p>
+                </div>
               </div>
-              <div class="col-md-6">
-                <p><label for="">Date: </label> <?php echo date("Y-m-d"); ?></p>
-                <p><label for="">Signature: </label></p>
-              </div>
+
             </div>
 
           </div>
@@ -117,13 +135,44 @@
 <!-- /.Default Modal -->
 
 <style>
+  
   div.print-details{
     display: none;
+  }
+
+  @media print {
+
+      .filter-by {
+        display: none;
+      }
+      #print-btn{
+        display: none;
+      }
+      .print-details{
+        display: inline !important;
+      }
+      .main-footer{
+        display: none !important;
+      }
+
   }
 </style>
 
 <script>
 
 // Some Script Here!
+$('[name=filteredBy]').on('change', function(){
 
+  if($(this).val() == 'Weekly'){
+    window.location.href = 'adminIndex.php?page=SalesReport&type=Weekly&value=This Week';
+  }else if($(this).val() == 'Yearly'){
+    window.location.href = 'adminIndex.php?page=SalesReport&type=Yearly&value=This Year';
+  }else{
+    window.location.href = 'adminIndex.php?page=SalesReport&type=Monthly&value=This Month';
+  }
+});
+
+$('#print-btn').on('click', function(){
+  window.print();
+})
 </script>

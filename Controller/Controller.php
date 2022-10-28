@@ -1072,13 +1072,21 @@ class Controller extends Model{
                                 MONTH(createdDate) = MONTH(CURRENT_DATE())
                             AND 
                                 YEAR(createdDate) = YEAR(CURRENT_DATE())";
-        if( $earningsPer == 'Annualy'){
+        if($earningsPer == 'Annualy'){
             $getRerserved = "SELECT 
                                     *
                                 FROM 
                                     billing
                                 WHERE
                                     YEAR(createdDate) = YEAR(CURRENT_DATE())";
+        }
+        if($earningsPer == 'Weekly'){
+            $getRerserved = "SELECT 
+                                    *
+                                FROM 
+                                    billing
+                                WHERE
+                                    YEARWEEK(`createdDate`, 1) = YEARWEEK(CURDATE(), 1)";
         }
 
         $getRecs = $this->dynamicSLCTQuery($getRerserved);
@@ -1098,6 +1106,13 @@ class Controller extends Model{
         }elseif ($type == 'Yearly') {
             # Yearly report
             $sql .= " WHERE YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Weekly') {
+            # Yearly report
+            
+
+            $sql .= " WHERE YEARWEEK(`createdDate`, 1) = YEARWEEK(CURDATE(), 1) ORDER BY createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }else{

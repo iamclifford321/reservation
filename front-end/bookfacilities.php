@@ -52,6 +52,9 @@
                         $disabled = 'disabled';
                         if(isset($_SESSION['Facilities']) && count($_SESSION['Facilities']) > 0){
                             $disabled = null;
+                            // echo '<pre>';
+                            // print_r($_SESSION['Facilities']);
+                            // die();
                             foreach ($_SESSION['Facilities'] as $key => $facility) {
                                 $total += floatval($facility['totalAmount']);
                                 ?>
@@ -60,7 +63,7 @@
                                             <div class="card-body">
                                                 <div class="card-content-divider">
                                                     <div class="card-image">
-                                                        <img class="card-img-top d-block" src="image/gallery/02.jpg" alt="Card image cap">
+                                                        <img class="card-img-top d-block" src="../public/uploads/images/<?php echo $facility['faclityImg']; ?>" alt="Card image cap">
                                                     </div>
                                                     <div class="card-content pl-3">
                                                         <h5 class="card-title"><?php echo $facility['facilityName']; ?></h5>

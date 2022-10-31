@@ -329,10 +329,20 @@
                             </a>
                         </li>
                         <li class="nav-item">
+
+                            <a href="?page=payments" class="nav-link <?php echo $payment ?>">
+                                <i class="nav-icon fas fa-money-bill-alt"></i>
+                                <p>
+                                    Payments
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="?page=SalesReport&type=Weekly&value=This Week" class="nav-link">
                                 <i class="nav-icon fas fa-file-invoice"></i>
                                 <p>
                                     Report
+
                                 </p>
                             </a>
                         </li>

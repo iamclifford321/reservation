@@ -68,6 +68,14 @@
         $rtrn = $controller->getReservation();
         echo json_encode($rtrn);
     }
+    if($_POST['action'] == 'create-payment'){
+        $rtrn = $controller->insertPayment();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'get-payment'){
+        $rtrn = $controller->getPayment();
+        echo json_encode($rtrn);
+    }
     if($_POST['action'] == 'login'){
         $rtrn = $controller->login();
         if($rtrn){
@@ -84,11 +92,22 @@
         }
         
     }
-    if($_POST['action'] == 'create-payment'){
-        $rtrn = $controller->insertPayment();
+    if($_POST['action'] == 'makePayment'){
+
+        $rtrn = $controller->makePaymentManual();
+        header("Location:" . $_SERVER['HTTP_REFERER'] . "&message=Payment added!");
+    }
+
+    if($_POST['action'] == 'makeRefund'){
+
+        $rtrn = $controller->makeRefund();
+        header("Location:adminIndex.php?page=reservations&message=Payment added!");
+        
+    }
+
+    if($_POST['action'] == 'activate-facility'){
+        $rtrn = $controller->activateFacility();
         echo json_encode($rtrn);
     }
-    if($_POST['action'] == 'get-payment'){
-        $rtrn = $controller->getPayment();
-        echo json_encode($rtrn);
-    }
+
+    

@@ -2,12 +2,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
         <div class="col-sm-6">
-            <h1>Name of the tab</h1>
+            <h1>Reservations</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Name of the tab</li>
+            <li class="breadcrumb-item active">Reservations</li>
             </ol>
         </div>
         </div>
@@ -28,15 +28,14 @@
             <table id="reservation-data" class="table table-striped">
                 <thead>
                     <tr>
+
+                        <th>Reservation Date</th>
                         <th>Customer</th>
+                        <th>Number of Guest</th>
                         <th>Facility</th>
-                        <th>Event</th>
-                        <!-- <th>Event Date</th> -->
-                        <th>Event Start</th>
-                        <th>Event End</th>
-                        <th>Guest Count</th>
                         <th>Status</th>
                         <th></th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -78,7 +77,16 @@
                             <div class="form-group">
                                 <label for="facility">Facility</label>
                                 <select name="facility" id="facility" class="form-control" required>
+                                    <option value="">-- Select --</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="eventDate">Event Date</label>
+                                <input type="text" name="eventDate" id="eventDate" class="form-control" required>
+                                <small class="text-danger d-none alert-reserve">There has already been a reservation on the selected date.</small>
                             </div>
                         </div>
 
@@ -89,6 +97,11 @@
                             </div>
                         </div>
 
+                        <input type="hidden" name="fromDate">
+                        <input type="hidden" name="toDate">
+                        <input type="hidden" name="numberOfDays">
+                        <input type="hidden" name="price">
+
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="guest">No of Guest</label>
@@ -96,7 +109,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6 col-md-6">
+                        <!-- <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="event-from">From</label>
                                 <input type="text" name="event-from" id="event-from" class="form-control datepicker" required>
@@ -108,14 +121,14 @@
                                 <label for="event-to">To</label>
                                 <input type="text" name="event-to" id="event-to" class="form-control datepicker" required>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
 
                 </div>
                 <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Save</button>
+                  <button type="submit" class="btn btn-primary" name="saveReservation" disabled="true">Save</button>
                 </div>
             </form>
         </div>
@@ -278,7 +291,93 @@
 // Some Script Here!
     $(document).ready(function(){
 
-        $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
+        const days = (date_1, date_2) =>{
+            let difference = date_1.getTime() - date_2.getTime();
+            let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+            return TotalDays;
+        }
+
+        $('#facility').on('change', function(){
+            
+            var facility_id = $(this).val();           
+            getFacilityReservation(facility_id);
+            $('[name=price]').val($(this).find(":selected").attr('price'));
+            if(facility_id == '' || facility_id == null){
+                $('[name=saveReservation]').prop('disabled', true);
+                $('[name=price]').val(null)
+            }
+            
+        })
+        function getFacilityReservation(facility_id){
+
+            $.ajax({
+                url : "customerAction.php",
+                method : "POST",
+                dataType: 'JSON',
+                data : {
+                    action : 'getFacilityReservation',
+                    faciltyId : facility_id
+                },
+                success: function(res){
+                    console.log('res', res);
+                    let disabledDates = [];
+                    for (const elmnt of res) {
+                        disabledDates.push(moment(elmnt).format('YY-MM-DD'));
+                    }
+                    $('#eventDate').daterangepicker({
+                                                        locale : {
+                                                            format : 'YYYY/MM/DD'
+                                                        },
+                                                        isInvalidDate: function(ele) {
+                                                            var currDate = moment(ele._d).format('YY-MM-DD');
+                                                            return disabledDates.indexOf(currDate) != -1;
+                                                        },
+                                                        autoUpdateInput: false,
+                                                    },function(start, end, label){
+                                                        var strtDate = start.format('Y-MM-DD');
+                                                        var endDate = end.format('Y-MM-DD');
+                                                        // console.log(endDate);
+                                                        var isValid = true;
+                                                        for (const elmnt of res) {
+                                                            if(isDateBetween(strtDate, endDate, elmnt)){
+                                                                isValid = false;
+                                                            }
+                                                        }
+                                                        if(!isValid){
+                                                            $('.alert-reserve').removeClass('d-none');
+                                                            $('[name=saveReservation]').prop('disabled', true);
+                                                            $('#eventDate').val(strtDate + ' to ' + endDate);
+                                                            return;
+                                                        }
+                                                        $('.alert-reserve').addClass('d-none');
+                                                        
+                                                        $('[name=saveReservation]').prop('disabled', false);
+                                                        $('[name=fromDate]').val(strtDate);
+                                                        $('[name=toDate]').val(endDate);
+                                                        $('#eventDate').val(strtDate + ' to ' + endDate);
+                                                        var numDays = days(new Date(endDate), new Date(strtDate));
+                                                        $('[name=numberOfDays]').val( numDays + 1);
+                                                    });
+
+
+                }
+            });
+
+        }
+
+        function isDateBetween(dateFrom, dateTo, dateCheck){
+            
+            console.log('dateFrom', dateFrom);
+            var from = new Date(dateFrom);  // -1 because months are from 0 to 11
+            var to   = new Date(dateTo);
+            var check = new Date(dateCheck);
+
+            return check >= from && check <= to;
+
+        }
+
+
+            
 
         $("#payment-receipt").on("change", function() {
             var fileName = $(this).val().split("\\").pop();
@@ -311,7 +410,9 @@
         });
 
         getReservationDetails();
+
         function getReservationDetails(){
+            // TEST HAHA
             $.ajax({
                 method      : 'POST',
                 url         : 'adminAction.php',
@@ -322,64 +423,51 @@
                     console.log('res===> ', res);
                     if(res.length > 0){
                         table.clear().draw();
-                        for (let index = 0; index < res.length; index++) {
 
+
+                        for (let index = 0; index < res.length; index++) {
+                            const element = res[index];
                             var status      = '';
                             var dataTarget  = '';
-
-                            if( res[index]['stats'] == 'Reserved') {
-                                status = 'Disabled';
-                                dataTarget = 'refund-payment';
-                            } else {
-                                dataTarget = 'cancel-reservation';
+                            var approve = ``;
+                            if(res[index]['status'] == 'Pending Cancel'){
+                                approve = `<a href="?page=approveCancelation&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Approve Cancellation</a>`;
                             }
-                            console.log('res===> ', res[index]);
-                            const element = res[index];
+                            var cancel = `<a href="?page=approveCancelation&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Cancel</a>`;
+                            if(res[index]['status'] == 'Pending Cancel' || res[index]['status'] == 'Cencelled'){
+                                cancel = ``;
+                            }
+                            // <a href="?page=payment&reservationId=${element.reservationId}&customerId=${element.customerId}&totalAmountFac=${element.totalAmountFac}" class="dropdown-item make-payment">Pay</a>
+                            var facilities = ``;
+                            element.facilities.forEach(iterator => {
+                                facilities += `<li>
+                                                    <a href="#"><small>${iterator.faclityName} (${iterator.facilityDate})</small></a>
+                                                </li>`;
+                            });
                             table.row.add([
-                                res[index]['FirstName'].charAt(0).toUpperCase() + res[index]['FirstName'].slice(1) + ' ' + res[index]['LastName'].charAt(0).toUpperCase() + res[index]['LastName'].slice(1),
-                                res[index]['Facility_name'],
-                                res[index]['Event'],
+                                res[index]['date'],
+                                res[index]['customer'],
+                                res[index]['numberOfCustomer'],
                                 //res[index]['Reservation_date'],
-                                res[index]['Date_in'],
-                                res[index]['Date_out'],
-                                res[index]['Number_of_guest'],
-                                res[index]['Reservation_status'],
+                                `<ul>${facilities}</ul>`,
+                                res[index]['status'],
                                 `<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                     <div class="btn-group" role="group">
                                         <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Payment Status
+                                            Action
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            <button data-toggle="modal" 
-                                                    type="submit" 
-                                                    class="dropdown-item make-payment" 
-                                                    data-target="#modal-new-payment"
-                                                    payment-customer="${res[index]['FirstName']} ${res[index]['LastName']}"
-                                                    payment-facility="${res[index]['Facility_name']}"
-                                                    payment-reservation="${res[index]['FirstName']} ${res[index]['LastName']} - ${res[index]['Event']}"
-                                                    payment-facility-id="${res[index]['fasId']}"
-                                                    payment-customer-id="${res[index]['customer_id']}"
-                                                    payment-reservation-id="${res[index]['resId']}"
-                                                    id="make-payment"
-                                                    ${status}
-                                                    >Make Payment</button>
-                                            <button data-toggle="modal" 
-                                                    type="submit" 
-                                                    class="dropdown-item approved-payment" 
-                                                    receipt-value="public/uploads/images/${res[index]['Receipt']}" 
-                                                    data-target="#approved-payment"
-                                                    ${status}
-                                                    >Approved</button>
-                                            <button data-toggle="modal" 
-                                                    type="submit" 
-                                                    class="dropdown-item cancel-payment" 
-                                                    receipt-value="public/uploads/images/${res[index]['Receipt']}" 
-                                                    data-target="#${dataTarget}"
-                                                    >Cancel</button>
+                                            <a href="?page=paymentHistory&reservationId=${element.reservationId}&customerId=${element.customerId}&totalAmountFac=${element.totalAmountFac}&status=${res[index]['status']}" class="dropdown-item make-payment">Payment history</a>
+                                            ${cancel}
+                                            ${approve}
                                         </div>
                                     </div>
                                 </div>`
                             ]).draw();
+
+
+
+
                         }
                     }
                 }
@@ -426,15 +514,16 @@
                 data        : {
                     action      : 'get-facility',
                 }, success: function(res){
-
                     if(res.length > 0){
+                        $('#facility').append(`<option value="">-- Select --</option>`);
                         for (let index = 0; index < res.length; index++) {
-                            $('#facility').append(
-                                `<option value="${res[index]['Facility_id']}">${res[index]['Facility_name']}</option>`
-                            )
+                            if(res[index]['status'] == 'Activate'){
+                                $('#facility').append(
+                                    `<option value="${res[index]['Facility_id']}" price="${res[index]['Price']}">${res[index]['Facility_name']}(₱${res[index]['Price']}/day)</option>`
+                                )
+                            }
                         }
                     }
-
                 }
             });
             
@@ -443,11 +532,11 @@
         $('[name=new-reservation-form]').on('submit', function(e){
             //alert();
             let customer     = $('#customer').val();
-            let facility     = $('#facility').val();
             let event        = $('#event').val();
             //let eventdate    = $('#event-date').val();
-            let eventfrom    = $('#event-from').val();
-            let eventto      = $('#event-to').val();
+            let facility     = $('#facility').val();
+            let eventfrom    = $('[name=fromDate]').val();
+            let eventto      = $('[name=toDate]').val();
             let guest        = $('#guest').val();
             //let status       = $('#status').val();
 
@@ -469,7 +558,9 @@
                         eventfrom    : eventfrom,
                         eventto      : eventto,
                         guest        : guest,
-                        //status       : status
+                        numberOfDays    : $('[name=numberOfDays]').val(),
+                        price   : $('[name=price]').val()
+
                 }, success : function(res){
 
                     if(res['status'] == 'success'){

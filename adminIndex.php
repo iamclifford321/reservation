@@ -1,5 +1,8 @@
 <?php
-    include 'Config/session.php';
+    include 'Config/sessionAdmin.php';
+    require_once 'Config/Config.php'; 
+    require_once 'Model/Model.php'; 
+    require_once 'Controller/Controller.php'; 
     if(!isset($_GET['page'])) die("<center><h1 class='text-align: center'>Page not found</h1></center>");
      $dashboard     = '';
      $reservation   = '';
@@ -14,7 +17,7 @@
 
         $dashboard      = 'active';
 
-     }elseif ($_GET['page']=='reservations') {
+     }elseif ($_GET['page']=='reservations' || $_GET['page']=='payment' || $_GET['page']=='paymentHistory' || $_GET['page'] == 'approveCancelation') {
 
         $reservation    = 'active';
 
@@ -42,7 +45,11 @@
 
         $refund       = 'active';
 
-     }else{
+     }elseif ($_GET['page']=='SalesReport') {
+
+
+     }
+     else{
         die("<center><h1 class='text-align: center'>Page not found</h1></center>");
      }
      
@@ -216,7 +223,7 @@
                     </div>
                 </li>
                 <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-bell"></i>
                         <span class="badge badge-warning navbar-badge">15</span>
@@ -225,10 +232,10 @@
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
-                </li>
+                </li> -->
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                        <i class="fas fa-expand-arrows-alt"></i>
+                    <a class="nav-link" href="Config/logout.php?isAdmin=true">
+                        Sign Out
                     </a>
                 </li>
 
@@ -321,17 +328,8 @@
                                 </p>
                             </a>
                         </li>
-
                         <li class="nav-item">
-                            <a href="?page=payments" class="nav-link <?php echo $payment ?>">
-                                <i class="nav-icon fas fa-file-invoice"></i>
-                                <p>
-                                    Payments
-                                </p>
-                            </a>
-                        </li>
 
-                        <li class="nav-item">
                             <a href="?page=payments" class="nav-link <?php echo $payment ?>">
                                 <i class="nav-icon fas fa-money-bill-alt"></i>
                                 <p>
@@ -339,15 +337,24 @@
                                 </p>
                             </a>
                         </li>
-
                         <li class="nav-item">
+                            <a href="?page=SalesReport&type=Weekly&value=This Week" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    Report
+
+                                </p>
+                            </a>
+                        </li>
+
+                        <!-- <li class="nav-item">
                             <a href="?page=refund" class="nav-link <?php echo $refund ?>">
                                 <i class="nav-icon fas fa-money-bill-alt"></i>
                                 <p>
                                     Refund
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
 
                         <!-- <li class="nav-item">
             <a href="#" class="nav-link">

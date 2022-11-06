@@ -413,12 +413,16 @@
 
         function getReservationDetails(){
             // TEST HAHA
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            
             $.ajax({
                 method      : 'POST',
                 url         : 'adminAction.php',
                 dataType    : "JSON",
                 data        : {
                     action      : 'get-reservation',
+                    filterBy    : urlParams.get('filterBy')
                 }, success: function(res){
                     console.log('res===> ', res);
                     if(res.length > 0){

@@ -48,7 +48,11 @@
      }elseif ($_GET['page']=='SalesReport') {
 
 
-     }
+     }elseif ($_GET['page']=='editProfile') {
+
+
+    }
+
      else{
         die("<center><h1 class='text-align: center'>Page not found</h1></center>");
      }
@@ -170,7 +174,7 @@
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="public/assets/dist/img/user1-128x128.jpg" alt="User Avatar"
+                                <img src="public/assets/dist/img/Basic_Ui_(186).jpg" alt="User Avatar"
                                     class="img-size-50 mr-3 img-circle">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
@@ -258,12 +262,11 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
                         <i class="fa-solid fa-g"></i>
-                        <img src="public/assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2"
+                        <img src="public/assets/dist/img/Basic_Ui_(186).jpg" class="img-circle elevation-2"
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#"
-                            class="d-block"><?php echo ucfirst($_SESSION['user_data']['FirstName']) . ' ' . ucfirst($_SESSION['user_data']['LastName']) ?></a>
+                        <a href="?page=editProfile" class="d-block"><?php echo ucfirst($_SESSION['user_data']['FirstName']) . ' ' . ucfirst($_SESSION['user_data']['LastName']) ?></a>
                     </div>
                 </div>
 
@@ -329,11 +332,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-
                             <a href="?page=payments" class="nav-link <?php echo $payment ?>">
                                 <i class="nav-icon fas fa-money-bill-alt"></i>
                                 <p>
-                                    Payments
+                                    Entrance fee
                                 </p>
                             </a>
                         </li>
@@ -342,7 +344,6 @@
                                 <i class="nav-icon fas fa-file-invoice"></i>
                                 <p>
                                     Report
-
                                 </p>
                             </a>
                         </li>

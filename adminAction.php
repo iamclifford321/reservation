@@ -86,8 +86,7 @@
         }else{
             echo json_encode(array(
                 'status' => 'invalid',
-                'msg' => 'Invalid credentials',
-
+                'msg' => 'Invalid credentials'
             ));
         }
         
@@ -109,5 +108,20 @@
         $rtrn = $controller->activateFacility();
         echo json_encode($rtrn);
     }
-
+    if($_POST['action'] == 'save-payment'){
+        $rtrn = $controller->addEntranceFee();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'getThepassUser'){
+        $rtrn = $controller->getThepassUser();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'updateThePass'){
+        $rtrn = $controller->updateThePass();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'updateUserProfile'){
+        $rtrn = $controller->updateUserProfile();
+        echo json_encode($rtrn);
+    }
     

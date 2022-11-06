@@ -11,7 +11,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
         <div class="col-sm-6">
-            <h1>Name of the tab</h1>
+            <h1>Entrance Payment</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -38,12 +38,10 @@
                 <thead>
                     <tr>
                         <th>Customer</th>
-                        <th>Facility</th>
-                        <th>Event</th>
-                        <th>Payment Date</th>
                         <th>Amount</th>
-                        <th>Receipt</th>
-                        <th>Status</th>
+                        <th>Number-Of-Adults</th>
+                        <th>Number-Of-Childrens</th>
+                        <th>Payment Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,7 +61,7 @@
 <div class="modal fade" id="modal-new-payment">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form action="" method="POST" name="payment-form">
+        <form action="adminAction.php" method="POST" name="payment-form">
             <div class="modal-header">
                 <h4 class="modal-title">Payment Details</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -71,37 +69,49 @@
                 </button>
             </div>
             <div class="modal-body">
-
-                <div class="row ">
-
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label for="">Facility</label>
+                            <select name="facilty" id="facilty" class="form-control">
+                                <option value="">-- None --</option>
+                                <?php foreach( $facilities as $facility ) : ?>
+                                    <option value="<?php echo $facility['Reservation_id'] . '-' . $facility['Customer_id']; ?>">
+                                        <?php echo $facility['Reservation_id'] . ' (' . $facility['Event'] . ')'; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-sm-12 col-md-12 payment-type-container">
-                        <div class="row">
-                            <div class="col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <label for="firstname">Firstname</label>
-                                    <input type="text" name="firstname" id="firstname" class="form-control" required>
+                        <div class="customerName">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label for="firstname">Firstname</label>
+                                        <input type="text" name="firstname" id="firstname" class="form-control">
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label for="middlename">Middlename</label>
+                                        <input type="text" name="middlename" id="middlename" class="form-control">
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label for="lastname">Lastname</label>
+                                        <input type="text" name="lastname" id="lastname" class="form-control">
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <label for="middlename">Middlename</label>
-                                    <input type="text" name="middlename" id="middlename" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <label for="lastname">Lastname</label>
-                                    <input type="text" name="lastname" id="lastname" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <label for="count">Number of Person</label>
-                                    <input type="number" name="count" id="count" class="form-control" required>
-                                </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="countAdult">Number of Adults</label>
+                                <input type="number" name="countAdult" id="countAdult" class="form-control" required>
                             </div>
                         </div>
 
@@ -113,36 +123,21 @@
                         </div>
                         <div class="col-sm-12 col-md-12 payment-type-container child-form-container">
                             <div class="form-group">
-                                <label for="count">Number of Child</label>
-                                <input type="number" name="count" id="count" class="form-control" required>
+                                <label for="countChild">Number of Child</label>
+                                <input type="number" name="countChild" id="countChild" class="form-control">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12">
+                        <!-- <div class="col-sm-12 col-md-12">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="include-facility">
                                 <label class="form-check-label" for="include-facility">Include Facility?</label>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12 payment-type-container facility-form-container">
-                            <div class="row">
-
-                                <?php foreach( $facilities as $facility ) : ?>
-                                
-                                    <div class="col-sm-6 col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="<?php echo $facility['Facility_id']; ?>" id="<?php echo $facility['Facility_id']; ?>">
-                                            <label class="form-check-label" for="<?php echo $facility['Facility_id']; ?>"><?php echo $facility['Facility_name']; ?></label>
-                                        </div>
-                                    </div>
-                                
-                                <?php endforeach; ?>
-
-                            </div>
-                        </div>
+                        </div> -->
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="total-payment">Total Payment</label>
-                                <input type="number" name="total-payment" id="total-payment" class="form-control" required>
+                                <input type="number" readonly name="total-payment" id="total-payment" class="form-control" required>
+                                <input type="hidden" name="totalPayment">
                             </div>
                         </div>
                     </div>
@@ -212,25 +207,20 @@
                     action: 'get-payment',
                 },
                 success: function(res) {
-
                     if (res.length > 0) {
                         table.clear().draw();
                         for (let index = 0; index < res.length; index++) {
-
                             const element = res[index];
+                            console.log(element);
                             table.row.add([
-                                res[index]['FirstName'].charAt(0).toUpperCase() + res[index]['FirstName'].slice(1) + ' ' + res[index]['LastName'].charAt(0).toUpperCase() + res[index]['LastName'].slice(1),
-                                res[index]['Facility_name'],
-                                res[index]['Event'] ,
-                                res[index]['Payment_date'],
-                                res[index]['Amount'],
-                                `<img data-toggle="modal" class="" src="public/uploads/images/${res[index]['Receipt']}" style="height: 35px;"/>`,
-                                res[index]['Status']
+                                element['FirstName'].charAt(0).toUpperCase() + element['FirstName'].slice(1) + ' ' + element['LastName'].charAt(0).toUpperCase() + element['LastName'].slice(1),
+                                element['Amount'],
+                                element['numberOfAdults'],
+                                element['numberOfChildrens'],
+                                element['Payment_date']
                             ]).draw();
-                            
                         }
                     }
-
                 }
             });
 
@@ -250,6 +240,87 @@
             }
         });
 
+
+        $('#countChild').on('change', function(){
+            var adultPay = parseFloat(($('#countAdult').val() == '' || $('#countAdult').val() == null) ? 0 : $('#countAdult').val()) * 30;
+            var childPay = parseFloat(($(this).val() == '' || $(this).val() == null) ? 0 : $(this).val()) * 20;
+            var total  = childPay + adultPay;
+            $('[name=totalPayment]').val(total);
+            $('#total-payment').val(total)
+        });
+
+
+        $('#countAdult').on('change', function(){
+
+            var childPay = parseFloat(($('#countChild').val() == '' || $('#countChild').val() == null) ? 0 : $('#countChild').val()) * 20;
+
+            var adultPay = parseFloat(($(this).val() == '' || $(this).val() == null) ? 0 : $(this).val()) * 30;
+            var total  = childPay + adultPay;
+            $('[name=totalPayment]').val(total);
+            $('#total-payment').val(total);
+
+        });
+
+        $('[name=payment-form]').on('submit', function(e){
+
+            e.preventDefault();
+            var firstname = $('#firstname').val();
+            var middlename = $('#middlename').val();
+            var lastname = $('#lastname').val();
+
+            var NumberofChild = ($('#countChild').val() == '' || $('#countChild').val() == null) ? 0 : $('#countChild').val();
+            var NumberofAdults = ($('#countAdult').val() == '' || $('#countAdult').val() == null) ? 0 : $('#countAdult').val();
+            var Reservation = ($('#facilty').val() == '' || $('#facilty').val() == null) ? null : $('#facilty').val();
+            var TotalPayment = ($('[name=totalPayment]').val() == '' || $('[name=totalPayment]').val() == null) ? 0 : $('[name=totalPayment]').val();
+            var reservationId = '';
+            var customerId = '';
+            var numberOf = parseInt(NumberofChild) + parseInt(NumberofAdults);
+            if(Reservation != '' && Reservation != null){
+                reservationId = Reservation.split('-')[0];
+                customerId = Reservation.split('-')[1];
+            }
+
+            $.ajax({
+                method: 'POST',
+                url: 'adminAction.php',
+                dataType: "JSON",
+                data: {
+                    action: 'save-payment',
+                    countChild: NumberofChild,
+                    countAdult: NumberofAdults,
+                    totalPayment: TotalPayment,
+                    Reservation: reservationId,
+                    customerId: customerId,
+                    numberOf: numberOf,
+                    firstname : firstname,
+                    middlename : middlename,
+                    lastname : lastname
+                },
+                success: function(res) {
+                    if(res['status'] == 'success'){
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Succesfuly added payment'
+                        });
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                        
+                    }
+                }
+            });
+        });
+        $('#facilty').on('change', function(){
+            if($(this).val() == '' || $(this).val() == null){
+                $('.customerName').show();
+                $('#firstname').prop('required', true);
+                $('#lastname').prop('required', true);
+            }else{
+                $('#firstname').prop('required', false);
+                $('#lastname').prop('required', false);
+                $('.customerName').hide();
+            }
+        })
     });
 
 </script>

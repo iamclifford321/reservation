@@ -351,7 +351,7 @@ class Controller extends Model{
 
     }
     public function getReservation(){
-
+        $reservations;
         $str = "SELECT 
                     * 
                 FROM 
@@ -359,13 +359,25 @@ class Controller extends Model{
                 LEFT JOIN 
                     customer 
                 ON 
-                    reservation.Customer_id = customer.customer_id
-                GROUP BY
-                    reservation.Reservation_id
-                ORDER BY
-                    reservation.createdDate DESC";
+                    reservation.Customer_id = customer.customer_id ";
+        if(isset($_POST['filterBy']) && $_POST['filterBy'] != null){
+            $str .= " WHERE Reservation_status =:status ";
+            $str .= "GROUP BY
+                        reservation.Reservation_id
+                    ORDER BY
+                        reservation.createdDate DESC";
+            $reservations = $this->dynamicSLCTLabeledQuery($str, array(
+                ':status' => $_POST['filterBy']
+            ));
+        }else{
+            
+            $str .= "GROUP BY
+                        reservation.Reservation_id
+                    ORDER BY
+                        reservation.createdDate DESC";
+            $reservations = $this->dynamicSLCTQuery($str);
+        }
 
-        $reservations = $this->dynamicSLCTQuery($str);
         $reservationData = $reservations['data']->fetchAll(PDO::FETCH_ASSOC);
         // +++++++
     
@@ -551,7 +563,22 @@ class Controller extends Model{
     }
 
     public function getPayment(){
-        $payments = $this->dynamicSLCTQuery("SELECT * FROM payments LEFT JOIN facility ON facility.Facility_id = payments.Facility_id LEFT JOIN customer ON customer.customer_id = payments.Customer_id LEFT JOIN reservation ON reservation.Reservation_id = payments.Reservation_id GROUP BY payments.Payment_id ORDER BY payments.Payment_id ASC");
+        $payments = $this->dynamicSLCTQuery("SELECT 
+                                                    * 
+                                                FROM 
+                                                    payments
+                                                LEFT JOIN 
+                                                    customer 
+                                                ON 
+                                                    customer.customer_id = payments.Customer_id
+                                                WHERE
+                                                    payments.isIntrance = true
+                                                GROUP BY 
+                                                    payments.Payment_id 
+                                                ORDER BY 
+                                                    payments.Payment_id
+                                                ASC");
+
         return $payments['data']->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -717,7 +744,7 @@ class Controller extends Model{
     }
 
     public function getTheFicilities(){
-        $str = "SELECT * FROM facility";
+        $str = "SELECT * FROM reservation";
         $facilities = $this->dynamicSLCTQuery($str);
         $dataRet = $facilities['data']->fetchAll(PDO::FETCH_ASSOC);
         return $dataRet;
@@ -1045,7 +1072,7 @@ class Controller extends Model{
 
         $updateReservationSql = "UPDATE reservation set Reservation_status = :reservationStatus WHERE Reservation_id =:reservationId";
         $updateReservationParam = array(
-            'reservationStatus' => 'Cencelled',
+            'reservationStatus' => 'Cancelled',
             'reservationId' => $_POST['resId']
         );
         $uodateReservation = $this->dynamicDMLLabeledQuery($updateReservationSql, $updateReservationParam);
@@ -1056,7 +1083,7 @@ class Controller extends Model{
 
         $updateReservationSql = "UPDATE reservation set Reservation_status = :reservationStatus WHERE Reservation_id =:reservationId";
         $updateReservationParam = array(
-            'reservationStatus' => 'Cencelled',
+            'reservationStatus' => 'Cancelled',
             'reservationId' => $resId
         );
         $uodateReservation = $this->dynamicDMLLabeledQuery($updateReservationSql, $updateReservationParam);
@@ -1130,5 +1157,96 @@ class Controller extends Model{
         }
         $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
         return $data;
-     }
+    }
+
+    public function addEntranceFee(){
+        $customerId = $_POST['customerId'];
+        if($_POST['customerId'] == ''){
+            $qryCustomer = 'INSERT INTO customer(FirstName, MiddleName, LastName)VALUES(:FirstName, :MiddleName, :LastName)';
+        
+            $firstname = $_POST['firstname'];
+            $lastname = $_POST['lastname'];
+            $middlename = $_POST['middlename'];
+            $placeholderCustomer = array(
+                ':FirstName' => $firstname,
+                ':MiddleName' => $middlename, 
+                ':LastName' => $lastname
+            );
+            $insertCus = $this->dynamicDMLLabeledQuery($qryCustomer, $placeholderCustomer);
+            $customerId = $insertCus['id'];
+        }
+        
+        $insertBillingSQL = 'INSERT INTO billing(ReservationId, CustomerId, TotalBill, isIntrance, PaymentMode)VALUES(:ReservationId, :CustomerId, :TotalBill, :isIntrance, :PaymentMode)';
+        $insertPaymentSQL = 'INSERT INTO payments(Customer_id, Reservation_id, Status, Amount, type, isIntrance, numberOfAdults, numberOfChildrens, numberOfGuests)VALUES(:Customer_id, :Reservation_id, :Status, :Amount, :type, :isIntrance, :numberOfAdults, :numberOfChildrens, :numberOfGuests)';
+
+        $insertBilling = $this->dynamicDMLLabeledQuery($insertBillingSQL, array(
+            ':ReservationId' => $_POST['Reservation'], 
+            ':CustomerId' => $customerId,
+            ':TotalBill' => $_POST['totalPayment'],
+            ':isIntrance' => true,
+            ':PaymentMode' => 'Manual'
+        ));
+
+        $insertPayment = $this->dynamicDMLLabeledQuery($insertPaymentSQL, array(
+            ':Customer_id' => $customerId,
+            ':Reservation_id' => $_POST['Reservation'],
+            ':Status' => 'Success', 
+            ':Amount' =>  $_POST['totalPayment'], 
+            ':type' => 'Manual',
+            ':isIntrance' => true,
+            ':numberOfAdults' => $_POST['countAdult'], 
+            ':numberOfChildrens' => $_POST['countChild'],
+            ':numberOfGuests' => $_POST['numberOf']
+        ));
+
+
+        $updateReservationSQL = 'UPDATE reservation set Number_of_guest = :Number_of_guest,  number_of_adults = :number_of_adults, number_of_children = :number_of_children WHERE Reservation_id =:Reservation_id';
+
+        $updateRes = $this->dynamicDMLLabeledQuery($updateReservationSQL, array(
+            ':Number_of_guest' => $_POST['numberOf'],
+            ':number_of_adults' => $_POST['countAdult'],
+            ':number_of_children' => $_POST['countChild'],
+            ':Reservation_id' => $_POST['Reservation']
+        ));
+        
+        return [
+            'status' => 'success'
+        ];
+    }
+    public function getThepassUser(){
+        $usr = 'SELECT * FROM user WHERE User_id =:UserId AND Password =:oldPass';
+        $usrDetails = $this->dynamicSLCTLabeledQuery($usr, array(
+            ':UserId' => $_POST['userId'],
+            ':oldPass' => $_POST['oldPass']
+        ));
+        if($usrDetails['status'] == 'success'){
+            return $usrDetails['data']->fetch(PDO::FETCH_ASSOC);
+        }else{
+            return ['status' => 'error'];
+        }
+        
+    }
+    public function updateThePass(){
+        $updatePassSQL = 'UPDATE user set Password = :pass WHERE User_id = :Userid';
+        $updateRes = $this->dynamicDMLLabeledQuery($updatePassSQL, array(
+            ':pass' => $_POST['newPass'],
+            ':Userid' => $_POST['userId']
+        ));
+        return $updateRes;
+    }
+
+    public function updateUserProfile(){
+        $updatePassSQL = 'UPDATE user set LastName = :LastName, FirstName = :FirstName, Username = :Username WHERE User_id = :Userid';
+        $updateRes = $this->dynamicDMLLabeledQuery($updatePassSQL, array(
+            ':LastName' => $_POST['lastname'],
+            ':FirstName' => $_POST['firstname'],
+            ':Username' => $_POST['username'],
+            ':Userid' => $_POST['userId']
+        ));
+        $_SESSION['user_data']['FirstName'] = $_POST['firstname'];
+        $_SESSION['user_data']['LastName'] = $_POST['lastname'];
+        $_SESSION['user_data']['Username'] = $_POST['username'];
+        
+        return $updateRes;
+    }
 }

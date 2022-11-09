@@ -9,7 +9,7 @@
         require_once '../Controller/Controller.php'; 
 
         $controller = new Controller(); 
-        $getTheFacilities = $controller->getTheFicilities();
+        $getTheFacilities = $controller->getFacility();
     ?>
     <?php include 'head.php'; ?>
     <body>

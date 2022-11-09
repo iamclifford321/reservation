@@ -42,7 +42,7 @@
         <!--================ About History Area  =================-->
         
         <!--================ Testimonial Area  =================-->
-        <section class="testimonial_area section_gap">
+        <!-- <section class="testimonial_area section_gap">
             <div class="container">
                 <div class="section_title text-center">
                     <h2 class="title_color">Testimonial from our Clients</h2>
@@ -107,7 +107,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
         <!--================ Testimonial Area  =================-->
         
         <!--================ start footer Area  =================-->	

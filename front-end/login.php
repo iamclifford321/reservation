@@ -8,82 +8,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reservation and Billing system</title>
-
-     <!-- Google Font: Source Sans Pro -->
-     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-     <!-- Font Awesome -->
-     <link rel="stylesheet" href="../public/assets/plugins/fontawesome-free/css/all.min.css">
-     <!-- Ionicons -->
-     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-     <!-- Tempusdominus Bootstrap 4 -->
-     <link rel="stylesheet" href="../public/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-     <!-- iCheck -->
-     <link rel="stylesheet" href="../public/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-     <!-- JQVMap -->
-     <link rel="stylesheet" href="../public/assets/plugins/jqvmap/jqvmap.min.css">
-     <!-- Theme style -->
-     <link rel="stylesheet" href="../public/assets/dist/css/adminlte.min.css">
-     <!-- overlayScrollbars -->
-     <link rel="stylesheet" href="../public/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-     <!-- Daterange picker -->
-     <link rel="stylesheet" href="../public/assets/plugins/daterangepicker/daterangepicker.css">
-     <!-- summernote -->
-     <link rel="stylesheet" href="../public/assets/plugins/summernote/summernote-bs4.min.css">
      <!-- SweetAlert2 -->
      <link rel="stylesheet" href="../public/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
      <!-- custom style -->
-     <link rel="stylesheet" href="../public/assets/dist/css/custom.css">
-    <!-- jQuery -->
-    <script src="../public/assets/plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="../public/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-
-    <!-- Bootstrap 4 -->
-    <script src="../public/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="../public/assets/plugins/chart.js/Chart.min.js"></script>
-    <!-- Sparkline -->
-    <script src="../public/assets/plugins/sparklines/sparkline.js"></script>
-    <!-- JQVMap -->
-    <script src="../public/assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="../public/assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="../public/assets/plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- daterangepicker -->
-    <script src="../public/assets/plugins/moment/moment.min.js"></script>
-    <script src="../public/assets/plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="../public/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- Summernote -->
-    <script src="../public/assets/plugins/summernote/summernote-bs4.min.js"></script>
-    <!-- overlayScrollbars -->
-    <script src="../public/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../public/assets/dist/js/adminlte.js"></script>
-
-
-    <script src="../public/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="../public/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="../public/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../public/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="../public/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../public/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="../public/assets/plugins/jszip/jszip.min.js"></script>
-    <script src="../public/assets/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="../public/assets/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="../public/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="../public/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="../public/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+  
     <!-- SweetAlert2 -->
-    <script src="../public/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="loginTemplate/css/style.css">
+    
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
-     <div class="wrapper">
+     <!-- <div class="wrapper">
           <div id="formContent" class="d-flex align-items-center justify-content-center mt-5">
-               <!-- Tabs Titles -->
-               <!-- Login Form -->
+
                <form action="adminAction.php" method="POST">
                     <div class="logo mb-5">
                          <h2 class="text-center">Login</h2>
@@ -102,11 +45,57 @@
                </form>
           
           </div>
-     </div>
+     </div> -->
 
+     <section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-7 col-lg-5">
+					<div class="wrap">
+						<div class="img" style="background-image: url(loginTemplate/images/bg-1.jpg);"></div>
+						<div class="login-wrap p-4 p-md-5">
+			      	<div class="d-flex">
+			      		<div class="w-100">
+			      			<h3 class="mb-4">Sign In</h3>
+			      		</div>
+							<div class="w-100">
+								<p class="social-media d-flex justify-content-end">
+									<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
+									<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-twitter"></span></a>
+								</p>
+							</div>
+			      		</div>
+							<form action="#" class="signin-form">
+
+                                        <div class="form-group mt-3">
+                                             <input type="text" class="form-control" required name="username">
+                                             <label class="form-control-placeholder" for="username">Username</label>
+                                        </div>
+                                        <div class="form-group">
+                                             <input id="password-field" type="password" name="password" class="form-control" required>
+                                             <label class="form-control-placeholder" for="password">Password</label>
+                                             <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                        </div>
+                                        <div class="form-group">
+                                             <button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign In</button>
+                                        </div>
+
+                                   </form>
+		          <p class="text-center">Not a member? <a href="register-customer.php">Sign Up</a></p>
+		        </div>
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
 <!-- ./wrapper -->
 
 </body>
+<script src="loginTemplate/js/jquery.min.js"></script>
+<script src="loginTemplate/js/popper.js"></script>
+<script src="loginTemplate/js/bootstrap.min.js"></script>
+<script src="loginTemplate/js/main.js"></script>
+<script src="../public/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
 <script>
      $(document).ready(function(){
           var Toast = Swal.mixin({
@@ -129,7 +118,7 @@
                             username : $('[name=username]').val()
                         },
                         success : function(res){
-
+                              console.log('res', res);
                             if( res['status'] == 'invalid'){
                                    Swal.fire(
                                     'Invalid Credentials',

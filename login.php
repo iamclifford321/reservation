@@ -9,103 +9,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reservation and Billing system</title>
 
-     <!-- Google Font: Source Sans Pro -->
-     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-     <!-- Font Awesome -->
-     <link rel="stylesheet" href="public/assets/plugins/fontawesome-free/css/all.min.css">
-     <!-- Ionicons -->
-     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-     <!-- Tempusdominus Bootstrap 4 -->
-     <link rel="stylesheet" href="public/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-     <!-- iCheck -->
-     <link rel="stylesheet" href="public/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-     <!-- JQVMap -->
-     <link rel="stylesheet" href="public/assets/plugins/jqvmap/jqvmap.min.css">
-     <!-- Theme style -->
-     <link rel="stylesheet" href="public/assets/dist/css/adminlte.min.css">
-     <!-- overlayScrollbars -->
-     <link rel="stylesheet" href="public/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-     <!-- Daterange picker -->
-     <link rel="stylesheet" href="public/assets/plugins/daterangepicker/daterangepicker.css">
-     <!-- summernote -->
-     <link rel="stylesheet" href="public/assets/plugins/summernote/summernote-bs4.min.css">
-     <!-- SweetAlert2 -->
-     <link rel="stylesheet" href="public/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
-     <!-- custom style -->
-     <link rel="stylesheet" href="public/assets/dist/css/custom.css">
-    <!-- jQuery -->
-    <script src="public/assets/plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="public/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-
-    <!-- Bootstrap 4 -->
-    <script src="public/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="public/assets/plugins/chart.js/Chart.min.js"></script>
-    <!-- Sparkline -->
-    <script src="public/assets/plugins/sparklines/sparkline.js"></script>
-    <!-- JQVMap -->
-    <script src="public/assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="public/assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="public/assets/plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- daterangepicker -->
-    <script src="public/assets/plugins/moment/moment.min.js"></script>
-    <script src="public/assets/plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="public/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- Summernote -->
-    <script src="public/assets/plugins/summernote/summernote-bs4.min.js"></script>
-    <!-- overlayScrollbars -->
-    <script src="public/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="public/assets/dist/js/adminlte.js"></script>
-
-
-    <script src="public/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="public/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="public/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="public/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="public/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="public/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="public/assets/plugins/jszip/jszip.min.js"></script>
-    <script src="public/assets/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="public/assets/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="public/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="public/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="public/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="public/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--===============================================================================================-->
+       <link rel="stylesheet" type="text/css" href="loginTemplate/vendor/bootstrap/css/bootstrap.min.css">
+  <!--===============================================================================================-->
+       <link rel="stylesheet" type="text/css" href="loginTemplate/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+  <!--===============================================================================================-->
+       <link rel="stylesheet" type="text/css" href="loginTemplate/fonts/iconic/css/material-design-iconic-font.min.css">
+  <!--===============================================================================================-->
+       <link rel="stylesheet" type="text/css" href="loginTemplate/vendor/animate/animate.css">
+  <!--===============================================================================================-->	
+       <link rel="stylesheet" type="text/css" href="loginTemplate/vendor/css-hamburgers/hamburgers.min.css">
+  <!--===============================================================================================-->
+       <link rel="stylesheet" type="text/css" href="loginTemplate/vendor/animsition/css/animsition.min.css">
+  <!--===============================================================================================-->
+       <link rel="stylesheet" type="text/css" href="loginTemplate/vendor/select2/select2.min.css">
+  <!--===============================================================================================-->	
+       <link rel="stylesheet" type="text/css" href="loginTemplate/vendor/daterangepicker/daterangepicker.css">
+  <!--===============================================================================================-->
+       <link rel="stylesheet" type="text/css" href="loginTemplate/css/util.css">
+       <link rel="stylesheet" type="text/css" href="loginTemplate/css/main.css">
+  <!--===============================================================================================-->
+       <!-- SweetAlert2 -->
+       <link rel="stylesheet" href="public/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <style>
+          
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
-     <div class="wrapper">
-          <div id="formContent" class="d-flex align-items-center justify-content-center mt-5">
-               <!-- Tabs Titles -->
-               <!-- Login Form -->
-               <form action="adminAction.php" method="POST">
-                    <div class="logo mb-5">
-                         <h2 class="text-center">Login</h2>
-                    </div>
-                    
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Username</label>
-                      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username" name="username">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Password</label>
-                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
-                    </div>
-                    <button type="submit" name="login" class="btn btn-primary">Login</button>
-               </form>
-          
-          </div>
-     </div>
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<form class="" id="formLogin" action="adminAction.php" method="POST">
+					<span class="login100-form-title p-b-26">
+						Welcome
+					</span>
+
+					<div class="wrap-input100" data-validate = "Valid email is: a@b.c">
+						<input class="input100" type="text" name="username">
+						<span class="focus-input100" data-placeholder="username"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Enter password">
+						<span class="btn-show-pass">
+							<i class="zmdi zmdi-eye"></i>
+						</span>
+						<input class="input100" type="password" name="password">
+						<span class="focus-input100" data-placeholder="Password"></span>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button type="submit" class="login100-form-btn" >
+								Login
+							</button>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
 
 <!-- ./wrapper -->
 
 </body>
+<!--===============================================================================================-->
+<script src="loginTemplate/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="loginTemplate/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="loginTemplate/vendor/bootstrap/js/popper.js"></script>
+	<script src="loginTemplate/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="loginTemplate/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="loginTemplate/vendor/daterangepicker/moment.min.js"></script>
+	<script src="loginTemplate/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="loginTemplate/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+    <!-- SweetAlert2 -->
+    <script src="public/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+	<script src="loginTemplate/js/main.js"></script>
 <script>
      $(document).ready(function(){
           var Toast = Swal.mixin({
@@ -114,7 +102,8 @@
                 showConfirmButton: false,
                 timer: 3000
           });
-          $('form').on('submit', function(event){
+
+          $('form#formLogin').on('submit', function(event){
                try {
                     $.ajax({
                          url : 'adminAction.php',

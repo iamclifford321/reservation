@@ -72,7 +72,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <div class="form-group">
-                            <label for="">Facility</label>
+                            <label for="">Reservation</label>
                             <select name="facilty" id="facilty" class="form-control">
                                 <option value="">-- None --</option>
                                 <?php foreach( $facilities as $facility ) : ?>

@@ -208,7 +208,7 @@
         <section class="accomodation_area section_gap" id="reservation-section">
             <div class="container">
                 <div class="section_title text-center">
-                    <h2 class="title_color">Hotel Accomodation</h2>
+                    <h2 class="title_color">Available Facilities</h2>
                     <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, </p>
                 </div>
                 <div class="row mb_30">
@@ -265,7 +265,7 @@
         <!--================ About History Area  =================-->
         
         <!--================ Testimonial Area  =================-->
-        <section class="testimonial_area section_gap">
+        <!-- <section class="testimonial_area section_gap">
             <div class="container">
                 <div class="section_title text-center">
                     <h2 class="title_color">Testimonial from our Clients</h2>
@@ -330,7 +330,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
         <!--================ Testimonial Area  =================-->
         
         <!--================ start footer Area  =================-->	

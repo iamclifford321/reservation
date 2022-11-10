@@ -9,7 +9,7 @@
 	$totalUnpaid = 0;
 	$totalCancelled = 0;
 	foreach ($getReservations as $key => $getReservation) {
-		if($getReservation['status'] == 'Cencelled'){
+		if($getReservation['status'] == 'Cancelled'){
 			$totalCancelled ++;
 		}
 		if($getReservation['status'] == 'Unpaid'){

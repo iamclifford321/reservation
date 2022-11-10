@@ -521,7 +521,7 @@
                     if(res.length > 0){
                         $('#facility').append(`<option value="">-- Select --</option>`);
                         for (let index = 0; index < res.length; index++) {
-                            if(res[index]['status'] == 'Activate'){
+                            if(res[index]['status'] == 'Activate' || res[index]['status'] == ''){
                                 $('#facility').append(
                                     `<option value="${res[index]['Facility_id']}" price="${res[index]['Price']}">${res[index]['Facility_name']}(₱${res[index]['Price']}/day)</option>`
                                 )

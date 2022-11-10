@@ -1,3 +1,4 @@
+<input type="hidden" id="user_id" value="<?php echo $_SESSION['user_data']['User_id'] ?>">
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -203,12 +204,15 @@
                         table.clear().draw();
                         for (let index = 0; index < res.length; index++) {
                             const element = res[index];
-                            table.row.add([
-                                `<a href="#" class="userName" data-target="#modal-update-user" data-toggle="modal" User_id="${res[index]['User_id']}">${res[index]['FirstName'] + ' ' + res[index]['LastName']}</a>`,
-                                res[index]['Address'],
-                                res[index]['Username'],
-                                `<button type="submit" class="btn btn-danger deleteRecord" User_id="${res[index]['User_id']}">Delete</button>`
-                            ]).draw();
+                            if($('#user_id').val() != element.User_id){
+                                table.row.add([
+                                    `<a href="#" class="userName" data-target="#modal-update-user" data-toggle="modal" User_id="${res[index]['User_id']}">${res[index]['FirstName'] + ' ' + res[index]['LastName']}</a>`,
+                                    res[index]['Address'],
+                                    res[index]['Username'],
+                                    `<button type="submit" class="btn btn-danger deleteRecord" User_id="${res[index]['User_id']}">Delete</button>`
+                                ]).draw();
+                            }
+
                         }
                     }
                 }

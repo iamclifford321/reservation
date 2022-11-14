@@ -375,6 +375,7 @@
                     for (const elmnt of res) {
                         disabledDates.push(moment(elmnt).format('YY-MM-DD'));
                     }
+                    var today = new Date();
                     $('#eventDate').daterangepicker({
                                                         locale : {
                                                             format : 'YYYY/MM/DD'
@@ -384,6 +385,7 @@
                                                             return disabledDates.indexOf(currDate) != -1;
                                                         },
                                                         autoUpdateInput: false,
+                                                        minDate: today,
                                                     },function(start, end, label){
                                                         var strtDate = start.format('Y-MM-DD');
                                                         var endDate = end.format('Y-MM-DD');

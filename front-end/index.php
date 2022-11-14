@@ -355,9 +355,9 @@
                                 array_push($partialReservedFacilityIds, $facility['facilityId']);
                             }
                         }
+
                         foreach ($getTheFacilities as $getTheFacility) {
                             if($getTheFacility['Category'] == 'Entertainment'){
-
                                 if($getTheFacility['status'] == 'Activated' || $getTheFacility['status'] == ''){
                                     ?>
                                         <div class="col-lg-3 col-sm-6">
@@ -510,6 +510,10 @@
                         for (const elmnt of res) {
                             disabledDates.push(moment(elmnt).format('YY-MM-DD'));
                         }
+                        var today = new Date();
+                        // var dd = String(today.getDate()).padStart(2, '0');
+                        // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                        // var yyyy = today.getFullYear();
                         $('[name=reserveDate]').daterangepicker({
                                                                     locale : {
                                                                         format : 'YYYY/MM/DD'
@@ -519,6 +523,7 @@
                                                                         return disabledDates.indexOf(currDate) != -1;
                                                                     },
                                                                     autoUpdateInput: false,
+                                                                    minDate: today ,
                                                                 },function(start, end, label){
                                                                     var strtDate = start.format('Y-MM-DD');
                                                                     var endDate = end.format('Y-MM-DD');

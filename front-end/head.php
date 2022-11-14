@@ -33,4 +33,8 @@
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="../public/assets/plugins/fontawesome-free/css/all.min.css">
+
+        <!-- Full calendar -->
+        <link rel="stylesheet" href="../public/assets/plugins/fullcalendar/main.css">
+        <script src="../public/assets/plugins/fullcalendar/main.js"></script>
 </head>

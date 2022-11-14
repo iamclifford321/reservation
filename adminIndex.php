@@ -51,8 +51,12 @@
      }elseif ($_GET['page']=='editProfile') {
 
 
+    }elseif($_GET['page'] == 'amenities'){
+        $amenities = 'active';
     }
-
+    elseif($_GET['page'] == 'approve'){
+        
+    }
      else{
         die("<center><h1 class='text-align: center'>Page not found</h1></center>");
      }
@@ -145,6 +149,11 @@
     <script src="public/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="public/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+
+    <!-- Full calendar -->
+    <link rel="stylesheet" href="public/assets/plugins/fullcalendar/main.css">
+    <script src="public/assets/plugins/fullcalendar/main.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -323,6 +332,16 @@
                                 </p>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="?page=amenities" class="nav-link <?php echo $amenities ?>">
+                                <i class="nav-icon far fa-image"></i>
+                                <p>
+                                    Amenities
+                                </p>
+                            </a>
+                        </li>
+
                         <li class="nav-item">
                             <a href="?page=users" class="nav-link <?php echo $users ?>">
                                 <i class="nav-icon fas fa-user"></i>

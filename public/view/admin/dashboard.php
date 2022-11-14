@@ -141,7 +141,7 @@
 
 		<div class="card">
 			<div class="card-header">
-				<h5>Requests for cancellation</h5>
+				<h5>Requests for Cancellation</h5>
 			</div>
 			<div class="card-body">
 				<table class="table">
@@ -157,7 +157,7 @@
 					</thead>
 					<tbody class="table-hover">
 						<?php foreach($getReservations as $keyRes => $getReservation) : ?>
-						<?php if($getReservation['status'] == ''): ?>
+						<?php if($getReservation['status'] == 'Pending Cancel'): ?>
 						<tr>
 							<td><?php echo $getReservation['date'] ?></td>
 							<td><?php echo $getReservation['customer'] ?></td>
@@ -177,7 +177,7 @@
 								?>
 
 							</td>
-							<td><?php echo $getReservation['status'] ?></td>
+							<td><?php echo $getReservation['status']; ?></td>
 							<td>
 								<a href="?page=approveCancelation&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>">Approve Cancel</a>
 							</td>
@@ -191,7 +191,76 @@
 			
 		</div>
 
+
+		<div class="card">
+			<div class="card-header">
+				<h5>Pending Reservation</h5>
+			</div>
+			<div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Reservation Date</th>
+							<th>Customer</th>
+							<th>Number of Guest</th>
+							<th>Facility</th>
+							<th>Payment Status</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody class="table-hover">
+						<?php foreach($getReservations as $keyRes => $getReservation) : ?>
+						<?php if($getReservation['status'] == 'Pending'): ?>
+						<tr>
+							<td><?php echo $getReservation['date'] ?></td>
+							<td><?php echo $getReservation['customer'] ?></td>
+							<td><?php echo $getReservation['numberOfCustomer'] ?></td>
+							<td>
+
+								<?php
+									foreach ($getReservation['facilities'] as $keyFac => $facility) {
+										?>
+											<ul>
+												<li>
+													<a href="#"><small><?php echo $facility['faclityName'] . '(' . $facility['facilityDate'] . ')'; ?></small></a>
+												</li>
+											</ul>
+										<?php
+									}
+								?>
+
+							</td>
+							<td><?php echo $getReservation['paymentStatus']; ?></td>
+							<td><?php echo $getReservation['status']; ?></td>
+							<td>
+
+								<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            <a href="?page=paymentHistory&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>&totalAmountFac=<?php echo $getReservation['totalAmountFac']; ?>&status=<?php echo $getReservation['paymentStatus']; ?>" class="dropdown-item make-payment">Payment history</a>
+                                            <a href="?page=approveCancelation&amp;reservationId=<?php echo $getReservation['reservationId']; ?>&;customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Cancel</a>
+                                            <a href="?page=approve&amp;reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Approve</a>
+                                            <a class="dropdown-item make-payment" href="?page=details&reservationId=<?php echo $getReservation['reservationId']; ?>">Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+							</td>
+						</tr>
+						<?php endif; ?>
+						<?php endforeach; ?>
+						
+					</tbody>
+				</table>
+			</div>
+			
+		</div>
+
 	</div>
+	<div class="pt-3"></div>
 </div>
 <style type="text/css">
 	.container-fluid {

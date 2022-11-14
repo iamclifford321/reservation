@@ -169,15 +169,16 @@ class Controller extends Model{
 
                     $sql = "INSERT 
                                 INTO 
-                                    facility(Facility_name,Price,Image)
+                                    facility(Facility_name,Price,Image, Category)
                                 VALUES
-                                    (:Facility_name,:Price,:Image)";
+                                    (:Facility_name,:Price,:Image, :Category)";
 
 
                     $placeholders = array(
                         ':Facility_name'    => $_POST['facility_name'],
                         ':Price'            => $_POST['price'],
-                        ':Image'            => $final_image
+                        ':Image'            => $final_image,
+                        ':Category'         => $_POST['category']
                     );
 
                     $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
@@ -273,7 +274,7 @@ class Controller extends Model{
     public function activateFacility(){
         $deactivate = $this->dynamicSLCTLabeledQuery("UPDATE facility set status = :status WHERE Facility_id =:facilityId", array(
             ':facilityId' => $_POST['facilityId'],
-            ':status' => 'Activate'
+            ':status' => 'Activated'
         ));
 
         return [
@@ -311,6 +312,16 @@ class Controller extends Model{
 
     }
     public function insertReservation(){
+        // 
+
+        $aminities = '';
+        $totals = 0;
+        if(isset($_POST['aminitiesJson'])){
+            $aminities = serialize($_POST['aminitiesJson']);
+            foreach ($_POST['aminitiesJson'] as $var) {
+                $totals += $var['price'];
+            }
+        }
 
         $sql = "INSERT 
                     INTO 
@@ -318,18 +329,30 @@ class Controller extends Model{
                         (Customer_id,
                          Event,
                          Number_of_guest,
-                         Reservation_status)
+                         Reservation_status,
+                         aminities,
+                         number_of_adults,
+                         number_of_children,
+                         paymentStatus)
                     VALUES
                         (:Customer,
                          :Event,
                          :Guest ,
-                         :Status)";
-
+                         :Status,
+                         :aminities,
+                         :number_of_adults,
+                         :number_of_children,
+                         :paymentStatus)";
+        $tt = $_POST['numberOfAdults'] + $_POST['numberOfChildrens'];
         $placeholders = array(
             ':Customer'      => $_POST['customer'],
             ':Event'         => $_POST['event'],
-            ':Guest'         =>  $_POST['guest'],
-            ':Status'        =>  'Unpaid'
+            ':Guest'         =>  $tt,
+            ':Status'        =>  'Pending',
+            ':aminities'     => $aminities,
+            ':number_of_adults' => $_POST['numberOfAdults'],
+            ':number_of_children' => $_POST['numberOfChildrens'],
+            ':paymentStatus' => 'Unpaid'
         );
         $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
 
@@ -337,7 +360,7 @@ class Controller extends Model{
         // numberOfDays
         // price
         $totalPayment = $_POST['numberOfDays'] * $_POST['price'];
-
+        $totalPayment += $totals;
         $placeholdersFacRes = array(
             ':reservationId'      => $dml['id'],
             ':dateIn'         => $_POST['eventfrom'],
@@ -346,7 +369,6 @@ class Controller extends Model{
             ':facilityId'       => $_POST['facility']
         );
         $dmlFaci = $this->dynamicDMLLabeledQuery($sqlFacilityRes, $placeholdersFacRes);
-
         return $dml;
 
     }
@@ -391,7 +413,8 @@ class Controller extends Model{
                 'numberOfCustomer' => $data['Number_of_guest'],
                 'status' => $data['Reservation_status'],
                 'reservationId' => $data['Reservation_id'],
-                'customerId' => $data['customer_id']
+                'customerId' => $data['customer_id'],
+                'paymentStatus' => $data['paymentStatus']
             );
 
 
@@ -456,17 +479,19 @@ class Controller extends Model{
         return $users['data']->fetch(PDO::FETCH_ASSOC);
     }
     public function loginCustomer(){
+        
         $username = $_POST['username'];
         $password = $_POST['password'];
         $sql = "SELECT * FROM customer WHERE username = :username AND Password = :password";
-        
         $customers = $this->dynamicSLCTLabeledQuery($sql, array(
             ':username' => $username,
             ':password' => $password
         ));
+
         $custRes = $customers['data']->fetch(PDO::FETCH_ASSOC);
         
         if(isset($_SESSION['reservationIdTemp'])){
+
             if($custRes){
                 $updateResrv = "UPDATE reservation set Customer_id =:customerId WHERE Reservation_id =:resrvId";
                 $param = array(
@@ -481,6 +506,7 @@ class Controller extends Model{
                 $custRes['reservationIdTemp'] = $reservationIdTemp;
                 $custRes['customerId'] = $customerId;
             }
+
         }
 
         return $custRes;
@@ -751,6 +777,7 @@ class Controller extends Model{
     }
 
     public function getFacilityReservation(){
+
         $query = "SELECT * FROM reservation_facility LEFT JOIN reservation ON reservation_facility.reservationId=reservation.Reservation_id WHERE facilityId = :facilityId AND (reservation.Reservation_status = 'Reserved' OR reservation.Reservation_status = 'Partially paid')";
         $dataReserved = [];
         $param = array(
@@ -776,16 +803,24 @@ class Controller extends Model{
     }
     public function submitReservation(){
         
-        $insertReservationQry = "INSERT INTO reservation (Number_of_guest, Reservation_status, Event, Customer_id)VALUES(:Number_of_guest, :Reservation_status, :Event, :CustomerId)";
+
+        $insertReservationQry = "INSERT INTO reservation (Number_of_guest, Reservation_status, Event, Customer_id, aminities, paymentStatus)VALUES(:Number_of_guest, :Reservation_status, :Event, :CustomerId, :aminities, :paymentStatus)";
         $customerId = (!isset($_SESSION['user_data']['customer_id'])) ? '' : $_SESSION['user_data']['customer_id'];
+        $strjson = '';
+        if(isset($_POST['aminities']) && $_POST['aminities'] != ''){
+            $strjson = serialize(json_decode($_POST['aminities']));
+        }
         $placeholderReservation = array(
             ':Number_of_guest' => 0,
             // ':numberOfAdults' => 0, 
             // ':numberOfChildren' => 0,
-            ':Reservation_status' => 'Unpaid',
+            ':Reservation_status' => 'Pending',
             ':Event' => $_POST['event'],
-            ':CustomerId' => $customerId
+            ':CustomerId' => $customerId,
+            ':aminities' => $strjson,
+            ':paymentStatus' => 'Unpaid'
         );
+
         $rtrnReservation = $this->dynamicDMLLabeledQuery($insertReservationQry, $placeholderReservation);
         if($rtrnReservation['status'] == 'success'){
             
@@ -839,6 +874,14 @@ class Controller extends Model{
     }
     public function makePaymentManual(){
 
+        $balance = $_POST['balancePay'] - $_POST['payment-amount'];
+        $isPartial = false;
+        if($balance > 0){
+            $isPartial = true;
+        }
+        // echo $balance;
+        // // if($balance)
+        // die();
 
         $insertBilling = "INSERT INTO billing(PaymentMode, CustomerId, ReservationId, TotalBill)VALUES(:PaymentMode, :CustomerId, :ReservationId, :TotalBill)";
         $insertBillingParam = array(
@@ -849,7 +892,7 @@ class Controller extends Model{
         );
 
         $rtrnInsertBilling = $this->dynamicDMLLabeledQuery($insertBilling, $insertBillingParam);
-        $isPartial = (isset($_POST['isPartial']) && $_POST['isPartial'] == true) ? true : false;
+        // $isPartial = (isset($_POST['isPartial']) && $_POST['isPartial'] == true) ? true : false;
         $paymentInsert = "INSERT INTO payments(Gcash_number, Customer_id, Reservation_id, isPartial, Status, Amount, type) VALUES (:Gcash_number, :Customer_id, :Reservation_id, :isPartial, :status, :Amount, :type)";
         $paymentInsertParam = array(
             ':Gcash_number' => $_POST['gcash-numner'],
@@ -862,14 +905,16 @@ class Controller extends Model{
         );
 
         $rtrnInsertPayment = $this->dynamicDMLLabeledQuery($paymentInsert, $paymentInsertParam);
-        $reservationStatus = 'Reserved';
-        if($isPartial){
-            $reservationStatus = 'Partially paid';
+        $paymentStatus = 'Partially paid';
+
+        // $paymentStatus = 
+        if(!$isPartial){
+            $paymentStatus = 'Paid';
         }
 
-        $updateReservation = "UPDATE reservation set Reservation_status = :reservationStatus WHERE Reservation_id = :reservationId";
+        $updateReservation = "UPDATE reservation set paymentStatus = :paymentStatus WHERE Reservation_id = :reservationId";
         $updateReservationParam = array(
-            ':reservationStatus' => $reservationStatus,
+            ':paymentStatus' => $paymentStatus,
             ':reservationId' => $_POST['resId']
         );
         $rtrnupdateReservation = $this->dynamicDMLLabeledQuery($updateReservation, $updateReservationParam);
@@ -1080,7 +1125,8 @@ class Controller extends Model{
 
     }
     public function updateSpecificRes($resId){
-
+        // echo $resId
+        // die();
         $updateReservationSql = "UPDATE reservation set Reservation_status = :reservationStatus WHERE Reservation_id =:reservationId";
         $updateReservationParam = array(
             'reservationStatus' => 'Cancelled',
@@ -1246,7 +1292,68 @@ class Controller extends Model{
         $_SESSION['user_data']['FirstName'] = $_POST['firstname'];
         $_SESSION['user_data']['LastName'] = $_POST['lastname'];
         $_SESSION['user_data']['Username'] = $_POST['username'];
-        
         return $updateRes;
+
     }
+
+    public function getAminities(){
+        $sql = "SELECT * FROM aminities";
+        $ret = $this->dynamicSLCTQuery($sql);
+        return $ret['data']->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function saveAminities(){
+        $sql = "INSERT into aminities(Name, price) VALUES (:Name, :price)";
+
+        $ret = $this->dynamicDMLLabeledQuery($sql, array(
+            ':Name' => $_POST['name'],
+            ':price' => $_POST['price']
+        ));
+        return $ret;
+    }
+
+    public function editAminities(){
+        $sql = "UPDATE aminities set Name = :Name , price = :price WHERE aminitiesId = :aminitiesId";
+
+        $ret = $this->dynamicDMLLabeledQuery($sql, array(
+            ':Name' => $_POST['edit_name'],
+            ':price' => $_POST['edit_price'],
+            ':aminitiesId' => $_POST['aminitiesId']
+        ));
+        return $ret;
+    }
+
+    public function deleteAmin(){
+        $sql = "DELETE FROM aminities WHERE aminitiesId = :aminitiesId";
+
+        $ret = $this->dynamicDMLLabeledQuery($sql, array(
+            ':aminitiesId' => $_POST['aminitiesId']
+        ));
+        return $ret;
+    }
+
+    public function deactivateFacility(){
+
+        $deactivate = $this->dynamicSLCTLabeledQuery("UPDATE facility set status = :status WHERE Facility_id =:facilityId", array(
+            ':facilityId' => $_POST['facilityId'],
+            ':status' => 'Deactivated'
+        ));
+
+        return [
+            'status'    =>  'success'
+        ];
+    }
+
+    public function approveReservation($resId){
+        $deactivate = $this->dynamicSLCTLabeledQuery("UPDATE reservation set Reservation_status = :status WHERE Reservation_id =:Reservation_id", array(
+            ':Reservation_id' => $resId,
+            ':status' => 'Reserved'
+        ));
+
+        return [
+            'status'    =>  'success'
+        ];
+    }
+
+    
 }

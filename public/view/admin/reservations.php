@@ -1,3 +1,11 @@
+<?php 
+        require_once 'Config/Config.php';
+        require_once 'Model/Model.php';
+        require_once 'Controller/Controller.php';
+        $controller = new Controller(); 
+        $aminities = $controller->getAminities();
+?>
+
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -6,8 +14,8 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Reservations</li>
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Reservations</li>
             </ol>
         </div>
         </div>
@@ -31,8 +39,9 @@
 
                         <th>Reservation Date</th>
                         <th>Customer</th>
-                        <th>Number of Guest</th>
+                        <th># of Guests</th>
                         <th>Facility</th>
+                        <th>Payment status</th>
                         <th>Status</th>
                         <th></th>
 
@@ -90,10 +99,24 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6 col-md-6">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="event">Event</label>
                                 <input type="text" name="event" id="event" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="numberOfAdults">Number of Adults</label>
+                                <input type="number" name="numberOfAdults" id="numberOfAdults" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="numberOfChildrens">Number of Children</label>
+                                <input type="number" name="numberOfChildrens" id="numberOfChildrens" class="form-control" required>
                             </div>
                         </div>
 
@@ -102,27 +125,45 @@
                         <input type="hidden" name="numberOfDays">
                         <input type="hidden" name="price">
 
-                        <div class="col-sm-6 col-md-6">
+                        <!-- <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="guest">No of Guest</label>
                                 <input type="number" name="guest" id="guest" class="form-control">
                             </div>
-                        </div>
+                        </div> -->
 
+                            <div class="col-sm-12"><label for="">Aminities</label></div>
+                            <?php foreach($aminities as $aminity) : ?>
+                                <div class="col-md-6">
+                                    <input type="checkbox" class="aminityClass"
+                                        id="<?php echo $aminity['aminitiesId']; ?>" 
+                                        value="<?php echo $aminity['aminitiesId']; ?>" 
+                                        aminName="<?php echo $aminity['Name']; ?>"
+                                        aminPrice="<?php echo $aminity['price']; ?>"> 
+                                        <label for="<?php echo $aminity['aminitiesId']; ?>"><?php echo $aminity['Name']; ?>(₱<?php echo number_format($aminity['price'], 2); ?>)</label>
+                                </div>
+                            <?php endforeach; ?>
+                        
                         <!-- <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="event-from">From</label>
                                 <input type="text" name="event-from" id="event-from" class="form-control datepicker" required>
                             </div>
                         </div>
-
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="event-to">To</label>
                                 <input type="text" name="event-to" id="event-to" class="form-control datepicker" required>
                             </div>
                         </div> -->
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="">Total</label>
+                                <input type="text" id="readonlyTotal" readonly class="form-control">
+                            </div>
 
+                        </div>
+                    
                     </div>
 
                 </div>
@@ -290,7 +331,17 @@
 
 // Some Script Here!
     $(document).ready(function(){
-
+        $('#numberOfAdults').on('change', function(){
+            calculateReadonly()
+        });
+        $('#numberOfChildrens').on('change', function(){
+            calculateReadonly()
+        });
+        // numberOfAdults
+        // numberOfChildrens
+        $(document).on('change', '.aminityClass', function(){
+            calculateReadonly();
+        })
         const days = (date_1, date_2) =>{
             let difference = date_1.getTime() - date_2.getTime();
             let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
@@ -306,7 +357,7 @@
                 $('[name=saveReservation]').prop('disabled', true);
                 $('[name=price]').val(null)
             }
-            
+            calculateReadonly();
         })
         function getFacilityReservation(facility_id){
 
@@ -357,6 +408,8 @@
                                                         $('#eventDate').val(strtDate + ' to ' + endDate);
                                                         var numDays = days(new Date(endDate), new Date(strtDate));
                                                         $('[name=numberOfDays]').val( numDays + 1);
+                                                        $('#readonlyTotal').val();
+                                                        calculateReadonly();
                                                     });
 
 
@@ -364,7 +417,33 @@
             });
 
         }
+        function calculateReadonly(){
+            var readonlyTotal = 0;
+            // numberOfDays
+            // price
+            readonlyTotal = parseFloat($('[name=numberOfDays]').val()) * parseFloat($('[name=price]').val());
+            // readonlyTotal += 
+            $('.aminityClass').each(function(){
+                if($(this).prop('checked')){
+                    readonlyTotal += parseFloat($(this).attr('aminprice'));
+                }
+            });
 
+            var numberOfAdults = $('#numberOfAdults').val();
+            var numberOfChildrens = $('#numberOfChildrens').val();
+
+            if(numberOfAdults != ''){
+                readonlyTotal += parseFloat(numberOfAdults) * 30;
+            }
+            if(numberOfChildrens != ''){
+                readonlyTotal += parseFloat(numberOfChildrens) * 20;
+            }
+            
+            if(!isNaN(readonlyTotal)){
+                $('#readonlyTotal').val('₱' + readonlyTotal.toFixed(2));
+            }
+            
+        }
         function isDateBetween(dateFrom, dateTo, dateCheck){
             
             console.log('dateFrom', dateFrom);
@@ -438,7 +517,7 @@
                                 approve = `<a href="?page=approveCancelation&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Approve Cancellation</a>`;
                             }
                             var cancel = `<a href="?page=approveCancelation&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Cancel</a>`;
-                            if(res[index]['status'] == 'Pending Cancel' || res[index]['status'] == 'Cencelled'){
+                            if(res[index]['status'] == 'Pending Cancel' || res[index]['status'] == 'Cancelled'){
                                 cancel = ``;
                             }
                             // <a href="?page=payment&reservationId=${element.reservationId}&customerId=${element.customerId}&totalAmountFac=${element.totalAmountFac}" class="dropdown-item make-payment">Pay</a>
@@ -454,6 +533,7 @@
                                 res[index]['numberOfCustomer'],
                                 //res[index]['Reservation_date'],
                                 `<ul>${facilities}</ul>`,
+                                res[index]['paymentStatus'],
                                 res[index]['status'],
                                 `<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                     <div class="btn-group" role="group">
@@ -464,6 +544,7 @@
                                             <a href="?page=paymentHistory&reservationId=${element.reservationId}&customerId=${element.customerId}&totalAmountFac=${element.totalAmountFac}&status=${res[index]['status']}" class="dropdown-item make-payment">Payment history</a>
                                             ${cancel}
                                             ${approve}
+                                            <a class="dropdown-item make-payment" href="?page=details&reservationId=${element.reservationId}">Details</a>
                                         </div>
                                     </div>
                                 </div>`
@@ -521,7 +602,7 @@
                     if(res.length > 0){
                         $('#facility').append(`<option value="">-- Select --</option>`);
                         for (let index = 0; index < res.length; index++) {
-                            if(res[index]['status'] == 'Activate' || res[index]['status'] == ''){
+                            if(res[index]['status'] == 'Activated' || res[index]['status'] == ''){
                                 $('#facility').append(
                                     `<option value="${res[index]['Facility_id']}" price="${res[index]['Price']}">${res[index]['Facility_name']}(₱${res[index]['Price']}/day)</option>`
                                 )
@@ -530,7 +611,6 @@
                     }
                 }
             });
-            
         }
             
         $('[name=new-reservation-form]').on('submit', function(e){
@@ -542,11 +622,22 @@
             let eventfrom    = $('[name=fromDate]').val();
             let eventto      = $('[name=toDate]').val();
             let guest        = $('#guest').val();
+            let numberOfAdults = $('#numberOfAdults').val();
+            let numberOfChildrens = $('#numberOfChildrens').val();
             //let status       = $('#status').val();
-
-
-
-
+            var aminities = [];
+            $('.aminityClass').each(function(){
+                if($(this).prop('checked')){
+                    aminities.push(
+                        {
+                            name: $(this).attr('aminname'),
+                            price: $(this).attr('aminprice'),
+                            amId: $(this).val()
+                        }
+                    );
+                }
+            });
+            
           //  e.preventDefault();
 
             $.ajax({
@@ -554,19 +645,21 @@
                 url         : 'adminAction.php',
                 dataType    : "JSON",
                 data        : {
-                        action       : 'create-reservation',
-                        customer     : customer,
-                        facility     : facility,
-                        event        : event,
-                        //eventdate    : eventdate,
-                        eventfrom    : eventfrom,
-                        eventto      : eventto,
-                        guest        : guest,
-                        numberOfDays    : $('[name=numberOfDays]').val(),
-                        price   : $('[name=price]').val()
-
+                    action       : 'create-reservation',
+                    customer     : customer,
+                    facility     : facility,
+                    event        : event,
+                    //eventdate    : eventdate,
+                    eventfrom    : eventfrom,
+                    eventto      : eventto,
+                    guest        : guest,
+                    numberOfDays    : $('[name=numberOfDays]').val(),
+                    price   : $('[name=price]').val(),
+                    numberOfAdults: numberOfAdults,
+                    numberOfChildrens: numberOfChildrens,
+                    aminitiesJson: aminities
                 }, success : function(res){
-
+                    
                     if(res['status'] == 'success'){
                         Toast.fire({
                             icon: 'success',

@@ -20,6 +20,36 @@
             .hotel_img {
                 height: 330px;
             }
+            div.checkAvail{
+                display: none;
+            }
+            div.hotel_img:hover .checkAvail{
+                display: block;
+            }
+            div.custom-modal{
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 1000;
+                background-color: #bbbabaa1;
+                opacity: 0;
+            }
+            div.custom-modal-inner{
+                height: auto;
+                width: 50em;
+                margin: auto;
+                background-color: white;
+                padding: 5px 30px 30px 30px;
+                margin-top: 40px;
+            }
+            .facility-image{
+                width: 100%;
+            }
+            .close-button{
+                float: right;
+            }
         </style>
         <!-- Modal Area -->
             <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -208,10 +238,10 @@
         <section class="accomodation_area section_gap" id="reservation-section">
             <div class="container">
                 <div class="section_title text-center">
-                    <h2 class="title_color">Available Facilities</h2>
-                    <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, </p>
+                    <h2 class="title_color">Available Rooms</h2>
                 </div>
                 <div class="row mb_30">
+
                     <?php
                         $partialReservedFacilityIds = [];
                         if(isset($_SESSION['Facilities'])){
@@ -220,29 +250,149 @@
                             }
                         }
                         foreach ($getTheFacilities as $getTheFacility) {
-                            if($getTheFacility['status'] == 'Activate' || $getTheFacility['status'] == ''){
-                                ?>
-                                    <div class="col-lg-3 col-sm-6">
-                                        <div class="accomodation_item text-center">
-                                            <div class="hotel_img">
-                                                <img src="../public/uploads/images/<?php echo $getTheFacility['Image'] ?>" alt="">
-                                                <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
-                                                    <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
-                                                <?php else : ?>
-                                                    <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>" faclity-img="<?php echo $getTheFacility['Image'] ?>">ADD</button>
-                                                <?php endif; ?>
+                            if($getTheFacility['Category'] == 'Rooms'){
+
+                                if($getTheFacility['status'] == 'Activated' || $getTheFacility['status'] == ''){
+                                    ?>
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="accomodation_item text-center">
+                                                <div class="hotel_img">
+                                                    <img src="../public/uploads/images/<?php echo $getTheFacility['Image'] ?>" alt="" class="facility-image">
+                                                    <div class="checkAvail" style="position: absolute;
+                                                                                    bottom: 50%;
+                                                                                    left: 50%;
+                                                                                    -webkit-transform: translate(-50%);
+                                                                                    -ms-transform: translate(-50%);
+                                                                                    transform: translate(-50%);
+                                                                                    max-width: 128px;">
+                                                        <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
+                                                    </div>
+                                                    <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
+                                                        <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
+                                                    <?php else : ?>
+                                                        <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>" faclity-img="<?php echo $getTheFacility['Image'] ?>">ADD</button>
+                                                    <?php endif; ?>
+                                                    
+                                                </div>
+                                                <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
+                                                <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
                                             </div>
-                                            <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
-                                            <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
                                         </div>
-                                    </div>
-                                <?php
+                                    <?php
+                                }
                             }
                         }
                     ?>
                 </div>
             </div>
         </section>
+
+
+        <section class="accomodation_area section_gap" id="reservation-section">
+            <div class="container">
+                <div class="section_title text-center">
+                    <h2 class="title_color">Available Cottages</h2>
+                </div>
+                <div class="row mb_30">
+
+                    <?php
+                        $partialReservedFacilityIds = [];
+                        if(isset($_SESSION['Facilities'])){
+                            foreach ($_SESSION['Facilities'] as $facility) {
+                                array_push($partialReservedFacilityIds, $facility['facilityId']);
+                            }
+                        }
+                        foreach ($getTheFacilities as $getTheFacility) {
+
+                            if($getTheFacility['Category'] == 'Cottages'){
+                                if($getTheFacility['status'] == 'Activated' || $getTheFacility['status'] == ''){
+                                    ?>
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="accomodation_item text-center">
+                                                <div class="hotel_img">
+                                                    <img src="../public/uploads/images/<?php echo $getTheFacility['Image'] ?>" alt="" class="facility-image">
+                                                    <div class="checkAvail" style="position: absolute;
+                                                                                    bottom: 50%;
+                                                                                    left: 50%;
+                                                                                    -webkit-transform: translate(-50%);
+                                                                                    -ms-transform: translate(-50%);
+                                                                                    transform: translate(-50%);
+                                                                                    max-width: 128px;">
+                                                        <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
+                                                    </div>
+                                                    <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
+                                                        <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
+                                                    <?php else : ?>
+                                                        <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>" faclity-img="<?php echo $getTheFacility['Image'] ?>">ADD</button>
+                                                    <?php endif; ?>
+                                                    
+                                                </div>
+                                                <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
+                                                <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
+                                            </div>
+                                        </div>
+                                    <?php
+                                }
+                            }
+                        }
+                    ?>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="accomodation_area section_gap" id="reservation-section">
+            <div class="container">
+                <div class="section_title text-center">
+                    <h2 class="title_color">Available for Entertainment</h2>
+                </div>
+                <div class="row mb_30">
+
+                    <?php
+                        $partialReservedFacilityIds = [];
+                        if(isset($_SESSION['Facilities'])){
+                            foreach ($_SESSION['Facilities'] as $facility) {
+                                array_push($partialReservedFacilityIds, $facility['facilityId']);
+                            }
+                        }
+                        foreach ($getTheFacilities as $getTheFacility) {
+                            if($getTheFacility['Category'] == 'Entertainment'){
+
+                                if($getTheFacility['status'] == 'Activated' || $getTheFacility['status'] == ''){
+                                    ?>
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="accomodation_item text-center">
+                                                <div class="hotel_img">
+                                                    <img src="../public/uploads/images/<?php echo $getTheFacility['Image'] ?>" alt="" class="facility-image">
+                                                    <div class="checkAvail" style="position: absolute;
+                                                                                    bottom: 50%;
+                                                                                    left: 50%;
+                                                                                    -webkit-transform: translate(-50%);
+                                                                                    -ms-transform: translate(-50%);
+                                                                                    transform: translate(-50%);
+                                                                                    max-width: 128px;">
+                                                        <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
+                                                    </div>
+                                                    <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
+                                                        <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
+                                                    <?php else : ?>
+                                                        <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>" faclity-img="<?php echo $getTheFacility['Image'] ?>">ADD</button>
+                                                    <?php endif; ?>
+                                                    
+                                                </div>
+                                                <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
+                                                <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
+                                            </div>
+                                        </div>
+                                    <?php
+                                }
+                            }
+                        }
+                    ?>
+                </div>
+            </div>
+        </section>
+
         <!--================ Accomodation Area  =================-->
         
         <!--================ About History Area  =================-->
@@ -261,84 +411,66 @@
                     </div>
                 </div>
             </div>
+            
         </section>
-        <!--================ About History Area  =================-->
-        
-        <!--================ Testimonial Area  =================-->
-        <!-- <section class="testimonial_area section_gap">
-            <div class="container">
-                <div class="section_title text-center">
-                    <h2 class="title_color">Testimonial from our Clients</h2>
-                    <p>The French Revolution constituted for the conscience of the dominant aristocratic class a fall from </p>
-                </div>
-                <div class="testimonial_slider owl-carousel">
-                    <div class="media testimonial_item">
-                        <img class="rounded-circle" src="image/testtimonial-1.jpg" alt="">
-                        <div class="media-body">
-                            <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                            <a href="#"><h4 class="sec_h4">Fanny Spencer</h4></a>
-                            <div class="star">
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star-half-o"></i></a>
-                            </div>
-                        </div>
-                    </div>    
-                    <div class="media testimonial_item">
-                        <img class="rounded-circle" src="image/testtimonial-1.jpg" alt="">
-                        <div class="media-body">
-                            <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                            <a href="#"><h4 class="sec_h4">Fanny Spencer</h4></a>
-                            <div class="star">
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star-half-o"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media testimonial_item">
-                        <img class="rounded-circle" src="image/testtimonial-1.jpg" alt="">
-                        <div class="media-body">
-                            <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                            <a href="#"><h4 class="sec_h4">Fanny Spencer</h4></a>
-                            <div class="star">
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star-half-o"></i></a>
-                            </div>
-                        </div>
-                    </div>    
-                    <div class="media testimonial_item">
-                        <img class="rounded-circle" src="image/testtimonial-1.jpg" alt="">
-                        <div class="media-body">
-                            <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                            <a href="#"><h4 class="sec_h4">Fanny Spencer</h4></a>
-                            <div class="star">
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star-half-o"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+       
+        <!-- Modal -->
+        <div class="custom-modal">
+            
+            <div class="custom-modal-inner">
+                <p class="clearfix"><span class="close-button" style="text-align: right; cursor:pointer; font-weight:bold">Close</span></p>
+                <div id="calendar"></div>
             </div>
-        </section> -->
-        <!--================ Testimonial Area  =================-->
-        
-        <!--================ start footer Area  =================-->	
+        </div>
+        <!-- / Modal -->
         <?php include 'footer.php'; ?>
     </body>
     <script>
+
         $(document).ready(function(){
-            
+
+            $('div.custom-modal').fadeOut('display');
+            $('.close-button').on('click', function(){
+                $('.custom-modal').fadeOut();
+                window.location.reload();
+                calendar.removeAllEvents();
+            })
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl,{
+                initialView: 'dayGridMonth'
+            });
+            calendar.render();
+            $('.availabilty-button').on('click', function(){
+                $('div.custom-modal').css('opacity', 1);
+                var facId = $(this).attr('facility-Id');
+                $.ajax({
+                    url : "../customerAction.php",
+                    method : "POST",
+                    dataType: 'JSON',
+                    data : {
+                        action : 'getFacilityReservation',
+                        faciltyId : facId
+                    },
+                    success: function(res){
+                        // calendar.removeAllEvents();
+                        console.log('res', res);
+                        $('.custom-modal').fadeIn();
+                        if(res.length > 0){
+                            for (let index = 0; index < res.length; index++) {
+                                const element = res[index];
+                                var date = new Date(element + 'T00:00:00'); // will be in local time
+                                calendar.addEvent({
+                                    title: 'Reserved',
+                                    start: date,
+                                    allDay: true,
+                                    backgroundColor: '#ff5b5b'
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+
             // console.log( isDateBetween('2022-10-11', '2022-10-15', '2022-10-14') );
             function isDateBetween(dateFrom, dateTo, dateCheck){
                 console.log('dateFrom', dateFrom);

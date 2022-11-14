@@ -31,7 +31,9 @@
                         <tr>
                             <th>Facility Type</th>
                             <th>Price</th>
+                            <th>Category</th>
                             <th>Image</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -69,6 +71,17 @@
                                 <label for="facility_name">Facility Name</label>
                                 <input type="text" name="facility_name" id="facility_name" class="form-control"
                                     required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="facility_name">Category</label>
+                                <select name="category" id="category_name" class="form-control" required>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Cottages" selected>Cottages</option>
+                                    <option value="Rooms">Rooms</option>
+                                </select>
                             </div>
                         </div>
 
@@ -163,6 +176,17 @@
 
 <!-- /.Default Modal -->
 
+        <!-- Modal -->
+        <div class="custom-modal">
+            
+            <div class="custom-modal-inner">
+                <p class="clearfix"><span class="close-button" style="float: right; font-weight:bold; cursor:pointer">Close</span></p>
+                <div id="calendar">
+                </div>
+            </div>
+        </div>
+        <!-- / Modal -->
+
 <style>
 .image-file-container {
     height: unset;
@@ -180,11 +204,41 @@
 .image-update-label img {
     height: 275px;
 }
+
+div.custom-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    background-color: #bbbabaa1;
+    /* opacity: 0; */
+}
+div.custom-modal-inner{
+    height: auto;
+    width: 50em;
+    margin: auto;
+    background-color: white;
+    padding: 5px 30px 30px 30px;
+    margin-top: 40px;
+}
 </style>
 <script>
 // Some Script Here!
 $(document).ready(function() {
+    
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl,{
+        initialView: 'dayGridMonth'
+    });
+    
+    calendar.render();
+    $('.custom-modal').css('display', 'none');
 
+    $('.close-button').on('click', function(){
+        window.location.reload();
+    })
     $("#image").on("change", function() {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
@@ -226,17 +280,21 @@ $(document).ready(function() {
                 if (res.length > 0) {
                     table.clear().draw();
                     for (let index = 0; index < res.length; index++) {
+                        var calBtn = ` <button class="btn availability" Facility_id="${res[index]['Facility_id']}"><i class="nav-icon far fa-calendar-alt"></i></button>`
                         // <button class="btn btn-secondary"><i class="nav-icon far fa-calendar-alt"></i></button>
-                        var deac = `<button type="submit" class="btn btn-danger deleteRecord" Facility_id="${res[index]['Facility_id']}">Delete</button>`;
-                        if(res[index]['status'] == 'Deactivate'){
-                            deac = `<button type="submit" class="btn btn-danger activateRecord" Facility_id="${res[index]['Facility_id']}">Activate</button>`;
+                        var del = `<button type="submit" class="btn btn-danger deleteRecord" Facility_id="${res[index]['Facility_id']}">Delete</button>`;
+                        var deac = `<button type="submit" class="btn btn-secondary deactivateRecord" Facility_id="${res[index]['Facility_id']}">Deactivate</button>`;
+                        if(res[index]['status'] == 'Deactivated'){
+                            deac = `<button type="submit" class="btn btn-primary activateRecord" Facility_id="${res[index]['Facility_id']}">Activate</button>`;
                         }
                         const element = res[index];
                         table.row.add([
                             `<a href="#" img-src="${res[index]['Image']}" class="facilityName" data-target="#modal-update-facility" data-toggle="modal" Facility_id="${res[index]['Facility_id']}">${res[index]['Facility_name']}</a>`,
                             res[index]['Price'],
+                            res[index]['Category'],
                             `<img src="public/uploads/images/${res[index]['Image']}" style="height: 35px;"/>`,
-                            deac
+                            res[index]['status'],
+                            deac + del + calBtn
                         ]).draw();
                     }
                 }
@@ -245,7 +303,35 @@ $(document).ready(function() {
         });
 
     }
+    $(document).on('click', '.availability', function(){
+        $('.custom-modal').css('opacity', 1);
+        var facId = $(this).attr('facility_id');
+        $.ajax({
+                url : "adminAction.php",
+                method : "POST",
+                dataType: 'JSON',
+                data : {
+                    action : 'getFacilityReservation',
+                    faciltyId : facId
+                },
+                success: function(res){
+                    $('.custom-modal').fadeIn();
+                        if(res.length > 0){
+                            for (let index = 0; index < res.length; index++) {
+                                const element = res[index];
+                                var date = new Date(element + 'T00:00:00'); // will be in local time
+                                calendar.addEvent({
+                                    title: 'Reserved',
+                                    start: date,
+                                    allDay: true,
+                                    backgroundColor: '#ff5b5b'
+                                });
+                            }
+                        }
+                }
+            });
 
+    })
     $(document).on('click', '.facilityName', function() {
 
         var facilityId = $(this).attr('Facility_id');
@@ -285,13 +371,14 @@ $(document).ready(function() {
         $('[type=submit]').attr('disabled', 'true');
         let facility_name = $('#facility_name').val();
         let price = $('#price').val();
-
+        let category = $('#category_name').val();
 
         var file_data = $('#image').prop('files')[0];
         var form_data = new FormData();
         form_data.append('price', price);
         form_data.append('facility_name', facility_name);
         form_data.append('file', file_data);
+        form_data.append('category', category);
 
         form_data.append('action', 'create-facility');
 
@@ -412,7 +499,39 @@ $(document).ready(function() {
 
             }
         });
-    })
+    });
+
+    $(document).on('click', '.deactivateRecord', function(e) {
+
+        var Id = $(this).attr('Facility_id');
+        $('#facilityId').val(Id);
+        $.ajax({
+            method: 'POST',
+            url: 'adminAction.php',
+            dataType: "JSON",
+            data: {
+                action: 'deactivate-facility',
+                facilityId: Id
+            },
+            success: function(res) {
+                console.log(res);
+                if (res['status'] == 'success') {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Successfully deleted the record!'
+                    });
+
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+
+                }
+            }
+        });
+        e.preventDefault();
+
+        });
+
     $(document).on('click', '.deleteRecord', function(e) {
 
         var Id = $(this).attr('Facility_id');

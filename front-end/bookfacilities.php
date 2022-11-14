@@ -1,5 +1,14 @@
 
 <!doctype html>
+<?php
+
+    require_once '../Config/Config.php'; 
+    require_once '../Model/Model.php'; 
+    require_once '../Controller/Controller.php'; 
+    $controller = new Controller(); 
+    $aminities = $controller->getAminities();
+
+?>
 <html lang="en">
     
     <?php include 'head.php'; ?>
@@ -101,16 +110,17 @@
                                         <label for="">Facility Reservation fee</label>
                                         <input type="text" class="form-control totalReadOnly" readonly value="₱<?php echo number_format($total, 2); ?>">
                                         <input type="hidden" name="total" value="<?php echo $total; ?>">
+                                        <input type="hidden" name="temTotal" value="<?php echo $total; ?>">
                                     </div>
                                     <div class="form-group">
                                         <label for="">Event</label>
                                         <input type="text" class="form-control" name="event" required>
                                     </div>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="">No. of Guests</label>
                                         <input type="number" class="form-control" name="numberOfGuest" required>
-                                    </div>
-
+                                    </div> -->
+                                    <input type="hidden" id="aminities" name="aminities">
                                     <!-- <div class="form-group">
                                         <label for="hasChildren">Has Children</label>
                                         <input type="checkbox" name="hasChildren" id="hasChildren" checked>
@@ -125,6 +135,19 @@
                                         <label for="">Total Entrance Fee</label>
                                         <input type="text" class="form-control" readonly name="entranceFee">
                                     </div> -->
+
+
+                                    <div class="col-sm-12"><label for="">Aminities</label></div>
+                                    <?php foreach($aminities as $aminity) : ?>
+                                        <div class="col-md-6">
+                                            <input type="checkbox" class="aminityClass"
+                                                id="<?php echo $aminity['aminitiesId']; ?>" 
+                                                value="<?php echo $aminity['aminitiesId']; ?>" 
+                                                aminName="<?php echo $aminity['Name']; ?>"
+                                                aminPrice="<?php echo $aminity['price']; ?>">
+                                                <label for="<?php echo $aminity['aminitiesId']; ?>"><?php echo $aminity['Name']; ?>(₱<?php echo number_format($aminity['price'], 2); ?>)</label>
+                                        </div>
+                                    <?php endforeach; ?>
 
                                 </div>
                                 <div class="card-footer">
@@ -145,6 +168,42 @@
 
     <script>
         $(document).ready(function(){
+            $('form').on('submit', function(e){
+                var formatted = '';
+                var aminities = [];
+                $('.aminityClass').each(function(){
+                    if($(this).prop('checked')){
+                        aminities.push(
+                            {
+                                name: $(this).attr('aminname'),
+                                price: $(this).attr('aminprice'),
+                                amId: $(this).val()
+                            }
+                        );
+                    }
+                });
+                if(aminities.length > 0){
+                    formatted = JSON.stringify(aminities);
+                }
+                
+
+                $('#aminities').val(formatted);
+                // e.preventDefault();
+            });
+
+            $('.aminityClass').on('change', function(){
+                var totalCalc = parseFloat($('[name=temTotal]').val());
+                $('.aminityClass').each(function(){
+                    if($(this).prop('checked')){
+                        totalCalc += parseFloat($(this).attr('aminprice'))
+                    }
+                });
+                $('.totalReadOnly').val('₱' + totalCalc.toFixed(2).toLocaleString('en-US'));
+                $('[name=total]').val(totalCalc);
+                // 
+                //         totalReadOnly
+            });
+
             $('#hasChildren').on('change', function(){
                 if($(this).prop('checked')){
                     $('.childNumber').removeClass('d-none');

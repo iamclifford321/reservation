@@ -157,6 +157,7 @@
                                         <div class="form-group">
                                             <label for="payment-amount">Amount</label>
                                             <input type="text" required id="payment-amount" readonly="true" value="₱<?php echo number_format($balance, 2) ?>" class="form-control" totalAll=<?php echo $balance; ?>>
+                                            <input type="hidden" name="balancePay" value="<?php echo $balance; ?>">
                                             <input type="hidden" required name="payment-amount" id="payment-amount-hidden" class="form-control" value="<?php echo $balance; ?>">
                                         </div>
                                         <div class="form-group">

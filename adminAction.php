@@ -124,4 +124,42 @@
         $rtrn = $controller->updateUserProfile();
         echo json_encode($rtrn);
     }
+    if($_POST['action'] == 'getFacilityReservation'){
+        $rtrn = $controller->getFacilityReservation();
+        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'saveaminity'){
+        
+        $rtrn = $controller->saveAminities();
+        if($rtrn['status'] == 'success'){
+            header('Location:adminIndex.php?page=amenities');
+        }
+
+        // page=amenities        echo json_encode($rtrn);
+    }
+
+    if($_POST['action'] == 'editaminity'){
+        
+        $rtrn = $controller->editAminities();
+        if($rtrn['status'] == 'success'){
+            header('Location:adminIndex.php?page=amenities');
+        }
+
+        // page=amenities        echo json_encode($rtrn);
+    }
+    if($_POST['action'] == 'deleteAmin'){
+        
+        $rtrn = $controller->deleteAmin();
+        echo json_encode($rtrn);
+
+        // page=amenities        echo json_encode($rtrn);
+    }
+
+    if($_POST['action'] == 'deactivate-facility'){
+        
+        $rtrn = $controller->deactivateFacility();
+        echo json_encode($rtrn);
+    }
+    
+
     

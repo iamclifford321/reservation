@@ -92,7 +92,7 @@
                     </tbody>
                 </table>
                 <div class="float-right mt-3">
-                    <?php if($bal == 0 || $hasRefund || $_GET['status'] == 'Cencelled'): ?>
+                    <?php if($bal == 0 || $hasRefund || $_GET['status'] == 'Cancelled'): ?>
                         <span class="btn btn-primary mb-3 btn-secondary">Add Payment</span>
                     <?php else : ?>
                         <a href="?page=payment&reservationId=<?php echo $_GET['reservationId']; ?>&customerId=<?php echo $_GET['customerId']; ?>" class="btn btn-primary mb-3">Add Payment</a>

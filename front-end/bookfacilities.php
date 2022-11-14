@@ -116,25 +116,28 @@
                                         <label for="">Event</label>
                                         <input type="text" class="form-control" name="event" required>
                                     </div>
-                                    <!-- <div class="form-group">
-                                        <label for="">No. of Guests</label>
-                                        <input type="number" class="form-control" name="numberOfGuest" required>
-                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="">No. of Adults</label>
+                                        <input type="number" class="form-control" name="adultNumber" required>
+                                    </div>
                                     <input type="hidden" id="aminities" name="aminities">
-                                    <!-- <div class="form-group">
-                                        <label for="hasChildren">Has Children</label>
-                                        <input type="checkbox" name="hasChildren" id="hasChildren" checked>
-                                    </div> -->
 
-                                    <!-- <div class="form-group childNumber">
+                                    <div class="form-group">
                                         <label for="">No. of Children</label>
                                         <input type="number" class="form-control" name="childNumber" required="true">
-                                    </div> -->
+                                    </div>
 
-                                    <!-- <div class="form-group">
+                                    <div class="form-group">
                                         <label for="">Total Entrance Fee</label>
                                         <input type="text" class="form-control" readonly name="entranceFee">
-                                    </div> -->
+                                        <input type="hidden" id="totalIntrance" value="0">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Total Fee</label>
+                                        <input type="text" class="form-control" readonly name="totalFee">
+                                    </div>
+
 
 
                                     <div class="col-sm-12"><label for="">Aminities</label></div>
@@ -168,6 +171,10 @@
 
     <script>
         $(document).ready(function(){
+
+            // 
+            // 
+
             $('form').on('submit', function(e){
                 var formatted = '';
                 var aminities = [];
@@ -192,6 +199,20 @@
             });
 
             $('.aminityClass').on('change', function(){
+                calculateTotal();
+                // 
+                //         totalReadOnly
+            });
+            // $('[name=numberOfAdults]').on('change', function(){
+            //     calculateTotal();
+            // });
+
+            // $('[name=childNumber]').on('change', function(){
+            //     calculateTotal();
+            // })
+            
+            function calculateTotal() {
+
                 var totalCalc = parseFloat($('[name=temTotal]').val());
                 $('.aminityClass').each(function(){
                     if($(this).prop('checked')){
@@ -200,10 +221,12 @@
                 });
                 $('.totalReadOnly').val('₱' + totalCalc.toFixed(2).toLocaleString('en-US'));
                 $('[name=total]').val(totalCalc);
-                // 
-                //         totalReadOnly
-            });
+                var totalAmount = parseFloat($('#totalIntrance').val());
+                var totalAll = parseFloat($('[name=total]').val()) + totalAmount;
+                $('[name=totalFee]').val('₱' + totalAll.toFixed(2).toLocaleString('en-US'));
 
+
+            }
             $('#hasChildren').on('change', function(){
                 if($(this).prop('checked')){
                     $('.childNumber').removeClass('d-none');
@@ -221,29 +244,39 @@
                 var paymentForChild = numberOfChild * 20;
 
                 var numberAdult = 0; 
-                if($('[name=adultNumber]').val() != null && $('[name=adultNumber]').val() != ''){
-                    alert($('[name=adultNumber]').val())
+                if($('[name=adultNumber]').val() != ''){
                     numberAdult = parseInt($('[name=adultNumber]').val()) * 30;
                 }
 
                 var totalAmount = paymentForChild + numberAdult;
-
+                if(isNaN(totalAmount)){
+                    totalAmount = 0;
+                }
                 $('[name=entranceFee]').val('₱' + totalAmount.toFixed(2).toLocaleString('en-US'));
-
+                var totalAll = parseFloat($('[name=total]').val()) + totalAmount;
+                $('[name=totalFee]').val('₱' + totalAll.toFixed(2).toLocaleString('en-US'));
+                $('#totalIntrance').val(totalAmount);
             });
 
             $('[name=adultNumber]').on('change', function(){
                 var adultNum = parseInt($(this).val());
-                var paymentForAdult= adultNum * 30;
+                var paymentForAdult = adultNum * 30;
 
                 var numberOfChild = 0;
-                if($('[name=childNumber]').val() != null && $('[name=childNumber]').val() != ''){
+                
+                if($('[name=childNumber]').val() != ''){
                     numberOfChild = parseInt($('[name=childNumber]').val()) * 20;
                 }
-                var totalAmount = paymentForAdult + numberOfChild;
-                $('[name=entranceFee]').val('₱' + totalAmount.toFixed(2).toLocaleString('en-US'));
 
-            })
+                var totalAmount = paymentForAdult + numberOfChild;
+                if(isNaN(totalAmount)){
+                    totalAmount = 0;
+                }
+                $('[name=entranceFee]').val('₱' + totalAmount.toFixed(2).toLocaleString('en-US'));
+                var totalAll = parseFloat($('[name=total]').val()) + totalAmount;
+                $('[name=totalFee]').val('₱' + totalAll.toFixed(2).toLocaleString('en-US'));
+                $('#totalIntrance').val(totalAmount);
+            });
 
 
             $('[name=date]').daterangepicker({

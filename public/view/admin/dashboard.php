@@ -179,7 +179,7 @@
 							</td>
 							<td><?php echo $getReservation['status']; ?></td>
 							<td>
-								<a href="?page=approveCancelation&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>">Approve Cancel</a>
+								<a href="?page=approveCancelation&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>">Cancel</a>
 							</td>
 						</tr>
 						<?php endif; ?>

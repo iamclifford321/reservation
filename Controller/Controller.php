@@ -802,18 +802,20 @@ class Controller extends Model{
         return $dataReserved;
     }
     public function submitReservation(){
-        
 
-        $insertReservationQry = "INSERT INTO reservation (Number_of_guest, Reservation_status, Event, Customer_id, aminities, paymentStatus)VALUES(:Number_of_guest, :Reservation_status, :Event, :CustomerId, :aminities, :paymentStatus)";
+        $insertReservationQry = "INSERT INTO reservation (Number_of_guest, number_of_children, number_of_adults, Reservation_status, Event, Customer_id, aminities, paymentStatus)VALUES(:Number_of_guest, :number_of_children, :number_of_adults, :Reservation_status, :Event, :CustomerId, :aminities, :paymentStatus)";
         $customerId = (!isset($_SESSION['user_data']['customer_id'])) ? '' : $_SESSION['user_data']['customer_id'];
         $strjson = '';
         if(isset($_POST['aminities']) && $_POST['aminities'] != ''){
             $strjson = serialize(json_decode($_POST['aminities']));
         }
+        $adultNumber = $_POST['adultNumber'];
+        $childNumber = $_POST['childNumber'];
+        $totalGuest = $adultNumber + $childNumber;
         $placeholderReservation = array(
-            ':Number_of_guest' => 0,
-            // ':numberOfAdults' => 0, 
-            // ':numberOfChildren' => 0,
+            ':Number_of_guest' => $totalGuest,
+            ':number_of_children' => $childNumber,
+            ':number_of_adults' => $adultNumber,
             ':Reservation_status' => 'Pending',
             ':Event' => $_POST['event'],
             ':CustomerId' => $customerId,
@@ -940,7 +942,11 @@ class Controller extends Model{
         // $rtrnIgetRerservedData = $rtrnIgetRerserved['data']->fetchAll(PDO::FETCH_ASSOC);
 
 
-
+        $balance = $_POST['balancePay'] - $_POST['payment-amount'];
+        $isPartial = false;
+        if($balance > 0){
+            $isPartial = true;
+        }
 
         $srcStr = 'public/uploads/images/';
         $fileName = $_POST['resId'] . basename($_FILES["payment-receipt"]["name"]);
@@ -956,9 +962,7 @@ class Controller extends Model{
                 ':ReservationId' => $_POST['resId'],
                 ':TotalBill' => $_POST['payment-amount']
             );
-
             $rtrnInsertBilling = $this->dynamicDMLLabeledQuery($insertBilling, $insertBillingParam);
-            $isPartial = (isset($_POST['isPartial']) && $_POST['isPartial'] == true) ? true : false;
             $paymentInsert = "INSERT INTO payments(Gcash_number, Customer_id, Reservation_id, Receipt, isPartial, Status, Amount, type) VALUES (:Gcash_number, :Customer_id, :Reservation_id, :fileName, :isPartial, :status, :Amount, :type)";
             $paymentInsertParam = array(
                 ':Gcash_number' => $_POST['gcash-numner'],
@@ -972,14 +976,16 @@ class Controller extends Model{
             );
 
             $rtrnInsertPayment = $this->dynamicDMLLabeledQuery($paymentInsert, $paymentInsertParam);
-            $reservationStatus = 'Reserved';
-            if($isPartial){
-                $reservationStatus = 'Partially paid';
-            }
+            $paymentStatus = 'Partially paid';
 
-            $updateReservation = "UPDATE reservation set Reservation_status = :reservationStatus WHERE Reservation_id = :reservationId";
+            // $paymentStatus = 
+            if(!$isPartial){
+                $paymentStatus = 'Paid';
+            }
+            $updateReservation = "UPDATE reservation set paymentStatus = :paymentStatus WHERE Reservation_id = :reservationId";
+            
             $updateReservationParam = array(
-                ':reservationStatus' => $reservationStatus,
+                ':paymentStatus' => $paymentStatus,
                 ':reservationId' => $_POST['resId']
             );
             $rtrnupdateReservation = $this->dynamicDMLLabeledQuery($updateReservation, $updateReservationParam);

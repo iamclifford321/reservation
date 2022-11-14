@@ -451,7 +451,7 @@ class Controller extends Model{
                 array_push($facilitiesArr, 
                     array(
                         'faclityName' => $facility['Facility_name'],
-                        'facilityDate' => date('d/M/Y', strtotime($facility['dateIn'])) . ' - ' . date('d/M/Y', strtotime($facility['dateOut'])),
+                        'facilityDate' => date('M. d Y', strtotime($facility['dateIn'])) . ' - ' . date('M. d Y', strtotime($facility['dateOut'])),
                         'facilityId' => $facility['facilityId']
                     )
                 );
@@ -706,7 +706,7 @@ class Controller extends Model{
         foreach ($reservationData as $data) {
 
             $innerArr = array(
-                'date' => date('d/M/Y', strtotime($data['createdDate'])),
+                'date' => date('M. d Y', strtotime($data['createdDate'])),
                 'customer' => $data['FirstName'] . ' ' . $data['LastName'],
                 'numberOfCustomer' => $data['Number_of_guest'],
                 'status' => $data['Reservation_status'],
@@ -739,7 +739,7 @@ class Controller extends Model{
                 array_push($facilitiesArr, 
                     array(
                         'faclityName' => $facility['Facility_name'],
-                        'facilityDate' => date('d/M/Y', strtotime($facility['dateIn'])) . ' - ' . date('d/M/Y', strtotime($facility['dateOut'])),
+                        'facilityDate' => date('M. d Y', strtotime($facility['dateIn'])) . ' - ' . date('M. d Y', strtotime($facility['dateOut'])),
                         'facilityId' => $facility['facilityId']
                     )
                 );

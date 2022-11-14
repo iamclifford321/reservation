@@ -408,7 +408,7 @@ class Controller extends Model{
         foreach ($reservationData as $data) {
 
             $innerArr = array(
-                'date' => date('d/M/Y', strtotime($data['createdDate'])),
+                'date' => date('M. d Y', strtotime($data['createdDate'])),
                 'customer' => $data['FirstName'] . ' ' . $data['LastName'],
                 'numberOfCustomer' => $data['Number_of_guest'],
                 'status' => $data['Reservation_status'],

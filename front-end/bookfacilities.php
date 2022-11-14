@@ -94,13 +94,31 @@
                     ?>
                     </div>
                     <div class="col-sm-12 col-md-4">
-                        <div class="card">
+                        <div class="card" style="position: relative">
+                            <?php if(!isset($_SESSION['user_data']['customer_id'])) : ?>
+                            <div style="    position: absolute;
+                            top: 0;
+                            right: 0;
+                            bottom: 0;
+                            left: 0;
+                            background: hsl(0deg 0% 100% / 81%);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;">
+
+                                <div>
+                                    <a href="login.php" class="btn btn-link">login</a> or <a href="register-customer.php" class="btn btn-link">register</a>
+                                </div>
+
+                            </div>
+                            <?php endif; ?>
                             <form action="../customerAction.php" method="POST">
 
                                 <div class="card-header">
                                     <label>Booking info</label>
                                 </div>
                                 <div class="card-body">
+
                                     <!-- <div class="form-group">
                                         <h4>Entrance fee</h4>
                                         <label for="">Adult: ₱30</label> <br>

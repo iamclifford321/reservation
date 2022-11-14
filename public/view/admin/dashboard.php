@@ -217,7 +217,6 @@
 							<td><?php echo $getReservation['customer'] ?></td>
 							<td><?php echo $getReservation['numberOfCustomer'] ?></td>
 							<td>
-
 								<?php
 									foreach ($getReservation['facilities'] as $keyFac => $facility) {
 										?>
@@ -229,7 +228,6 @@
 										<?php
 									}
 								?>
-
 							</td>
 							<td><?php echo $getReservation['paymentStatus']; ?></td>
 							<td><?php echo $getReservation['status']; ?></td>
@@ -243,7 +241,7 @@
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                             <a href="?page=paymentHistory&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>&totalAmountFac=<?php echo $getReservation['totalAmountFac']; ?>&status=<?php echo $getReservation['paymentStatus']; ?>" class="dropdown-item make-payment">Payment history</a>
                                             <a href="?page=approveCancelation&amp;reservationId=<?php echo $getReservation['reservationId']; ?>&;customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Cancel</a>
-                                            <a href="?page=approve&amp;reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Approve</a>
+                                            <a href="?page=approve&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Approve</a>
                                             <a class="dropdown-item make-payment" href="?page=details&reservationId=<?php echo $getReservation['reservationId']; ?>">Details</a>
                                         </div>
                                     </div>

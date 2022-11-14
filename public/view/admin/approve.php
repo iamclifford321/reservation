@@ -7,5 +7,5 @@
 
 ?>
 <script>
-    window.location.href = 'adminIndex.php?page=dashboard'
+    window.location.href = 'adminIndex.php?page=reservations'
 </script>

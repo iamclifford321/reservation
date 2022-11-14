@@ -544,6 +544,7 @@
                                             <a href="?page=paymentHistory&reservationId=${element.reservationId}&customerId=${element.customerId}&totalAmountFac=${element.totalAmountFac}&status=${res[index]['status']}" class="dropdown-item make-payment">Payment history</a>
                                             ${cancel}
                                             ${approve}
+                                            <a href="?page=approve&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Approve</a>
                                             <a class="dropdown-item make-payment" href="?page=details&reservationId=${element.reservationId}">Details</a>
                                         </div>
                                     </div>

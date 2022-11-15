@@ -10,7 +10,6 @@
 
     $controller = new Controller(); 
     
-    $getTheSales = $controller->salesReports($_GET['value'], $_GET['type']);
     // echo "<pre>";
     // print_r($getTheSales);
     // die();
@@ -36,77 +35,129 @@
     </div><!-- /.container-fluid -->
 </section>
 
-<section class="content">
-    <div class="container-fluid">
-        <h5 class="filter-by">Filtered by:
-          <select name="filteredBy" id="">
-            <?php // echo $_GET['value']; ?>
-            <?php foreach (['Weekly', 'Yearly', 'Monthly'] as $key => $value) : ?>
-              <?php 
-                
-                $selected = '';
-                if( $_GET['type'] == $value){
-                  $selected = 'Selected';
-                }
-              ?>
-              <option value="<?php echo $value; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
-            <?php endforeach; ?>
-          </select>
-        </h5> 
+<h5 class="filter-by">Filtered by:
+  <select name="filteredBy" id="">
+    <?php // echo $_GET['value']; ?>
+    <?php foreach (['Weekly', 'Yearly', 'Monthly'] as $key => $value) : ?>
+      <?php 
+        
+        $selected = '';
+        if( $_GET['type'] == $value){
+          $selected = 'Selected';
+        }
+      ?>
+      <option value="<?php echo $value; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+    <?php endforeach; ?>
+  </select>
+</h5> 
 
-        <!-- Main content here -->
-        <div class="card">
-          <div class="card-header">
-            <button class="btn btn-secondary" id="print-btn">Print</button>
-            <div class="print-details">
-              <div class="row">
-                <div class="col-md-6">
-                  <p><label for="">Name: </label> <?php echo ucfirst($_SESSION['user_data']['FirstName']) . ' ' . ucfirst($_SESSION['user_data']['LastName'])?></p>
-                  <p><label for="">Report filter: </label> <?php echo $_GET['value']; ?></p>
-                </div>
-                <div class="col-md-6">
-                  <p><label for="">Date: </label> <?php echo date("Y-m-d"); ?></p>
-                  <p><label for="">Signature: </label></p>
-                </div>
-              </div>
+<!-- Tabs navs -->
 
-            </div>
+<ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a
+      class="nav-link nav-link-tab"
+      id="ex1-tab-1"
+      data-mdb-toggle="tab"
+      href="#tab-content-Sales"
+      role="tab"
+      aria-controls="tab-content-Sales"
+      aria-selected="false">Sales</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a
+      class="nav-link nav-link-tab"
+      id="ex1-tab-2"
+      data-mdb-toggle="tab"
+      href="#tab-content-Entrances"
+      role="tab"
+      aria-controls="tab-content-Entrances"
+      aria-selected="false">Entrances</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link nav-link-tab" 
+        id="ex1-tab-3" 
+        data-mdb-toggle="tab" 
+        href="#tab-content-Cottages" 
+        role="tab" 
+        aria-controls="tab-content-Cottages" 
+        aria-selected="false">Cottages</a>
+  </li>
 
-          </div>
-          <div class="card-body">
-            <table class="table table-bordered">
-              <thead>
-                <th>Date</th>
-                <th>is Refund</th>
-                <th>Payment Mode</th>
-                <th>Amount</th>
-              </thead>
-              <tbody>
-                <?php $total = 0; foreach ($getTheSales as $key => $value) : ?>
-                <?php 
-                  $total += $value['TotalBill'];
-                ?>
-                  <tr>
-                    <td><?php echo $value['PaymentDate'] ?></td>
-                    <td><?php echo ($value['isRefund']) ? 'Yes' : 'No'; ?></td>
-                    <td><?php echo $value['PaymentMode'] ?></td>
-                    <td>₱<?php echo number_format($value['TotalBill'], 2) ?></td>
-                  </tr>
-                <?php endforeach; ?>
-                <tr>
-                  
-                  <td colspan="3"> <label for="">Total</label></td>
-                  <td>₱<?php echo number_format($total, 2); ?></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link nav-link-tab" 
+        id="ex1-tab-3" 
+        data-mdb-toggle="tab" 
+        href="#tab-content-Rooms" 
+        role="tab" 
+        aria-controls="tab-content-Rooms" 
+        aria-selected="false">Rooms</a>
+  </li>
 
-        <!-- /.Main content here -->
+  <!-- <li class="nav-item" role="presentation">
+    <a class="nav-link nav-link-tab" 
+        id="ex1-tab-3" 
+        data-mdb-toggle="tab" 
+        href="#tab-content-Reservations" 
+        role="tab" 
+        aria-controls="tab-content-Reservations" 
+        aria-selected="false">Reservations</a>
+  </li>
 
-    </div>
-</section>
+
+  <li class="nav-item" role="presentation">
+    <a class="nav-link nav-link-tab" 
+        id="ex1-tab-3" 
+        data-mdb-toggle="tab" 
+        href="#tab-content-Payment-Reservations" 
+        role="tab" 
+        aria-controls="tab-content-Payment-Reservations" 
+        aria-selected="false">Payment of Reservation</a>
+  </li> -->
+
+
+
+</ul>
+<!-- Tabs navs -->
+
+<!-- Tabs content -->
+<div class="tab-content" id="ex1-content">
+
+  <div class="tab-pane fade" id="tab-content-Sales" role="tabpanel" aria-labelledby="ex1-tab-1">
+    <?php include 'sales.php'; ?>
+  </div>
+  <div class="tab-pane fade" id="tab-content-Entrances" role="tabpanel" aria-labelledby="ex1-tab-2">
+    <?php include 'entrances.php'; ?>
+  </div>
+  <div class="tab-pane fade" id="tab-content-Cottages" role="tabpanel" aria-labelledby="ex1-tab-3">
+    <?php include 'cottages.php'; ?>
+  </div>
+  <div class="tab-pane fade" id="tab-content-Rooms" role="tabpanel" aria-labelledby="ex1-tab-1">
+    <?php include 'rooms.php'; ?>
+  </div>
+  <div class="tab-pane fade" id="tab-content-Reservations" role="tabpanel" aria-labelledby="ex1-tab-2">
+    <?php //include 'reservation.php'; ?>
+  </div>
+  <div class="tab-pane fade" id="tab-content-Payment-Reservations" role="tabpanel" aria-labelledby="ex1-tab-3">
+    <?php //include 'payments_of_reservation.php'; ?>
+  </div>
+
+</div>
+<!-- Tabs content -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- Default Modal-->
 
@@ -159,7 +210,15 @@
 </style>
 
 <script>
+$('.nav-link-tab').on('click', function(){
 
+  $('.tab-pane').removeClass('show active');
+  $('.nav-tabs .nav-item .nav-link').removeClass('active');
+  $(this).addClass('active');
+  var Id = '#' + $(this).attr('aria-controls');
+  $(Id).addClass('show active');
+
+})
 // Some Script Here!
 $('[name=filteredBy]').on('change', function(){
 
@@ -170,6 +229,7 @@ $('[name=filteredBy]').on('change', function(){
   }else{
     window.location.href = 'adminIndex.php?page=SalesReport&type=Monthly&value=This Month';
   }
+
 });
 
 $('#print-btn').on('click', function(){

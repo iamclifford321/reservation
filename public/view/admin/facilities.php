@@ -92,6 +92,14 @@
                             </div>
                         </div>
 
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="Description">Description</label>
+                                <textarea type="number" name="Description" id="Description" class="form-control" required>
+                                </textarea>
+                            </div>
+                        </div>
+
                         <div class="col-sm-12 col-md-12 margin-20px">
                             <div class="form-group custom-file">
                                 <label class="custom-file-label" for="image">Choose file</label>
@@ -137,6 +145,15 @@
                                     class="form-control" required>
                             </div>
                         </div>
+
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="Existing-Description">Description</label>
+                                <textarea type="number" name="Existing-Description" id="Existing-Description" class="form-control" required>
+                                </textarea>
+                            </div>
+                        </div>
+
 
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
@@ -361,6 +378,7 @@ $(document).ready(function() {
                 $('#existing-facility_name').val(res['Facility_name']);
                 $('#existing-price').val(res['Price']);
                 $('#facilityId').val(Facility_id);
+                $('#Existing-Description').val(res['description']);
                 console.log('res', res);
             }
         });
@@ -372,6 +390,7 @@ $(document).ready(function() {
         let facility_name = $('#facility_name').val();
         let price = $('#price').val();
         let category = $('#category_name').val();
+        let Description = $('#Description').val();
 
         var file_data = $('#image').prop('files')[0];
         var form_data = new FormData();
@@ -379,6 +398,7 @@ $(document).ready(function() {
         form_data.append('facility_name', facility_name);
         form_data.append('file', file_data);
         form_data.append('category', category);
+        form_data.append('Description', Description);
 
         form_data.append('action', 'create-facility');
 
@@ -432,6 +452,7 @@ $(document).ready(function() {
         form_data.append('facility_name', facility_name);
         form_data.append('file', file_data);
         form_data.append('facilityId', $('#facilityId').val());
+        form_data.append('Description', $('#Existing-Description').val());
         form_data.append('action', 'update-facility');
 
         try {

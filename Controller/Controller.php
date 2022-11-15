@@ -151,10 +151,9 @@ class Controller extends Model{
     }
     public function insertFacility(){
 
-
         $valid_extensions = array('jpeg', 'jpg', 'png'); // valid 
         $path = getcwd() . '/public/uploads/images/'; // upload directory
-
+        
         if(isset($_FILES['file']) && $_FILES['file']){
             $img = $_FILES['file']['name'];
             $tmp = $_FILES['file']['tmp_name'];
@@ -169,16 +168,18 @@ class Controller extends Model{
 
                     $sql = "INSERT 
                                 INTO 
-                                    facility(Facility_name,Price,Image, Category)
+                                    facility(Facility_name,Price,Image, Category, description, status)
                                 VALUES
-                                    (:Facility_name,:Price,:Image, :Category)";
+                                    (:Facility_name,:Price,:Image, :Category, :description, :status)";
 
 
                     $placeholders = array(
                         ':Facility_name'    => $_POST['facility_name'],
                         ':Price'            => $_POST['price'],
                         ':Image'            => $final_image,
-                        ':Category'         => $_POST['category']
+                        ':Category'         => $_POST['category'],
+                        ':description'      => $_POST['Description'],
+                        ':status'           => 'Activated'
                     );
 
                     $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
@@ -231,9 +232,10 @@ class Controller extends Model{
         $placeholders = array(
                     ':Facility_name'    => $_POST['facility_name'],
                     ':Price'            => $_POST['price'],
-                    ':facilityId'       => $_POST['facilityId']
+                    ':facilityId'       => $_POST['facilityId'],
+                    ':description'      => $_POST['Description']
                 );
-        $sql = "UPDATE facility SET Facility_name = :Facility_name,Price =:Price";
+        $sql = "UPDATE facility SET Facility_name = :Facility_name,Price =:Price, description =:description";
 
         if(isset($_FILES['file']) && $_FILES['file']){
 
@@ -1211,6 +1213,117 @@ class Controller extends Model{
         return $data;
     }
 
+    public function entraceReports($value, $type){
+
+        $sql = "SELECT * FROM reservation";
+        $getRecs;
+        if( $type == 'Monthly' ){
+            # Montly report
+            $sql .= " WHERE Reservation_status = 'Reserved' AND MONTH(createdDate) = MONTH(CURRENT_DATE()) AND YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Yearly') {
+            # Yearly report
+            $sql .= " WHERE Reservation_status = 'Reserved' AND YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Weekly') {
+            # Yearly report
+            $sql .= " WHERE Reservation_status = 'Reserved' AND YEARWEEK(`createdDate`, 1) = YEARWEEK(CURDATE(), 1) ORDER BY createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }else{
+            # custom date select
+            # date1-date2
+            $exploded = explode(",", $value);
+            $dateFrom = $exploded[0];
+            $dateTo = $exploded[1];
+            $sql .= " WHERE Reservation_status = 'Reserved' AND createdDate >= :dateFrom AND createdDate <= :dateTo ORDER BY createdDate ASC";
+
+            $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
+                ':dateFrom' => $dateFrom,
+                ':dateTo' => $dateTo
+            ));
+        }
+        $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+
+    public function cottagesReports($value, $type){
+
+        $sql = "SELECT * FROM reservation_facility LEFT JOIN facility ON facility.Facility_id = reservation_facility.facilityId";
+        $getRecs;
+        if( $type == 'Monthly' ){
+            # Montly report
+            $sql .= " WHERE facility.Category = 'Cottages' AND MONTH(reservation_facility.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Yearly') {
+            # Yearly report
+            $sql .= " WHERE facility.Category = 'Cottages' AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Weekly') {
+            # Yearly report
+            $sql .= " WHERE facility.Category = 'Cottages' AND YEARWEEK(reservation_facility.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY reservation_facility.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }else{
+            # custom date select
+            # date1-date2
+            $exploded = explode(",", $value);
+            $dateFrom = $exploded[0];
+            $dateTo = $exploded[1];
+            $sql .= " WHERE facility.Category = 'Cottages' AND reservation_facility.createdDate >= :dateFrom AND reservation_facility.createdDate <= :dateTo ORDER BY reservation_facility.createdDate ASC";
+
+            $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
+                ':dateFrom' => $dateFrom,
+                ':dateTo' => $dateTo
+            ));
+        }
+        $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+
+    public function roomsReports($value, $type){
+
+        $sql = "SELECT * FROM reservation_facility LEFT JOIN facility ON facility.Facility_id = reservation_facility.facilityId";
+        $getRecs;
+        if( $type == 'Monthly' ){
+            # Montly report
+            $sql .= " WHERE facility.Category = 'Rooms' AND MONTH(reservation_facility.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Yearly') {
+            # Yearly report
+            $sql .= " WHERE facility.Category = 'Rooms' AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Weekly') {
+            # Yearly report
+            $sql .= " WHERE facility.Category = 'Rooms' AND YEARWEEK(reservation_facility.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY reservation_facility.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }else{
+            # custom date select
+            # date1-date2
+            $exploded = explode(",", $value);
+            $dateFrom = $exploded[0];
+            $dateTo = $exploded[1];
+            $sql .= " WHERE facility.Category = 'Rooms' AND reservation_facility.createdDate >= :dateFrom AND reservation_facility.createdDate <= :dateTo ORDER BY reservation_facility.createdDate ASC";
+
+            $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
+                ':dateFrom' => $dateFrom,
+                ':dateTo' => $dateTo
+            ));
+        }
+        $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+    
+
     public function addEntranceFee(){
         $customerId = $_POST['customerId'];
         if($_POST['customerId'] == ''){
@@ -1359,6 +1472,14 @@ class Controller extends Model{
         return [
             'status'    =>  'success'
         ];
+    }
+
+    public function getFacilityInfo($FacilitId){
+        $facility = $this->dynamicSLCTLabeledQuery("SELECT * FROM facility WHERE Facility_id =:facilityId", array(
+            ':facilityId' => $FacilitId
+        ));
+        return $facility['data']->fetch(PDO::FETCH_ASSOC);
+
     }
 
     

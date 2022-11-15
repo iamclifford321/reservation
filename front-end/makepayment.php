@@ -62,7 +62,7 @@
                             <h4 class="alert-heading">How does this work?</h4>
                             <ul>
                                 <li>
-                                    Send money through Gcash, send it to 09*********, under the name Test Name
+                                    Send money through Gcash, send it to 09272555640, under the name <b>Maria Emma Aljas</b>
                                 </li>
                                 <li>
                                     Save the image of the reciept.
@@ -173,7 +173,7 @@
                                             <div class="col-sm-12 col-md-6 margin bottom">
 
                                                 <div class="form-group">
-                                                    <label for="gcash-numner">Gcash number</label>
+                                                    <label for="gcash-numner">Customer's Gcash number</label>
                                                     <input type="text" name="gcash-numner" id="gcash-numner" required class="form-control">
                                                 </div>
                                                 <input type="hidden" value="<?php echo $balance; ?>" name="balance">
@@ -192,7 +192,7 @@
                                             <input type="hidden" value="<?php echo $_GET['reservationId']; ?>" name="resId">
                                             <textarea value="" name="facilityIds" class="d-none"></textarea>
                                             <input type="hidden" value="<?php echo $_GET['customerId']; ?>" name="cusId">
-                                            <textarea type="text" name="scheduled" class="d-none"><?php echo $serialized; ?></textarea
+                                            <textarea type="text" name="scheduled" class="d-none"><?php echo $serialized; ?></textarea>
                                             <div class="col-sm-12 col-md-12 margin-20px">
                                                 <div class="custom-file" style="width:100%; height: 100%;">
                                                     <label class="custom-file-label" for="payment-receipt" style="width:100%; height: 100%;">

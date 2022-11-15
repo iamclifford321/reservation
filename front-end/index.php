@@ -51,6 +51,7 @@
                 float: right;
             }
         </style>
+        <?php if(isset($_GET['facilityId'])) : include 'FacilityInfo.php'; endif; ?>
         <!-- Modal Area -->
             <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                 <div class="modal-dialog modal-sm" role="document">
@@ -265,8 +266,22 @@
                                                                                     -ms-transform: translate(-50%);
                                                                                     transform: translate(-50%);
                                                                                     max-width: 128px;">
+                                                                                    
                                                         <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
                                                     </div>
+
+
+                                                    <div class="checkAvail" style="position: absolute;
+                                                                                    bottom: 65%;
+                                                                                    left: 50%;
+                                                                                    -webkit-transform: translate(-50%);
+                                                                                    -ms-transform: translate(-50%);
+                                                                                    transform: translate(-50%);
+                                                                                    max-width: 128px;">
+                                                                                    
+                                                        <a class="btn btn-primary" href="index.php?facilityId=<?php echo $getTheFacility['Facility_id'] ?>" style="color: white;">Check info</a>
+                                                    </div>
+
                                                     <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
                                                         <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
                                                     <?php else : ?>
@@ -320,6 +335,19 @@
                                                                                     max-width: 128px;">
                                                         <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
                                                     </div>
+
+                                                    
+                                                    <div class="checkAvail" style="position: absolute;
+                                                                                    bottom: 65%;
+                                                                                    left: 50%;
+                                                                                    -webkit-transform: translate(-50%);
+                                                                                    -ms-transform: translate(-50%);
+                                                                                    transform: translate(-50%);
+                                                                                    max-width: 128px;">
+                                                                                    
+                                                        <a class="btn btn-primary" href="index.php?facilityId=<?php echo $getTheFacility['Facility_id'] ?>" style="color: white;">Check info</a>
+                                                    </div>
+
                                                     <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
                                                         <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
                                                     <?php else : ?>
@@ -329,6 +357,7 @@
                                                 </div>
                                                 <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
                                                 <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
+                                                <p><?php echo $getTheFacility['description']; ?></p>
                                             </div>
                                         </div>
                                     <?php
@@ -372,6 +401,17 @@
                                                                                     transform: translate(-50%);
                                                                                     max-width: 128px;">
                                                         <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
+                                                    </div>
+
+                                                    <div class="checkAvail" style="position: absolute;
+                                                                                    bottom: 65%;
+                                                                                    left: 50%;
+                                                                                    -webkit-transform: translate(-50%);
+                                                                                    -ms-transform: translate(-50%);
+                                                                                    transform: translate(-50%);
+                                                                                    max-width: 128px;">
+                                                    
+                                                        <a class="btn btn-primary" href="index.php?facilityId=<?php echo $getTheFacility['Facility_id'] ?>" style="color: white;">Check info</a>
                                                     </div>
                                                     <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
                                                         <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>

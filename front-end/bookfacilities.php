@@ -158,7 +158,7 @@
 
 
 
-                                    <div class="col-sm-12"><label for="">Aminities</label></div>
+                                    <!-- <div class="col-sm-12"><label for="">Aminities</label></div>
                                     <?php foreach($aminities as $aminity) : ?>
                                         <div class="col-md-6">
                                             <input type="checkbox" class="aminityClass"
@@ -168,7 +168,7 @@
                                                 aminPrice="<?php echo $aminity['price']; ?>">
                                                 <label for="<?php echo $aminity['aminitiesId']; ?>"><?php echo $aminity['Name']; ?>(₱<?php echo number_format($aminity['price'], 2); ?>)</label>
                                         </div>
-                                    <?php endforeach; ?>
+                                    <?php endforeach; ?> -->
 
                                 </div>
                                 <div class="card-footer">
@@ -258,7 +258,7 @@
             
 
             $('[name=childNumber]').on('change', function(){
-                var numberOfChild = parseInt($(this).val());
+                var numberOfChild = ($(this).val() != '') ? parseInt($(this).val()) : 0;
                 var paymentForChild = numberOfChild * 20;
 
                 var numberAdult = 0; 
@@ -276,8 +276,9 @@
                 $('#totalIntrance').val(totalAmount);
             });
 
+            
             $('[name=adultNumber]').on('change', function(){
-                var adultNum = parseInt($(this).val());
+                var adultNum = ($(this).val() != '') ? parseInt($(this).val()) : 0;
                 var paymentForAdult = adultNum * 30;
 
                 var numberOfChild = 0;

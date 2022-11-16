@@ -1,4 +1,4 @@
-<?php $getTheSales = $controller->salesReports($_GET['value'], $_GET['type']); ?>
+<?php $getTheEnttrace = $controller->entertainmentReports($_GET['value'], $_GET['type']); ?>
 <section class="content">
     <div class="container-fluid">
         <!-- Main content here -->
@@ -21,34 +21,33 @@
 
           </div>
           <div class="card-body">
-          <h2>Sales</h2>
+          <h2>Entertainment</h2>
             <table class="table table-bordered">
               <thead>
-                <th>Date</th>
-                <th>is Refund</th>
-                <th>Payment Mode</th>
-                <th>Payment for</th>
-                <th>Amount</th>
+                <th>Name</th>
+                <th>Date Start</th>
+                <th>Date End</th>
+                <th>Amout</th>
               </thead>
               <tbody>
-                <?php $total = 0; foreach ($getTheSales as $key => $value) : ?>
+                <?php $total = 0; foreach ($getTheEnttrace as $key => $value) : ?>
                 <?php 
-                  $porpuse = 'Entrance fee';
-                  $total += $value['TotalBill'];
-                  if($value['ReservationId'] != null || $value['ReservationId'] != ''){
-                    $porpuse = 'Reservation fee';
-                  }
+                    // $numberAdult = $value['number_of_adults'] * 30;
+                    // $numberChild = $value['number_of_children'] * 20;
+                    // $totalPayment = $numberChild + $numberAdult;
+                    $total += $value['totalAmout'];
                 ?>
                   <tr>
-                    <td><?php echo date('M. d Y', strtotime($value['PaymentDate'])) ?></td>
-                    <td><?php echo ($value['isRefund']) ? 'Yes' : 'No'; ?></td>
-                    <td><?php echo $value['PaymentMode'] ?></td>
-                    <td><?php echo $porpuse ?></td>
-                    <td>₱<?php echo number_format($value['TotalBill'], 2) ?></td>
+                    <td><?php echo $value['Facility_name'] ?></td>
+                    <td><?php echo date('M. d Y', strtotime($value['dateIn'])) ?></td>
+                    <td><?php echo date('M. d Y', strtotime($value['dateOut'])) ?></td>
+                    <td>₱<?php echo number_format($value['totalAmout'], 2) ?></td>
                   </tr>
+
                 <?php endforeach; ?>
                 <tr>
-                  <td colspan="4"> <label for="">Total</label></td>
+                  
+                  <td colspan="3"> <label for="">Total</label></td>
                   <td>₱<?php echo number_format($total, 2); ?></td>
                 </tr>
               </tbody>

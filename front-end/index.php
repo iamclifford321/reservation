@@ -357,7 +357,7 @@
                                                 </div>
                                                 <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
                                                 <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
-                                                <p><?php echo $getTheFacility['description']; ?></p>
+                                                <!-- <p><?php echo $getTheFacility['description']; ?></p> -->
                                             </div>
                                         </div>
                                     <?php

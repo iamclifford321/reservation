@@ -20,7 +20,7 @@
 
         <div class="row custom-card">
             <div class="col-lg-6">
-                <img src="../../uploads/images/76Untitled.png">
+                <img src="">
             </div>
             <div class="col-lg-6">
                 <div class="reservation-title">
@@ -58,12 +58,11 @@
 
 <style type="text/css">
         .custom-card {
-            border: 1px solid #04091E;
+            border: 1px solid #dbdbdb;
             padding: 10px 20px;
-            max-width: 75%;
+            max-width: 50em;
             margin: auto;
             border-radius: 5px;
-            box-shadow: -3px -2px #2778fe;
         }
         p {
             margin-bottom: 0;

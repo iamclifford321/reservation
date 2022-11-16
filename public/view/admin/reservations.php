@@ -36,7 +36,7 @@
             <table id="reservation-data" class="table table-striped">
                 <thead>
                     <tr>
-
+                        <th>Reservation #</th>
                         <th>Reservation Date</th>
                         <th>Customer</th>
                         <th># of Guests</th>
@@ -132,7 +132,7 @@
                             </div>
                         </div> -->
 
-                            <div class="col-sm-12"><label for="">Aminities</label></div>
+                            <!-- <div class="col-sm-12"><label for="">Aminities</label></div>
                             <?php foreach($aminities as $aminity) : ?>
                                 <div class="col-md-6">
                                     <input type="checkbox" class="aminityClass"
@@ -142,7 +142,7 @@
                                         aminPrice="<?php echo $aminity['price']; ?>"> 
                                         <label for="<?php echo $aminity['aminitiesId']; ?>"><?php echo $aminity['Name']; ?>(₱<?php echo number_format($aminity['price'], 2); ?>)</label>
                                 </div>
-                            <?php endforeach; ?>
+                            <?php endforeach; ?> -->
                         
                         <!-- <div class="col-sm-6 col-md-6">
                             <div class="form-group">
@@ -515,8 +515,8 @@
                             var status      = '';
                             var dataTarget  = '';
                             var approve = ``;
-                            if(res[index]['status'] == 'Pending Cancel'){
-                                approve = `<a href="?page=approveCancelation&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Approve Cancellation</a>`;
+                            if(res[index]['status'] != 'Reserved'){
+                                approve = `<a href="?page=approve&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Approve</a>`;
                             }
                             var cancel = `<a href="?page=approveCancelation&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Cancel</a>`;
                             if(res[index]['status'] == 'Pending Cancel' || res[index]['status'] == 'Cancelled'){
@@ -530,6 +530,7 @@
                                             </li>`;
                             });
                             table.row.add([
+                                'Reservation No. ' + res[index]['reservationId'],
                                 res[index]['date'],
                                 res[index]['customer'],
                                 res[index]['numberOfCustomer'],
@@ -546,7 +547,6 @@
                                             <a href="?page=paymentHistory&reservationId=${element.reservationId}&customerId=${element.customerId}&totalAmountFac=${element.totalAmountFac}&status=${res[index]['status']}" class="dropdown-item make-payment">Payment history</a>
                                             ${cancel}
                                             ${approve}
-                                            <a href="?page=approve&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Approve</a>
                                             <a class="dropdown-item make-payment" href="?page=reservationDetails&reservationId=${element.reservationId}">Details</a>
                                         </div>
                                     </div>

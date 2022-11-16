@@ -32,15 +32,15 @@
               <tbody>
                 <?php $total = 0; foreach ($getTheEnttrace as $key => $value) : ?>
                 <?php 
-                    $numberAdult = $value['number_of_adults'] * 30;
-                    $numberChild = $value['number_of_children'] * 20;
+                    $numberAdult = $value['numberOfAdults'] * 30;
+                    $numberChild = $value['numberOfChildrens'] * 20;
                     $totalPayment = $numberChild + $numberAdult;
                     $total += $totalPayment;
                 ?>
                   <tr>
                     <td><?php echo date('M. d Y', strtotime($value['createdDate'])) ?></td>
-                    <td><?php echo $value['number_of_adults'] ?>(₱30)</td>
-                    <td><?php echo $value['number_of_children'] ?>(₱20)</td>
+                    <td><?php echo $value['numberOfAdults'] ?>(₱30)</td>
+                    <td><?php echo $value['numberOfChildrens'] ?>(₱20)</td>
                     <td>₱<?php echo number_format($totalPayment, 2) ?></td>
                   </tr>
 

@@ -70,7 +70,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <!-- <div class="col-sm-12 col-md-12">
                         <div class="form-group">
                             <label for="">Reservation</label>
                             <select name="facilty" id="facilty" class="form-control">
@@ -82,7 +82,7 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-sm-12 col-md-12 payment-type-container">
                         <div class="customerName">
                             <div class="row">
@@ -211,13 +211,16 @@
                         table.clear().draw();
                         for (let index = 0; index < res.length; index++) {
                             const element = res[index];
+                            var m = new Date(element['Payment_date']);
+                            var month = m.toLocaleString('default', { month: 'short' });
+                            console.log(m);
                             console.log(element);
                             table.row.add([
                                 element['FirstName'].charAt(0).toUpperCase() + element['FirstName'].slice(1) + ' ' + element['LastName'].charAt(0).toUpperCase() + element['LastName'].slice(1),
                                 element['Amount'],
                                 element['numberOfAdults'],
                                 element['numberOfChildrens'],
-                                element['Payment_date']
+                                month + '. ' + m.getUTCDate() + ', ' + m.getUTCFullYear() 
                             ]).draw();
                         }
                     }

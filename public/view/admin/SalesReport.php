@@ -8,7 +8,7 @@
 
     require_once 'Controller/Controller.php'; 
 
-    $controller = new Controller(); 
+    $controller = new Controller();
     
     // echo "<pre>";
     // print_r($getTheSales);
@@ -97,6 +97,16 @@
     <a class="nav-link nav-link-tab" 
         id="ex1-tab-3" 
         data-mdb-toggle="tab" 
+        href="#tab-content-Entertainment" 
+        role="tab" 
+        aria-controls="tab-content-Entertainment" 
+        aria-selected="false">Entertainment</a>
+  </li>
+
+  <li class="nav-item" role="presentation">
+    <a class="nav-link nav-link-tab" 
+        id="ex1-tab-3" 
+        data-mdb-toggle="tab" 
         href="#tab-content-Reservations" 
         role="tab" 
         aria-controls="tab-content-Reservations" 
@@ -134,6 +144,11 @@
   <div class="tab-pane fade" id="tab-content-Rooms" role="tabpanel" aria-labelledby="ex1-tab-1">
     <?php include 'rooms.php'; ?>
   </div>
+
+  <div class="tab-pane fade" id="tab-content-Entertainment" role="tabpanel" aria-labelledby="ex1-tab-1">
+    <?php include 'entertainment.php'; ?>
+  </div>
+  
   <div class="tab-pane fade" id="tab-content-Reservations" role="tabpanel" aria-labelledby="ex1-tab-2">
     <?php include 'reservation.php'; ?>
   </div>

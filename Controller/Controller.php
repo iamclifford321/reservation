@@ -384,12 +384,13 @@ class Controller extends Model{
                     customer 
                 ON 
                     reservation.Customer_id = customer.customer_id ";
+
         if(isset($_POST['filterBy']) && $_POST['filterBy'] != null){
             $str .= " WHERE Reservation_status =:status ";
             $str .= "GROUP BY
                         reservation.Reservation_id
                     ORDER BY
-                        reservation.createdDate DESC";
+                        reservation.Reservation_id DESC";
             $reservations = $this->dynamicSLCTLabeledQuery($str, array(
                 ':status' => $_POST['filterBy']
             ));
@@ -398,7 +399,7 @@ class Controller extends Model{
             $str .= "GROUP BY
                         reservation.Reservation_id
                     ORDER BY
-                        reservation.createdDate DESC";
+                        reservation.Reservation_id DESC";
             $reservations = $this->dynamicSLCTQuery($str);
         }
 
@@ -693,7 +694,7 @@ class Controller extends Model{
                 GROUP BY
                     reservation.Reservation_id
                 ORDER BY
-                    reservation.createdDate
+                    reservation.Reservation_id
                 DESC";
 
         $param = array(
@@ -1215,21 +1216,21 @@ class Controller extends Model{
 
     public function entraceReports($value, $type){
 
-        $sql = "SELECT * FROM reservation";
+        $sql = "SELECT * FROM payments";
         $getRecs;
         if( $type == 'Monthly' ){
             # Montly report
-            $sql .= " WHERE Reservation_status = 'Reserved' AND MONTH(createdDate) = MONTH(CURRENT_DATE()) AND YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
+            $sql .= " WHERE isIntrance = true AND MONTH(createdDate) = MONTH(CURRENT_DATE()) AND YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }elseif ($type == 'Yearly') {
             # Yearly report
-            $sql .= " WHERE Reservation_status = 'Reserved' AND YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
+            $sql .= " WHERE isIntrance = true AND YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }elseif ($type == 'Weekly') {
             # Yearly report
-            $sql .= " WHERE Reservation_status = 'Reserved' AND YEARWEEK(`createdDate`, 1) = YEARWEEK(CURDATE(), 1) ORDER BY createdDate ASC";
+            $sql .= " WHERE isIntrance = true AND YEARWEEK(`createdDate`, 1) = YEARWEEK(CURDATE(), 1) ORDER BY createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }else{
@@ -1238,7 +1239,7 @@ class Controller extends Model{
             $exploded = explode(",", $value);
             $dateFrom = $exploded[0];
             $dateTo = $exploded[1];
-            $sql .= " WHERE Reservation_status = 'Reserved' AND createdDate >= :dateFrom AND createdDate <= :dateTo ORDER BY createdDate ASC";
+            $sql .= " WHERE isIntrance = true AND createdDate >= :dateFrom AND createdDate <= :dateTo ORDER BY createdDate ASC";
 
             $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
                 ':dateFrom' => $dateFrom,
@@ -1252,21 +1253,21 @@ class Controller extends Model{
 
     public function cottagesReports($value, $type){
 
-        $sql = "SELECT * FROM reservation_facility LEFT JOIN facility ON facility.Facility_id = reservation_facility.facilityId";
+        $sql = "SELECT * FROM reservation_facility LEFT JOIN facility ON facility.Facility_id = reservation_facility.facilityId LEFT JOIN reservation ON reservation.Reservation_id = reservation_facility.reservationId";
         $getRecs;
         if( $type == 'Monthly' ){
             # Montly report
-            $sql .= " WHERE facility.Category = 'Cottages' AND MONTH(reservation_facility.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Cottages' AND MONTH(reservation_facility.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }elseif ($type == 'Yearly') {
             # Yearly report
-            $sql .= " WHERE facility.Category = 'Cottages' AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Cottages' AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }elseif ($type == 'Weekly') {
             # Yearly report
-            $sql .= " WHERE facility.Category = 'Cottages' AND YEARWEEK(reservation_facility.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY reservation_facility.createdDate ASC";
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Cottages' AND YEARWEEK(reservation_facility.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY reservation_facility.createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }else{
@@ -1275,7 +1276,44 @@ class Controller extends Model{
             $exploded = explode(",", $value);
             $dateFrom = $exploded[0];
             $dateTo = $exploded[1];
-            $sql .= " WHERE facility.Category = 'Cottages' AND reservation_facility.createdDate >= :dateFrom AND reservation_facility.createdDate <= :dateTo ORDER BY reservation_facility.createdDate ASC";
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Cottages' AND reservation_facility.createdDate >= :dateFrom AND reservation_facility.createdDate <= :dateTo ORDER BY reservation_facility.createdDate ASC";
+
+            $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
+                ':dateFrom' => $dateFrom,
+                ':dateTo' => $dateTo
+            ));
+        }
+        $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+
+    public function entertainmentReports($value, $type){
+
+        $sql = "SELECT * FROM reservation_facility LEFT JOIN facility ON facility.Facility_id = reservation_facility.facilityId LEFT JOIN reservation ON reservation.Reservation_id = reservation_facility.reservationId";
+        $getRecs;
+        if( $type == 'Monthly' ){
+            # Montly report
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Entertainment' AND MONTH(reservation_facility.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Yearly') {
+            # Yearly report
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Entertainment' AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Weekly') {
+            # Yearly report
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Entertainment' AND YEARWEEK(reservation_facility.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY reservation_facility.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }else{
+            # custom date select
+            # date1-date2
+            $exploded = explode(",", $value);
+            $dateFrom = $exploded[0];
+            $dateTo = $exploded[1];
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Entertainment' AND reservation_facility.createdDate >= :dateFrom AND reservation_facility.createdDate <= :dateTo ORDER BY reservation_facility.createdDate ASC";
 
             $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
                 ':dateFrom' => $dateFrom,
@@ -1460,21 +1498,21 @@ class Controller extends Model{
 
     public function roomsReports($value, $type){
 
-        $sql = "SELECT * FROM reservation_facility LEFT JOIN facility ON facility.Facility_id = reservation_facility.facilityId";
+        $sql = "SELECT * FROM reservation_facility LEFT JOIN facility ON facility.Facility_id = reservation_facility.facilityId LEFT JOIN reservation ON reservation.Reservation_id = reservation_facility.reservationId";
         $getRecs;
         if( $type == 'Monthly' ){
             # Montly report
-            $sql .= " WHERE facility.Category = 'Rooms' AND MONTH(reservation_facility.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Rooms' AND MONTH(reservation_facility.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }elseif ($type == 'Yearly') {
             # Yearly report
-            $sql .= " WHERE facility.Category = 'Rooms' AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Rooms' AND YEAR(reservation_facility.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation_facility.createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }elseif ($type == 'Weekly') {
             # Yearly report
-            $sql .= " WHERE facility.Category = 'Rooms' AND YEARWEEK(reservation_facility.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY reservation_facility.createdDate ASC";
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Rooms' AND YEARWEEK(reservation_facility.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY reservation_facility.createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }else{
@@ -1483,7 +1521,7 @@ class Controller extends Model{
             $exploded = explode(",", $value);
             $dateFrom = $exploded[0];
             $dateTo = $exploded[1];
-            $sql .= " WHERE facility.Category = 'Rooms' AND reservation_facility.createdDate >= :dateFrom AND reservation_facility.createdDate <= :dateTo ORDER BY reservation_facility.createdDate ASC";
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND facility.Category = 'Rooms' AND reservation_facility.createdDate >= :dateFrom AND reservation_facility.createdDate <= :dateTo ORDER BY reservation_facility.createdDate ASC";
 
             $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
                 ':dateFrom' => $dateFrom,
@@ -1680,7 +1718,7 @@ class Controller extends Model{
                 'status' => $data['Reservation_status'],
                 'reservationId' => $data['Reservation_id'],
                 'customerId' => $data['customer_id'],
-                'paymentStatus' => $data['paymentStatus']
+                'paymentStatus' => $data['paymentStatus'],
             );
             // array_push($list, );
             $str = "SELECT 
@@ -1717,6 +1755,7 @@ class Controller extends Model{
                     )
                 );
             }
+            
             $innerArr['totalAmountFac'] = $totalAmountFac;
             $innerArr['facilities'] = $facilitiesArr;
 

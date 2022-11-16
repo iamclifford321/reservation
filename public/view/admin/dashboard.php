@@ -147,6 +147,7 @@
 				<table class="table">
 					<thead>
 						<tr>
+							<th>Reservation #</th>
 							<th>Reservation Date</th>
 							<th>Customer</th>
 							<th>Number of Guest</th>
@@ -159,7 +160,7 @@
 						<?php foreach($getReservations as $keyRes => $getReservation) : ?>
 						<?php if($getReservation['status'] == 'Pending Cancel'): ?>
 						<tr>
-							<td><?php echo $getReservation['date'] ?></td>
+							<td>Reservation No. <?php echo $getReservation['reservationId'] ?></td>
 							<td><?php echo $getReservation['customer'] ?></td>
 							<td><?php echo $getReservation['numberOfCustomer'] ?></td>
 							<td>
@@ -169,7 +170,7 @@
 										?>
 											<ul>
 												<li>
-													<a href="#"><small><?php echo $facility['faclityName'] . '(' . $facility['facilityDate'] . ')'; ?></small></a>
+													<p><?php echo $facility['faclityName'] . ' <b>(' . $facility['facilityDate'] . ')</b>'; ?></p>
 												</li>
 											</ul>
 										<?php
@@ -200,6 +201,7 @@
 				<table class="table">
 					<thead>
 						<tr>
+							<th>Reservation #</th>
 							<th>Reservation Date</th>
 							<th>Customer</th>
 							<th>Number of Guest</th>
@@ -213,6 +215,7 @@
 						<?php foreach($getReservations as $keyRes => $getReservation) : ?>
 						<?php if($getReservation['status'] == 'Pending'): ?>
 						<tr>
+							<td>Reservation No. <?php echo $getReservation['reservationId'] ?></td>
 							<td><?php echo $getReservation['date'] ?></td>
 							<td><?php echo $getReservation['customer'] ?></td>
 							<td><?php echo $getReservation['numberOfCustomer'] ?></td>
@@ -222,7 +225,7 @@
 										?>
 											<ul>
 												<li>
-													<a href="#"><small><?php echo $facility['faclityName'] . '(' . $facility['facilityDate'] . ')'; ?></small></a>
+													<p><?php echo $facility['faclityName'] . ' <b>(' . $facility['facilityDate'] . ')</b>'; ?></p>
 												</li>
 											</ul>
 										<?php
@@ -240,7 +243,7 @@
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                             <a href="?page=paymentHistory&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>&totalAmountFac=<?php echo $getReservation['totalAmountFac']; ?>&status=<?php echo $getReservation['paymentStatus']; ?>" class="dropdown-item make-payment">Payment history</a>
-                                            <a href="?page=approveCancelation&amp;reservationId=<?php echo $getReservation['reservationId']; ?>&;customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Cancel</a>
+                                            <a href="?page=approveCancelation&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Cancel</a>
                                             <a href="?page=approve&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Approve</a>
                                             <a class="dropdown-item make-payment" href="?page=details&reservationId=<?php echo $getReservation['reservationId']; ?>">Details</a>
                                         </div>

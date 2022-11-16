@@ -94,7 +94,7 @@
                         var elmnt = `<ul>`;
                         for (const iterator of element.facilities) {
                             elmnt += `<li>
-                                        <a href="facilityInfo.php?id=${iterator.facilityId}"><small>${iterator.faclityName} (${iterator.facilityDate})</small></a>
+                                        <p> ${iterator.faclityName} <b>(${iterator.facilityDate})</b></p>
                                      </li>`;
                         }
 

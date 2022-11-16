@@ -148,7 +148,7 @@
 					<thead>
 						<tr>
 							<th>Reservation #</th>
-							<th>Reservation Date</th>
+							
 							<th>Customer</th>
 							<th>Number of Guest</th>
 							<th>Facility</th>
@@ -162,6 +162,9 @@
 						<tr>
 							<td>Reservation No. <?php echo $getReservation['reservationId'] ?></td>
 							<td><?php echo $getReservation['customer'] ?></td>
+							
+
+							
 							<td><?php echo $getReservation['numberOfCustomer'] ?></td>
 							<td>
 
@@ -245,7 +248,7 @@
                                             <a href="?page=paymentHistory&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>&totalAmountFac=<?php echo $getReservation['totalAmountFac']; ?>&status=<?php echo $getReservation['paymentStatus']; ?>" class="dropdown-item make-payment">Payment history</a>
                                             <a href="?page=approveCancelation&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Cancel</a>
                                             <a href="?page=approve&reservationId=<?php echo $getReservation['reservationId']; ?>&customerId=<?php echo $getReservation['customerId']; ?>" class="dropdown-item cancel-payment">Approve</a>
-                                            <a class="dropdown-item make-payment" href="?page=details&reservationId=<?php echo $getReservation['reservationId']; ?>">Details</a>
+                                            <a class="dropdown-item make-payment" href="?page=reservationDetails&reservationId=<?php echo $getReservation['reservationId']; ?>">Details</a>
                                         </div>
                                     </div>
                                 </div>

@@ -4,7 +4,7 @@
         <!-- Main content here -->
         <div class="card">
           <div class="card-header">
-            <button class="btn btn-secondary" id="print-btn">Print</button>
+            <button class="btn btn-secondary print-btn" id="print-btn">Print</button>
             <div class="print-details">
               <div class="row">
                 <div class="col-md-6">
@@ -21,6 +21,7 @@
 
           </div>
           <div class="card-body">
+          <h2>Cottages</h2>
             <table class="table table-bordered">
               <thead>
                 <th>Cottage Name</th>
@@ -34,7 +35,7 @@
                     // $numberAdult = $value['number_of_adults'] * 30;
                     // $numberChild = $value['number_of_children'] * 20;
                     // $totalPayment = $numberChild + $numberAdult;
-                    // $total += $totalPayment;
+                    $total += $value['totalAmout'];
                 ?>
                   <tr>
                     <td><?php echo $value['Facility_name'] ?></td>

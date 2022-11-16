@@ -4,12 +4,12 @@
             <div class="col-sm-6">
                 <h1>Facilities</h1>
             </div>
-            <div class="col-sm-6">
+            <!-- <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
                     <li class="breadcrumb-item active">Name of the tab</li>
                 </ol>
-            </div>
+            </div> -->
         </div>
     </div><!-- /.container-fluid -->
 </section>
@@ -57,7 +57,7 @@
             <form action="" method="POST" name="new-facility-form">
 
                 <div class="modal-header">
-                    <h4 class="modal-title">Default Modal</h4>
+                    <h4 class="modal-title">New Facility</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -130,7 +130,7 @@
         <div class="modal-content">
             <form action="" method="POST" name="modal-update-facility">
                 <div class="modal-header">
-                    <h4 class="modal-title">New User</h4>
+                    <h4 class="modal-title">Edit Facility</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

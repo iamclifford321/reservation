@@ -57,6 +57,9 @@
     elseif($_GET['page'] == 'approve'){
         
     }
+    elseif ($_GET['page'] == 'reservationDetails') {
+        # code...
+    }
      else{
         die("<center><h1 class='text-align: center'>Page not found</h1></center>");
      }
@@ -259,10 +262,10 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
+            <a href="#" class="brand-link">
                 <i class="far fas-g"></i>
                 <!-- <img src="public/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
-                <span class="brand-text font-weight-light">Gem's Eco Park</span>
+                <span class="brand-text font-weight-light">G-EM'S POOL PARK</span>
             </a>
 
             <!-- Sidebar -->

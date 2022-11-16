@@ -4,7 +4,7 @@
         <!-- Main content here -->
         <div class="card">
           <div class="card-header">
-            <button class="btn btn-secondary" id="print-btn">Print</button>
+            <button class="btn btn-secondary print-btn" id="print-btn">Print</button>
             <div class="print-details">
               <div class="row">
                 <div class="col-md-6">
@@ -21,6 +21,7 @@
 
           </div>
           <div class="card-body">
+          <h2>Sales</h2>
             <table class="table table-bordered">
               <thead>
                 <th>Date</th>

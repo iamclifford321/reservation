@@ -526,8 +526,8 @@
                             var facilities = ``;
                             element.facilities.forEach(iterator => {
                                 facilities += `<li>
-                                                    <a href="#"><small>${iterator.faclityName} (${iterator.facilityDate})</small></a>
-                                                </li>`;
+                                                    <p href="#">${iterator.faclityName} <label>(${iterator.facilityDate})</label></p>
+                                            </li>`;
                             });
                             table.row.add([
                                 res[index]['date'],
@@ -547,7 +547,7 @@
                                             ${cancel}
                                             ${approve}
                                             <a href="?page=approve&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Approve</a>
-                                            <a class="dropdown-item make-payment" href="?page=details&reservationId=${element.reservationId}">Details</a>
+                                            <a class="dropdown-item make-payment" href="?page=reservationDetails&reservationId=${element.reservationId}">Details</a>
                                         </div>
                                     </div>
                                 </div>`

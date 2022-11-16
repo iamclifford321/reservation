@@ -453,7 +453,7 @@ class Controller extends Model{
                 array_push($facilitiesArr, 
                     array(
                         'faclityName' => $facility['Facility_name'],
-                        'facilityDate' => date('M. d Y', strtotime($facility['dateIn'])) . ' - ' . date('M. d Y', strtotime($facility['dateOut'])),
+                        'facilityDate' => date('M. d Y', strtotime($facility['dateIn'])) . ' to ' . date('M. d Y', strtotime($facility['dateOut'])),
                         'facilityId' => $facility['facilityId']
                     )
                 );
@@ -1287,6 +1287,177 @@ class Controller extends Model{
     }
 
 
+    public function reservationReports($value, $type){
+
+        $sql = "SELECT 
+                    * 
+                FROM 
+                    reservation 
+                LEFT JOIN 
+                    customer 
+                ON 
+                    reservation.Customer_id = customer.customer_id ";
+        $getRecs;
+        if( $type == 'Monthly' ){
+            # Montly report
+            $sql .= " WHERE MONTH(reservation.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(reservation.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Yearly') {
+            # Yearly report
+            $sql .= " WHERE YEAR(reservation.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Weekly') {
+            # Yearly report
+            $sql .= " WHERE YEARWEEK(reservation.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY reservation.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }else{
+            # custom date select
+            # date1-date2
+            $exploded = explode(",", $value);
+            $dateFrom = $exploded[0];
+            $dateTo = $exploded[1];
+            $sql .= " WHERE reservation.createdDate >= :dateFrom AND reservation.createdDate <= :dateTo ORDER BY reservation.createdDate ASC";
+
+            $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
+                ':dateFrom' => $dateFrom,
+                ':dateTo' => $dateTo
+            ));
+        }
+        
+        $reservationData = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
+        $list = [];
+        foreach ($reservationData as $data) {
+
+            $innerArr = array(
+                'date' => date('M. d Y', strtotime($data['createdDate'])),
+                'customer' => $data['FirstName'] . ' ' . $data['LastName'],
+                'numberOfCustomer' => $data['Number_of_guest'],
+                'status' => $data['Reservation_status'],
+                'reservationId' => $data['Reservation_id'],
+                'customerId' => $data['customer_id'],
+                'paymentStatus' => $data['paymentStatus']
+            );
+            // array_push($list, );
+            $str = "SELECT 
+                            * 
+                        FROM 
+                            reservation_facility 
+                        LEFT JOIN 
+                            facility
+                        ON 
+                            reservation_facility.facilityId = facility.Facility_id
+                        WHERE 
+                            reservation_facility.reservationId = :reservationId
+                        GROUP BY
+                            reservation_facility.reservationFacilityId";
+        
+            $param = array(
+                ':reservationId' => $data['Reservation_id']
+            );
+            $facilities = $this->dynamicSLCTLabeledQuery($str, $param);
+            $facilitiesData = $facilities['data']->fetchAll(PDO::FETCH_ASSOC);
+            $facilitiesArr = [];
+            $totalAmountFac = 0;
+            foreach ($facilitiesData as $facility) {
+                $totalAmountFac += $facility['totalAmout'];
+                array_push($facilitiesArr, 
+                    array(
+                        'faclityName' => $facility['Facility_name'],
+                        'facilityDate' => date('M. d Y', strtotime($facility['dateIn'])) . ' to ' . date('M. d Y', strtotime($facility['dateOut'])),
+                        'facilityId' => $facility['facilityId']
+                    )
+                );
+            }
+            $innerArr['totalAmountFac'] = $totalAmountFac;
+            $innerArr['facilities'] = $facilitiesArr;
+            array_push($list, $innerArr);
+        }
+
+        // echo '<pre>';
+        // var_dump($list);
+        // die();
+        return $list;
+    }
+
+
+    public function reservationPaymentsReports($value, $type){
+
+        $sql = "SELECT 
+                    * 
+                FROM 
+                    reservation 
+                LEFT JOIN 
+                    customer 
+                ON 
+                    reservation.Customer_id = customer.customer_id ";
+        $getRecs;
+        if( $type == 'Monthly' ){
+            # Montly report
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND MONTH(reservation.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(reservation.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Yearly') {
+            # Yearly report
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND YEAR(reservation.createdDate) = YEAR(CURRENT_DATE()) ORDER BY reservation.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }elseif ($type == 'Weekly') {
+            # Yearly report
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND YEARWEEK(reservation.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY reservation.createdDate ASC";
+            $getRecs = $this->dynamicSLCTQuery($sql);
+
+        }else{
+            # custom date select
+            # date1-date2
+            $exploded = explode(",", $value);
+            $dateFrom = $exploded[0];
+            $dateTo = $exploded[1];
+            $sql .= " WHERE reservation.paymentStatus != 'Unpaid' AND reservation.createdDate >= :dateFrom AND reservation.createdDate <= :dateTo ORDER BY reservation.createdDate ASC";
+
+            $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
+                ':dateFrom' => $dateFrom,
+                ':dateTo' => $dateTo
+            ));
+        }
+        
+        $reservationData = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
+        $list = [];
+        foreach ($reservationData as $data) {
+
+            $innerArr = array(
+                'date' => date('M. d Y', strtotime($data['createdDate'])),
+                'customer' => $data['FirstName'] . ' ' . $data['LastName'],
+                'numberOfCustomer' => $data['Number_of_guest'],
+                'status' => $data['Reservation_status'],
+                'reservationId' => $data['Reservation_id'],
+                'customerId' => $data['customer_id'],
+                'paymentStatus' => $data['paymentStatus']
+            );
+            // array_push($list, );
+            $str = "SELECT * FROM payments WHERE Reservation_id = :reservationId";
+        
+            $param = array(
+                ':reservationId' => $data['Reservation_id']
+            );
+            $getPayments = $this->dynamicSLCTLabeledQuery($str, $param);
+            $payments = $getPayments['data']->fetchAll(PDO::FETCH_ASSOC);
+            $totalPaid = 0;
+            foreach ($payments as $paymentKey => $payment) {
+                $totalPaid += $payment['Amount'];
+            }
+            $innerArr['totalPaid'] = $totalPaid;
+            array_push($list, $innerArr);
+        }
+        // echo '<pre>';
+        // var_dump($list);
+        // die();
+        return $list;
+    }
+    
+
     public function roomsReports($value, $type){
 
         $sql = "SELECT * FROM reservation_facility LEFT JOIN facility ON facility.Facility_id = reservation_facility.facilityId";
@@ -1479,6 +1650,81 @@ class Controller extends Model{
             ':facilityId' => $FacilitId
         ));
         return $facility['data']->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+    public function getSpecificReservationWith($reservationId){
+        // TODO:: calculate the payment based on days
+
+        $sql = "SELECT 
+                    * 
+                FROM 
+                    reservation 
+                LEFT JOIN 
+                    customer 
+                ON 
+                    reservation.Customer_id = customer.customer_id 
+                WHERE
+                    reservation.Reservation_id = :reservationId";
+        $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
+            ':reservationId' => $reservationId
+        ));
+        $reservationData = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
+        $innerArr = array();
+        foreach ($reservationData as $data) {
+
+            $innerArr = array(
+                'date' => date('M. d Y', strtotime($data['createdDate'])),
+                'customer' => $data['FirstName'] . ' ' . $data['LastName'],
+                'numberOfCustomer' => $data['Number_of_guest'],
+                'status' => $data['Reservation_status'],
+                'reservationId' => $data['Reservation_id'],
+                'customerId' => $data['customer_id'],
+                'paymentStatus' => $data['paymentStatus']
+            );
+            // array_push($list, );
+            $str = "SELECT 
+                            * 
+                        FROM 
+                            reservation_facility 
+                        LEFT JOIN 
+                            facility
+                        ON 
+                            reservation_facility.facilityId = facility.Facility_id
+                        WHERE 
+                            reservation_facility.reservationId = :reservationId
+                        GROUP BY
+                            reservation_facility.reservationFacilityId";
+
+            $param = array(
+                ':reservationId' => $data['Reservation_id']
+            );
+
+
+
+
+            $facilities = $this->dynamicSLCTLabeledQuery($str, $param);
+            $facilitiesData = $facilities['data']->fetchAll(PDO::FETCH_ASSOC);
+            $facilitiesArr = [];
+            $totalAmountFac = 0;
+            foreach ($facilitiesData as $facility) {
+                $totalAmountFac += $facility['totalAmout'];
+                array_push($facilitiesArr, 
+                    array(
+                        'faclityName' => $facility['Facility_name'],
+                        'facilityDate' => date('M. d Y', strtotime($facility['dateIn'])) . ' - ' . date('M. d Y', strtotime($facility['dateOut'])),
+                        'facilityId' => $facility['facilityId']
+                    )
+                );
+            }
+            $innerArr['totalAmountFac'] = $totalAmountFac;
+            $innerArr['facilities'] = $facilitiesArr;
+
+        }
+        // echo '<pre>';
+        // var_dump($innerArr);
+        // die();
+        return $innerArr;
 
     }
 

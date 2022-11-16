@@ -52,7 +52,6 @@
 </h5> 
 
 <!-- Tabs navs -->
-
 <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
   <li class="nav-item" role="presentation">
     <a
@@ -94,7 +93,7 @@
         aria-selected="false">Rooms</a>
   </li>
 
-  <!-- <li class="nav-item" role="presentation">
+  <li class="nav-item" role="presentation">
     <a class="nav-link nav-link-tab" 
         id="ex1-tab-3" 
         data-mdb-toggle="tab" 
@@ -113,7 +112,7 @@
         role="tab" 
         aria-controls="tab-content-Payment-Reservations" 
         aria-selected="false">Payment of Reservation</a>
-  </li> -->
+  </li>
 
 
 
@@ -136,10 +135,10 @@
     <?php include 'rooms.php'; ?>
   </div>
   <div class="tab-pane fade" id="tab-content-Reservations" role="tabpanel" aria-labelledby="ex1-tab-2">
-    <?php //include 'reservation.php'; ?>
+    <?php include 'reservation.php'; ?>
   </div>
   <div class="tab-pane fade" id="tab-content-Payment-Reservations" role="tabpanel" aria-labelledby="ex1-tab-3">
-    <?php //include 'payments_of_reservation.php'; ?>
+    <?php include 'payments_of_reservation.php'; ?>
   </div>
 
 </div>
@@ -196,7 +195,7 @@
       .filter-by {
         display: none;
       }
-      #print-btn{
+      .print-btn{
         display: none;
       }
       .print-details{
@@ -205,7 +204,9 @@
       .main-footer{
         display: none !important;
       }
-
+      #ex1{
+        display: none;
+      }
   }
 </style>
 
@@ -232,7 +233,7 @@ $('[name=filteredBy]').on('change', function(){
 
 });
 
-$('#print-btn').on('click', function(){
+$('.print-btn').on('click', function(){
   window.print();
 })
 </script>

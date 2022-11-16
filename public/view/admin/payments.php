@@ -9,7 +9,7 @@
 ?>
 <section class="content-header">
     <div class="container-fluid">
-        <div class="row mb-2">
+        <!-- <div class="row mb-2">
         <div class="col-sm-6">
             <h1>Entrance Payment</h1>
         </div>
@@ -19,7 +19,7 @@
             <li class="breadcrumb-item active">Name of the tab</li>
             </ol>
         </div>
-        </div>
+        </div> -->
     </div><!-- /.container-fluid -->
 </section>
 

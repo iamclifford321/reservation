@@ -10,7 +10,7 @@
 
 ?>
 <html lang="en">
-    
+     
     <?php include 'head.php'; ?>
     <?php if(!isset($_SESSION['user_data'])) header('Location:login.php'); ?>
     <body>

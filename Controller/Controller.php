@@ -1713,12 +1713,15 @@ class Controller extends Model{
 
             $innerArr = array(
                 'date' => date('M. d Y', strtotime($data['createdDate'])),
-                'customer' => $data['FirstName'] . ' ' . $data['LastName'],
+                'customer' => ucfirst($data['FirstName']) . ' ' . ucfirst($data['LastName']),
                 'numberOfCustomer' => $data['Number_of_guest'],
+                'number_of_children' => $data['number_of_children'],
+                'number_of_adults' => $data['number_of_adults'],
                 'status' => $data['Reservation_status'],
                 'reservationId' => $data['Reservation_id'],
                 'customerId' => $data['customer_id'],
                 'paymentStatus' => $data['paymentStatus'],
+                'Event' => $data['Event']
             );
             // array_push($list, );
             $str = "SELECT 
@@ -1750,7 +1753,8 @@ class Controller extends Model{
                 array_push($facilitiesArr, 
                     array(
                         'faclityName' => $facility['Facility_name'],
-                        'facilityDate' => date('M. d Y', strtotime($facility['dateIn'])) . ' - ' . date('M. d Y', strtotime($facility['dateOut'])),
+                        'img' => $facility['Image'],
+                        'facilityDate' => date('M. d Y', strtotime($facility['dateIn'])) . ' to ' . date('M. d Y', strtotime($facility['dateOut'])),
                         'facilityId' => $facility['facilityId']
                     )
                 );

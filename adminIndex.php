@@ -336,14 +336,14 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="?page=amenities" class="nav-link <?php echo $amenities ?>">
                                 <i class="nav-icon far fa-image"></i>
                                 <p>
                                     Amenities
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
 
                         <li class="nav-item">
                             <a href="?page=users" class="nav-link <?php echo $users ?>">

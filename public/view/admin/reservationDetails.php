@@ -20,36 +20,51 @@
 
         <div class="row custom-card">
             <div class="col-lg-6">
-                <img src="">
+                <?php foreach ($resDetails['facilities'] as $key => $value) : ?>
+
+                    <div class="mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-content-divider">
+                                    <div class="card-image">
+                                        <img class="card-img-top d-block" src="public/uploads/images/<?php echo $value['img']; ?>" alt="Card image cap">
+                                    </div>
+                                    <div class="card-content pl-3 pt-3">
+                                        <h5 class="card-title"><?php echo $value['faclityName']; ?></h5>
+                                        <p class="card-text"><?php echo $value['facilityDate'] ?></p>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                    <!-- <li><?php echo $value['faclityName'] ?> <b>(<?php echo $value['facilityDate'] ?>)</b></li> -->
+                <?php endforeach; ?>
             </div>
             <div class="col-lg-6">
-                <div class="reservation-title">
-                    <h4 class="card-title">Reservation Title</h4>
-                    <p>Customer Name</p>
-                </div>
-                <div class="aminities">
-                    <h5 class="card-title">Aminities</h5>
-                    <ul>
-                        <li>Aminity 1</li>
-                        <li>Aminity 2</li>
-                        <li>Aminity 2</li>
-                    </ul>  
-                </div>
-                <div class="attendies">
-                    <h5 class="card-title">Number of Guests</h5>
-                    <div>
-                        <p>Adult: <span>200</span></p>
-                        <p>Kids: <span>50</span></p>
+                <div>
+                    <div class="reservation-title">
+                        <h4 class="card-title">Reservation No. <?php echo $resDetails['reservationId']; ?></h4>
+                        <p>Customer: <?php echo $resDetails['customer']; ?></p>
+                    </div>
+                    <div class="attendies">
+                        <h5 class="card-title">Number of Guests</h5>
+                        <div> 
+                            
+                            <p>Adult: <span><?php echo $resDetails['number_of_adults']; ?></span></p>
+                            <p>Kids: <span><?php echo $resDetails['number_of_children']; ?></span></p>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <h5 class="card-title">Event</h5>
+                        <p><?php echo $resDetails['Event']; ?></p>
+                    </div>
+                    <div class="status">
+                        <h5 class="card-title">Status</h5>
+                        <p><?php echo $resDetails['status']; ?></p>
                     </div>
                 </div>
-                <div class="event">
-                    <h5 class="card-title">Event</h5>
-                    <p>Birthday Party</p>
-                </div>
-                <div class="status">
-                    <h5 class="card-title">Status</h5>
-                    <p>Pending</p>
-                </div>
+
+
             </div>
         </div>
 
@@ -63,6 +78,8 @@
             max-width: 50em;
             margin: auto;
             border-radius: 5px;
+            align-items: center;
+            background-color: white;
         }
         p {
             margin-bottom: 0;

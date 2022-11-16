@@ -6,7 +6,7 @@
     if(!isset($_GET['page'])) die("<center><h1 class='text-align: center'>Page not found</h1></center>");
      $dashboard     = '';
      $reservation   = '';
-     $users         = '';
+     $users         = ''; 
      $facilities    = '';
      $billing       = '';
      $payment       = '';

@@ -473,6 +473,7 @@
         });
 
         let table = $("#reservation-data").DataTable({
+            order: [[1, 'desc']],
             "responsive"    : true, 
             // "lengthChange"  : false, 
             "autoWidth"     : false,

@@ -50,6 +50,12 @@
             .close-button{
                 float: right;
             }
+            .entrance-info{
+                width: 600px;
+                background: #00000052;
+                margin: auto;
+                padding: 30px;
+            }
         </style>
         <?php if(isset($_GET['facilityId'])) : include 'FacilityInfo.php'; endif; ?>
         <!-- Modal Area -->
@@ -227,7 +233,39 @@
 						<h6>Away from monotonous life</h6>
 						<h2>Relax Your Mind</h2>
 						<p>If you are looking at blank cassettes on the web, you may be very confused at the<br> difference in price. You may see some for as low as $.17 each.</p>
-						<a href="#" class="btn theme_btn button_hover">Get Started</a>
+						<div class="entrance-info">
+                            <div>
+                                <h3>G-Em's Pool Park</h3>
+                            </div>
+                            <div style="margin-top: 10px">
+                                <h4>Entrance fee</h4>
+                       
+                                    <label style="display: block;
+                                            margin: 0;
+                                            line-height: 1;"> <b>Adult:</b> Php 30.00</label>
+                                                                            <label style="display: block;
+                                            margin: 0;
+                                            line-height: 1;"><b>Children:</b> Php 20.00</label> 
+                            
+                            </div>
+                            <div style="margin-top: 10px">
+                                <!-- <h4>Facility prices</h4>
+                       
+                                <label style="display: block;
+                                        margin: 0;
+                                        line-height: 1;"> <b>Cottages:</b> Php 30.00</label>
+                                                                    <label style="display: block;
+                                        margin: 0;
+                                        line-height: 1;"><b>Room:</b> Php 20.00</label>  -->
+                                        <p>Open Monday to Sunday
+                                            8 am-5pm</p>
+                            </div>
+
+
+                    
+                    </div>
+
+                        </div>
 					</div>
 				</div>
             </div>

@@ -24,35 +24,51 @@
           <h2>Sales</h2>
             <table class="table table-bordered">
               <thead>
+
                 <th>Date</th>
+                <th>Customer</th>
+                <th>Facility Name</th>
+                <th>Date from</th>
+                <th>Date to</th>
                 <th>is Refund</th>
                 <th>Payment Mode</th>
                 <th>Payment for</th>
                 <th>Amount</th>
+
               </thead>
               <tbody>
-                <?php $total = 0; foreach ($getTheSales as $key => $value) : ?>
+                <?php $total = 0; foreach($getTheSales as $key => $value) : ?>
                 <?php 
                   $porpuse = 'Entrance fee';
-                  $total += $value['TotalBill'];
-                  if($value['ReservationId'] != null || $value['ReservationId'] != ''){
+                  $total += $value['amount'];
+                  if($value['reservationId'] != null || $value['reservationId'] != ''){
                     $porpuse = 'Reservation fee';
                   }
                 ?>
-                  <tr>
-                    <td><?php echo date('M. d Y', strtotime($value['PaymentDate'])) ?></td>
-                    <td><?php echo ($value['isRefund']) ? 'Yes' : 'No'; ?></td>
-                    <td><?php echo $value['PaymentMode'] ?></td>
-                    <td><?php echo $porpuse ?></td>
-                    <td>₱<?php echo number_format($value['TotalBill'], 2) ?></td>
-                  </tr>
+                <?php foreach($value['facilities'] as $facility): ?>
+                <tr>
+                  <td><?php echo date('M. d Y', strtotime($value['date'])) ?></td>
+                  <td><?php echo $value['customer'] ?></td>
+                  <td><?php echo (isset($facility['facilityName'])) ? $facility['facilityName'] : ''; ?>(<?php echo (isset($facility['Category'])) ? $facility['Category'] : ''; ?>)</td>
+                  
+                  <td><?php echo date('M. d Y', strtotime($facility['dateFrom'])); ?></td>
+                  <td><?php echo date('M. d Y', strtotime($facility['dateTo'])); ?></td>
+                  <td><?php echo $value['isRefund'] ?></td>
+                  <td><?php echo $value['PaymentMode'] ?></td>
+                  <td><?php echo $porpuse ?></td>
+                  <td>₱<?php echo number_format($value['amount'], 2) ?></td>
+                </tr>
+                <?php endforeach; ?>
+                
                 <?php endforeach; ?>
                 <tr>
-                  <td colspan="4"> <label for="">Total</label></td>
+                  <td colspan="8"> <label for="">Total</label></td>
                   <td>₱<?php echo number_format($total, 2); ?></td>
                 </tr>
               </tbody>
+              
             </table>
+
           </div>
         </div>
 

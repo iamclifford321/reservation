@@ -390,7 +390,7 @@ class Controller extends Model{
             $str .= "GROUP BY
                         reservation.Reservation_id
                     ORDER BY
-                        reservation.Reservation_id DESC";
+                        reservation.Reservation_id ASC";
             $reservations = $this->dynamicSLCTLabeledQuery($str, array(
                 ':status' => $_POST['filterBy']
             ));
@@ -399,7 +399,7 @@ class Controller extends Model{
             $str .= "GROUP BY
                         reservation.Reservation_id
                     ORDER BY
-                        reservation.Reservation_id DESC";
+                        reservation.Reservation_id ASC";
             $reservations = $this->dynamicSLCTQuery($str);
         }
 
@@ -945,12 +945,25 @@ class Controller extends Model{
         // $rtrnIgetRerservedData = $rtrnIgetRerserved['data']->fetchAll(PDO::FETCH_ASSOC);
 
 
-        $balance = $_POST['balancePay'] - $_POST['payment-amount'];
+        $balance = $_POST['balance'] - $_POST['payment-amount'];
+        
         $isPartial = false;
+        
         if($balance > 0){
+            echo 'test';
             $isPartial = true;
         }
+        echo 'isPartial ' . $isPartial;
+        echo 'balance ' .$balance;
 
+        $paymentStatus = 'Partially paid';
+
+        // $paymentStatus = 
+        if(!$isPartial){
+            $paymentStatus = 'Paid';
+        }
+        echo $paymentStatus;
+        // die();
         $srcStr = 'public/uploads/images/';
         $fileName = $_POST['resId'] . basename($_FILES["payment-receipt"]["name"]);
         $target_file = $srcStr . $fileName;
@@ -979,12 +992,7 @@ class Controller extends Model{
             );
 
             $rtrnInsertPayment = $this->dynamicDMLLabeledQuery($paymentInsert, $paymentInsertParam);
-            $paymentStatus = 'Partially paid';
 
-            // $paymentStatus = 
-            if(!$isPartial){
-                $paymentStatus = 'Paid';
-            }
             $updateReservation = "UPDATE reservation set paymentStatus = :paymentStatus WHERE Reservation_id = :reservationId";
             
             $updateReservationParam = array(
@@ -1178,23 +1186,43 @@ class Controller extends Model{
      }
      public function salesReports($value, $type){
 
-        $sql = "SELECT * FROM billing";
+        $sql = "SELECT 
+                    * 
+                FROM 
+                    billing
+                LEFT JOIN
+                    customer
+                on 
+                    customer.customer_id = billing.CustomerId
+                LEFT JOIN
+                    reservation 
+                on 
+                    reservation.Reservation_id = billing.ReservationId
+                LEFT JOIN 
+                    reservation_facility
+                on
+                    reservation.Reservation_id = reservation_facility.reservationId
+                LEFT JOIN
+                    facility
+                On 
+                    facility.Facility_id = reservation_facility.facilityId";
+
         $getRecs;
         if( $type == 'Monthly' ){
             # Montly report
-            $sql .= " WHERE MONTH(createdDate) = MONTH(CURRENT_DATE()) AND YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
+            $sql .= " WHERE MONTH(billing.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(billing.createdDate) = YEAR(CURRENT_DATE()) ORDER BY billing.createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }elseif ($type == 'Yearly') {
             # Yearly report
-            $sql .= " WHERE YEAR(createdDate) = YEAR(CURRENT_DATE()) ORDER BY createdDate ASC";
+            $sql .= " WHERE YEAR(billing.createdDate) = YEAR(CURRENT_DATE()) ORDER BY billing.createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }elseif ($type == 'Weekly') {
             # Yearly report
             
 
-            $sql .= " WHERE YEARWEEK(`createdDate`, 1) = YEARWEEK(CURDATE(), 1) ORDER BY createdDate ASC";
+            $sql .= " WHERE YEARWEEK(billing.createdDate, 1) = YEARWEEK(CURDATE(), 1) ORDER BY billing.createdDate ASC";
             $getRecs = $this->dynamicSLCTQuery($sql);
 
         }else{
@@ -1203,7 +1231,7 @@ class Controller extends Model{
             $exploded = explode(",", $value);
             $dateFrom = $exploded[0];
             $dateTo = $exploded[1];
-            $sql .= " WHERE createdDate >= :dateFrom AND createdDate <= :dateTo ORDER BY createdDate ASC";
+            $sql .= " WHERE billing.createdDate >= :dateFrom AND billing.createdDate <= :dateTo ORDER BY billing.createdDate ASC";
 
             $getRecs = $this->dynamicSLCTLabeledQuery($sql, array(
                 ':dateFrom' => $dateFrom,
@@ -1211,7 +1239,47 @@ class Controller extends Model{
             ));
         }
         $data = $getRecs['data']->fetchAll(PDO::FETCH_ASSOC);
-        return $data;
+        $listData = array();
+        // echo '<pre>';
+        foreach ($data as $value) {
+            // echo 'res';
+            if(array_key_exists($value['InvoiceNo'], $listData)){
+                array_push($listData[$value['InvoiceNo']]['facilities'], array(
+                    'facilityName' => $value['Facility_name'],
+                    'facilityPrice' => $value['Price'],
+                    'Category' => $value['Category'],
+                    'dateFrom' => $value['dateIn'],
+                    'dateTo' => $value['dateOut']
+                ));
+            }else{
+                $listData[$value['InvoiceNo']] = array(
+                    'date' => $value['PaymentDate'],
+                    'isRefund' => ($value['isRefund']) ? 'Yes' : 'No',
+                    'PaymentMode' => $value['PaymentMode'],
+                    'reservationId' => $value['ReservationId'],
+                    'amount' => $value['TotalBill'],
+                    'customer' => ucFirst($value['FirstName']) . ' ' . ucFirst($value['MiddleName']) . ucFirst($value['LastName']),
+                    'customerId' => $value['CustomerId'],
+                    'facilities' => array(
+                        array(
+                            'facilityName' => $value['Facility_name'],
+                            'facilityPrice' => $value['Price'],
+                            'Category' => $value['Category'],
+                            'dateFrom' => $value['dateIn'],
+                            'dateTo' => $value['dateOut']
+                        )
+                    )
+                );
+
+            }
+            # code...
+        }
+
+        
+
+        // print_r($listData);
+        // die();
+        return $listData;
     }
 
     public function entraceReports($value, $type){

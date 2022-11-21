@@ -95,8 +95,7 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="Description">Description</label>
-                                <textarea type="number" name="Description" id="Description" class="form-control" required>
-                                </textarea>
+                                <textarea name="Description" id="Description" class="form-control" required></textarea>
                             </div>
                         </div>
 

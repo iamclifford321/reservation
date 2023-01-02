@@ -292,6 +292,8 @@
 
            $('[name=booking-form]').on('submit', function(e){
                 
+
+            
                 var bal = parseInt($('[name=balance]').val());
                 var payment = parseInt($('#payment-amount-hidden').val());
                 
@@ -299,6 +301,16 @@
                     alert('Payment should be lesser or equal to the current balance');
                     e.preventDefault();
                 }
+
+                var paymentamount = parseFloat($('[name=payment-amount]').val());
+                var balancePay = parseFloat($('[name=balance]').val())/2;
+
+                
+                if(paymentamount < balancePay){
+                    alert(`Amount should be atleast 50 percent of the remaining balance`);
+                    e.preventDefault();
+                }
+
                 // $.ajax({
                 //     url : '../customerAction.php',
                 //     method: 'POST',

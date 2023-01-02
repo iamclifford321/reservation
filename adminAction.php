@@ -154,12 +154,20 @@
 
         // page=amenities        echo json_encode($rtrn);
     }
-
-    if($_POST['action'] == 'deactivate-facility'){
-        
+    if($_POST['action'] == 'deactivate-facility'){   
         $rtrn = $controller->deactivateFacility();
         echo json_encode($rtrn);
     }
-    
+    if($_POST['action'] == 'Edit Category'){
+        $rtrn = $controller->editCategory();
+        if($rtrn['status'] == 'success'){
+            header('Location:./adminIndex.php?page=categories');
+        }
+    }
 
-    
+    if($_POST['action'] == 'Create Category'){
+        $rtrn = $controller->createCategory();
+        if($rtrn['status'] == 'success'){
+            header('Location:./adminIndex.php?page=categories');
+        }
+    }

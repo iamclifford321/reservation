@@ -39,6 +39,7 @@
                         <th>Reservation #</th>
                         <th>Reservation Date</th>
                         <th>Customer</th>
+                        <th>Phone #</th>
                         <th># of Guests</th>
                         <th>Facility</th>
                         <th>Payment status</th>
@@ -99,12 +100,6 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label for="event">Event</label>
-                                <input type="text" name="event" id="event" class="form-control" required>
-                            </div>
-                        </div>
 
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
@@ -516,11 +511,15 @@
                             var status      = '';
                             var dataTarget  = '';
                             var approve = ``;
+
+                            var cancel = `<a href="?page=approveCancelation&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Cancel</a>`;
+                            if(res[index]['status'] == 'Pending Cancel' || res[index]['status'] == 'Cancelled'){
+                                cancel = ``;
+                            }
                             if(res[index]['status'] != 'Reserved'){
                                 approve = `<a href="?page=approve&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Approve</a>`;
                             }
-                            var cancel = `<a href="?page=approveCancelation&reservationId=${element.reservationId}&customerId=${element.customerId}" class="dropdown-item cancel-payment">Cancel</a>`;
-                            if(res[index]['status'] == 'Pending Cancel' || res[index]['status'] == 'Cancelled'){
+                            if(res[index]['status'] == 'Reserved'){
                                 cancel = ``;
                             }
                             // <a href="?page=payment&reservationId=${element.reservationId}&customerId=${element.customerId}&totalAmountFac=${element.totalAmountFac}" class="dropdown-item make-payment">Pay</a>
@@ -534,6 +533,7 @@
                                 'Reservation No. ' + res[index]['reservationId'],
                                 res[index]['date'],
                                 res[index]['customer'],
+                                res[index]['phoneNum'],
                                 res[index]['numberOfCustomer'],
                                 //res[index]['Reservation_date'],
                                 `<ul>${facilities}</ul>`,
@@ -620,7 +620,7 @@
         $('[name=new-reservation-form]').on('submit', function(e){
             //alert();
             let customer     = $('#customer').val();
-            let event        = $('#event').val();
+            // let event        = $('#event').val();
             //let eventdate    = $('#event-date').val();
             let facility     = $('#facility').val();
             let eventfrom    = $('[name=fromDate]').val();
@@ -652,7 +652,7 @@
                     action       : 'create-reservation',
                     customer     : customer,
                     facility     : facility,
-                    event        : event,
+                    event        : '',
                     //eventdate    : eventdate,
                     eventfrom    : eventfrom,
                     eventto      : eventto,

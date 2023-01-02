@@ -60,6 +60,10 @@
     elseif ($_GET['page'] == 'reservationDetails') {
         # code...
     }
+    elseif ($_GET['page'] == 'categories' || $_GET['page'] = 'newOrEditCat') {
+        $categories = 'active';
+    }
+    
      else{
         die("<center><h1 class='text-align: center'>Page not found</h1></center>");
      }
@@ -336,14 +340,14 @@
                             </a>
                         </li>
 
-                        <!-- <li class="nav-item">
-                            <a href="?page=amenities" class="nav-link <?php echo $amenities ?>">
+                        <li class="nav-item">
+                            <a href="?page=categories" class="nav-link <?php echo $categories ?>">
                                 <i class="nav-icon far fa-image"></i>
                                 <p>
-                                    Amenities
+                                    Categories
                                 </p>
                             </a>
-                        </li> -->
+                        </li>
 
                         <li class="nav-item">
                             <a href="?page=users" class="nav-link <?php echo $users ?>">

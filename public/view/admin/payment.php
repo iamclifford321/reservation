@@ -226,7 +226,17 @@
 <?php endif; ?>
 
 <script>
+    $('[name=booking-form]').on('submit', function(e){
+        var paymentamount = parseFloat($('[name=payment-amount]').val());
+        var balancePay = parseFloat($('[name=balancePay]').val())/2;
 
+        
+        if(paymentamount < balancePay){
+            alert(`Amount should be atleast 50 percent of the remaining balance`);
+            e.preventDefault();
+        }
+
+    })
     $('#payment-amount').on('click', function(){
         
         if(!$(this).prop('readonly')){

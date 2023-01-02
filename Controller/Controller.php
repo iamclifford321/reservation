@@ -29,7 +29,7 @@ class Controller extends Model{
             ':PhoneNumber'  => $_POST['phone'],
             ':Address'      => $_POST['address'],
             ':Email'        =>  $_POST['email'],
-            ':Age'          =>  $_POST['age'],
+            ':Age'          =>  null,
             ':Gender'       => $_POST['gender']
         );
         $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
@@ -55,7 +55,7 @@ class Controller extends Model{
             ':PhoneNumber' => $_POST['phone'],
             ':Address' => $_POST['address'],
             ':Email' => $_POST['email'],
-            ':Age' => $_POST['age'],
+            ':Age' => null,
             ':Gender' => $_POST['gender'],
             ':customer_id' => $_POST['customerID']
         );
@@ -417,13 +417,10 @@ class Controller extends Model{
                 'status' => $data['Reservation_status'],
                 'reservationId' => $data['Reservation_id'],
                 'customerId' => $data['customer_id'],
-                'paymentStatus' => $data['paymentStatus']
+                'paymentStatus' => $data['paymentStatus'],
+                'phoneNum' => $data['PhoneNumber']
             );
-
-
-
-
-
+            
             // array_push($list, );
             $str = "SELECT 
                             * 
@@ -820,7 +817,7 @@ class Controller extends Model{
             ':number_of_children' => $childNumber,
             ':number_of_adults' => $adultNumber,
             ':Reservation_status' => 'Pending',
-            ':Event' => $_POST['event'],
+            ':Event' => '',
             ':CustomerId' => $customerId,
             ':aminities' => $strjson,
             ':paymentStatus' => 'Unpaid'
@@ -1756,7 +1753,6 @@ class Controller extends Model{
             ':facilityId' => $FacilitId
         ));
         return $facility['data']->fetch(PDO::FETCH_ASSOC);
-
     }
 
     public function getSpecificReservationWith($reservationId){
@@ -1838,6 +1834,38 @@ class Controller extends Model{
         return $innerArr;
 
     }
+    function getCategories(){
 
+        $str = "SELECT 
+                    * 
+                FROM 
+                    category";
+
+        return $this->dynamicSLCTQuery($str);
+    }
+
+    function editCategory(){
+
+        $str = "UPDATE category set Name = :name WHERE categoryId = :id";
+        $param = array(
+            ':name' => $_POST['name'],
+            ':id' => $_POST['id']
+        );
+        
+        return $this->dynamicDMLLabeledQuery($str, $param);
+
+    }
+
+    function createCategory(){
+
+        $str = "INSERT INTO category (Name)Values(:name)";
+
+        $param = array(
+            ':name' => $_POST['name']
+        );
+        
+        return $this->dynamicDMLLabeledQuery($str, $param);
+        
+    }
     
 }

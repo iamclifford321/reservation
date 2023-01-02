@@ -130,10 +130,7 @@
                                         <input type="hidden" name="total" value="<?php echo $total; ?>">
                                         <input type="hidden" name="temTotal" value="<?php echo $total; ?>">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="">Event</label>
-                                        <input type="text" class="form-control" name="event" required>
-                                    </div>
+
                                     <div class="form-group">
                                         <label for="">No. of Adults</label>
                                         <input type="number" class="form-control" name="adultNumber" required>

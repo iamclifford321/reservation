@@ -150,6 +150,7 @@
 							<th>Reservation #</th>
 							
 							<th>Customer</th>
+							<th>Phone #</th>
 							<th>Number of Guest</th>
 							<th>Facility</th>
 							<th>Status</th>
@@ -162,6 +163,7 @@
 						<tr>
 							<td>Reservation No. <?php echo $getReservation['reservationId'] ?></td>
 							<td><?php echo $getReservation['customer'] ?></td>
+							<td><?php echo $getReservation['phoneNum'] ?></td>
 							
 
 							
@@ -207,6 +209,7 @@
 							<th>Reservation #</th>
 							<th>Reservation Date</th>
 							<th>Customer</th>
+							<th>Phone #</th>
 							<th>Number of Guest</th>
 							<th>Facility</th>
 							<th>Payment Status</th>
@@ -221,6 +224,7 @@
 							<td>Reservation No. <?php echo $getReservation['reservationId'] ?></td>
 							<td><?php echo $getReservation['date'] ?></td>
 							<td><?php echo $getReservation['customer'] ?></td>
+							<td><?php echo $getReservation['phoneNum'] ?></td>
 							<td><?php echo $getReservation['numberOfCustomer'] ?></td>
 							<td>
 								<?php

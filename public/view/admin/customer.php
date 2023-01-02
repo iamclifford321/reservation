@@ -30,7 +30,6 @@
                             <th>Name</th>
                             <th>Phone number</th>
                             <th>Address</th>
-                            <th>Age</th>
                             <th>Gender</th>
                             <th>Email</th>
                         </tr>
@@ -89,14 +88,8 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                            <label for="age">Age</label>
-                            <input type="number" name="age" id="age" class="form-control">
-                        </div>
-                    </div>
 
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-sm-12 col-md-12">
                         <div class="form-group">
                             <label for="gender">Gender</label>
                             <select name="gender" id="gender" class="form-control" required>
@@ -179,14 +172,9 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                            <label for="exsting-age">Age</label>
-                            <input type="number" name="exsting-age" id="exsting-age" class="form-control">
-                        </div>
-                    </div>
 
-                    <div class="col-sm-6 col-md-6">
+
+                    <div class="col-sm-12 col-md-12">
                         <div class="form-group">
                             <label for="exsting-gender">Gender</label>
                             <select name="exsting-gender" id="exsting-gender" class="form-control" required>
@@ -265,7 +253,6 @@ $(document).ready(function(){
                         let age = 'N/A';
                         let address = 'N/A';
                         let email = 'N/A';
-                        if(res[index]['Age'] != '') age = res[index]['Age'];
                         if(res[index]['Address'] != '') address = res[index]['Address'];
                         if(res[index]['Email'] != '') email = res[index]['Email'];
                         table.row.add([
@@ -303,7 +290,7 @@ $(document).ready(function(){
                 $('#exsting-middlename').val(res['MiddleName']);
                 $('#exsting-lastname').val(res['LastName']);
                 $('#exsting-phone').val(res['PhoneNumber']);
-                $('#exsting-age').val(res['Age']);
+                // $('#exsting-age').val(res['Age']);
                 $('#customerID').val(customer_Id);
                 
                 $('#exsting-email').val(res['Email']);
@@ -332,12 +319,12 @@ $(document).ready(function(){
         let middlename  = $('#middlename').val();
         let lastname    = $('#lastname').val();
         let phone       = $('#phone').val();
-        let age         = $('#age').val();
+        // let age         = $('#age').val();
         let gender      = $('#gender').val();
         let email       = $('#email').val();
         let address     = $('#address').val();
         
-        console.log($(this));
+        
         $.ajax({
             method      : 'POST',
             url         : 'adminAction.php',
@@ -348,7 +335,6 @@ $(document).ready(function(){
                 middlename  : middlename,
                 lastname    : lastname,
                 phone       : phone,
-                age         : age,
                 gender      : gender,
                 email       : email,
                 address     : address,
@@ -362,6 +348,9 @@ $(document).ready(function(){
                     getTheCustomers();
                     $('#modal-new-customer').modal('hide');
                 }
+            },
+            error : function( error ){
+                console.log('error', error);
             }
         })
         e.preventDefault();
@@ -373,7 +362,7 @@ $(document).ready(function(){
         let middlename  = $('#exsting-middlename').val();
         let lastname    = $('#exsting-lastname').val();
         let phone       = $('#exsting-phone').val();
-        let age         = $('#exsting-age').val();
+        // let age         = $('#exsting-age').val();
         let gender      = $('#exsting-gender').val();
         let email       = $('#exsting-email').val();
         let address     = $('#exsting-address').val();
@@ -388,7 +377,6 @@ $(document).ready(function(){
                     middlename  : middlename,
                     lastname    : lastname,
                     phone       : phone,
-                    age         : age,
                     gender      : gender,
                     email       : email,
                     address     : address,

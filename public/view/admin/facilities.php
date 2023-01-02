@@ -1,3 +1,13 @@
+<?php
+
+    require_once 'Config/Config.php';
+	require_once 'Model/Model.php';
+	require_once 'Controller/Controller.php';
+	$controller = new Controller();
+    $cats = $controller->getCategories();
+    $categories = $cats['data']->fetchAll(PDO::FETCH_ASSOC);
+
+?>
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -77,18 +87,24 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="facility_name">Category</label>
+                                <a href="?page=categories" style="float: right">New category</a>
                                 <select name="category" id="category_name" class="form-control" required>
-                                    <option value="Entertainment">Entertainment</option>
-                                    <option value="Cottages" selected>Cottages</option>
-                                    <option value="Rooms">Rooms</option>
+                                    <?php
+                                        foreach ($categories as $key => $category) {
+                                            ?>
+                                                <option value="<?php echo $category['categoryId']; ?>"><?php echo $category['Name']; ?></option>
+                                            <?php
+                                        }
+                                    ?>
                                 </select>
+                                
                             </div>
                         </div>
 
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="price">Price</label>
-                                <input type="number" name="price" id="price" class="form-control" required>
+                                <input type="decimal" name="price" id="price" class="form-control" required>
                             </div>
                         </div>
 
@@ -157,7 +173,7 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="existing-price">Price</label>
-                                <input type="number" name="existing-price" id="existing-price" class="form-control"
+                                <input type="decimal" name="existing-price" id="existing-price" class="form-control"
                                     required>
                             </div>
                         </div>
@@ -538,7 +554,7 @@ $(document).ready(function() {
                 if (res['status'] == 'success') {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Successfully deleted the record!'
+                        title: 'Successfully deactivated the record!'
                     });
 
                     setTimeout(() => {

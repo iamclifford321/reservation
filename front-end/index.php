@@ -241,7 +241,7 @@
 					<div class="banner_content text-center">
 						<h6>Away from monotonous life</h6>
 						<h2>Relax Your Mind</h2>
-						<p>If you are looking at blank cassettes on the web, you may be very confused at the<br> difference in price. You may see some for as low as $.17 each.</p>
+						
 						<div class="entrance-info">
                             <div>
                                 <h3>G-Em's Pool Park</h3>

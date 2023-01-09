@@ -234,8 +234,9 @@
 
         <!--================Banner Area =================-->
         <section class="banner_area">
-            <div class="booking_table d_flex align-items-center">
-            	<div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
+            <div class="booking_table d_flex align-items-center" style="background:url(image/321037410_1237344170527706_6969103792943382784_n.jpg);     background-repeat: no-repeat;
+            background-size: cover;">
+            	<div class="" ></div> 
 				<div class="container">
 					<div class="banner_content text-center">
 						<h6>Away from monotonous life</h6>

@@ -373,7 +373,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <img class="img-fluid" src="image/about_bg.jpg" alt="img">
+                        <img class="img-fluid" src="image/315428876_2219123081593320_5842634044671867908_n.jpg" alt="img">
                     </div>
                 </div>
             </div>

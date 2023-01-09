@@ -173,7 +173,7 @@
                                             <div class="col-sm-12 col-md-6 margin bottom">
 
                                                 <div class="form-group">
-                                                    <label for="gcash-numner">Customer's Gcash number</label>
+                                                    <label for="gcash-numner">Customer's Gcash Reference number</label>
                                                     <input type="text" name="gcash-numner" id="gcash-numner" required class="form-control">
                                                 </div>
                                                 <input type="hidden" value="<?php echo $balance; ?>" name="balance">

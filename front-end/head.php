@@ -37,4 +37,5 @@
         <!-- Full calendar -->
         <link rel="stylesheet" href="../public/assets/plugins/fullcalendar/main.css">
         <script src="../public/assets/plugins/fullcalendar/main.js"></script>
+        <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
 </head>

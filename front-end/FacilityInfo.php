@@ -12,7 +12,7 @@
         align-items: center;
     }
     .facility-info{
-        width: 50%;        
+        width: 70%;        
     }
     .facility-info-content{
         width: 100%;
@@ -37,7 +37,22 @@
             <div class="content">
                 <div class="row">
                     <div class="col-sm-5">
-                        <img src="../public/uploads/images/<?php echo $facility['Image']; ?>" alt="" style="width: 100%">
+                        <div class="carousel">
+                            <div class="owl-carousel">
+                                <?php
+                                    foreach (explode(',', $facility['Image']) as $key => $value) {
+                                        ?>
+                                            
+                                        <?php
+                                    }
+                                ?>
+                                
+                                <div> <img src="../public/uploads/images/<?php echo explode(',', $facility['Image'])[0]; ?>" alt="" style="width: 100%"> </div>
+                                <div> <img src="../public/uploads/images/<?php echo explode(',', $facility['Image'])[1]; ?>" alt="" style="width: 100%"> </div>
+
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="col-sm-7">
                         <h3>Description</h3>

@@ -70,8 +70,8 @@
                                         </div> -->
                                         <div class="col-sm-12 col-lg-12">
                                             <div class="form-group">
-                                                <label for="">Gcash No.</label>
-                                                <input type="number" name="gcashNumber" class="form-control" required>
+                                                <label for="">Gcash referencce No.</label>
+                                                <input type="text" name="gcashNumber" class="form-control" required>
                                             </div>
                                         </div>
 

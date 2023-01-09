@@ -4,7 +4,7 @@
 	require_once 'Model/Model.php';
 	require_once 'Controller/Controller.php';
 	$controller = new Controller();
-    $cats = $controller->getCategories();
+    $cats = $controller->getCategoriesFac();
     $categories = $cats['data']->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
@@ -31,8 +31,7 @@
 
         <div class="card">
             <div class="card-header">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#modal-new-facility">New
-                    Facility</button>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#modal-new-facility">New Facility</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -42,7 +41,7 @@
                             <th>Facility Type</th>
                             <th>Price</th>
                             <th>Category</th>
-                            <th>Image</th>
+                            <!-- <th>Image</th> -->
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -97,32 +96,30 @@
                                         }
                                     ?>
                                 </select>
-                                
                             </div>
                         </div>
-
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="price">Price</label>
                                 <input type="decimal" name="price" id="price" class="form-control" required>
                             </div>
                         </div>
-
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="Description">Description</label>
                                 <textarea name="Description" id="Description" class="form-control" required></textarea>
                             </div>
                         </div>
-
                         <div class="col-sm-12 col-md-12 margin-20px">
                             <div class="form-group custom-file">
+                                
+                                <input type="file" name="image" id="image" class="custom-file-input form-control" accept="image/png,image/jpeg" required multiple='true'>
                                 <label class="custom-file-label" for="image">Choose file</label>
-                                <input type="file" name="image" id="image" class="custom-file-input form-control"
-                                    required>
+
                             </div>
                         </div>
 
+                        
                     </div>
 
                 </div>
@@ -323,14 +320,13 @@ $(document).ready(function() {
                         table.row.add([
                             `<a href="#" img-src="${res[index]['Image']}" class="facilityName" data-target="#modal-update-facility" data-toggle="modal" Facility_id="${res[index]['Facility_id']}">${res[index]['Facility_name']}</a>`,
                             res[index]['Price'],
-                            res[index]['Category'],
-                            `<img src="public/uploads/images/${res[index]['Image']}" style="height: 35px;"/>`,
+                            res[index]['Name'],
+                            // `<img src="public/uploads/images/${res[index]['Image']}" style="height: 35px;"/>`,
                             res[index]['status'],
                             deac + del + calBtn
                         ]).draw();
                     }
                 }
-
             }
         });
 
@@ -398,24 +394,33 @@ $(document).ready(function() {
             }
         });
     }
-
+    $('#image').on('change', function(){
+        if($(this).prop('files').length > 1){
+            $('.custom-file-label').text($(this).prop('files').length + ' files');
+        }
+    });
     $('[name=new-facility-form]').on('submit', function(e) {
-        //alert();
         $('[type=submit]').attr('disabled', 'true');
         let facility_name = $('#facility_name').val();
         let price = $('#price').val();
         let category = $('#category_name').val();
         let Description = $('#Description').val();
 
-        var file_data = $('#image').prop('files')[0];
+        var file_data = $('#image').prop('files');
+
+        
         var form_data = new FormData();
         form_data.append('price', price);
         form_data.append('facility_name', facility_name);
-        form_data.append('file', file_data);
+
+        for (var x = 0; x < file_data.length; x++) {
+				form_data.append("files[]", file_data[x]);
+        }
+
         form_data.append('category', category);
         form_data.append('Description', Description);
-
         form_data.append('action', 'create-facility');
+      
 
         try {
             $.ajax({

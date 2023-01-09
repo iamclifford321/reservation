@@ -73,7 +73,7 @@
       aria-controls="tab-content-Entrances"
       aria-selected="false">Entrances</a>
   </li>
-  <li class="nav-item" role="presentation">
+  <!-- <li class="nav-item" role="presentation">
     <a class="nav-link nav-link-tab" 
         id="ex1-tab-3" 
         data-mdb-toggle="tab" 
@@ -81,9 +81,9 @@
         role="tab" 
         aria-controls="tab-content-Cottages" 
         aria-selected="false">Cottages</a>
-  </li>
+  </li> -->
 
-  <li class="nav-item" role="presentation">
+  <!-- <li class="nav-item" role="presentation">
     <a class="nav-link nav-link-tab" 
         id="ex1-tab-3" 
         data-mdb-toggle="tab" 
@@ -91,9 +91,9 @@
         role="tab" 
         aria-controls="tab-content-Rooms" 
         aria-selected="false">Rooms</a>
-  </li>
+  </li> -->
 
-  <li class="nav-item" role="presentation">
+  <!-- <li class="nav-item" role="presentation">
     <a class="nav-link nav-link-tab" 
         id="ex1-tab-3" 
         data-mdb-toggle="tab" 
@@ -101,7 +101,7 @@
         role="tab" 
         aria-controls="tab-content-Entertainment" 
         aria-selected="false">Entertainment</a>
-  </li>
+  </li> -->
 
   <li class="nav-item" role="presentation">
     <a class="nav-link nav-link-tab" 

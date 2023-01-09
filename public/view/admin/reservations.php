@@ -372,6 +372,7 @@
                     }
                     var today = new Date();
                     $('#eventDate').daterangepicker({
+                                                        timePicker: true,
                                                         locale : {
                                                             format : 'YYYY/MM/DD'
                                                         },
@@ -382,8 +383,8 @@
                                                         autoUpdateInput: false,
                                                         minDate: today,
                                                     },function(start, end, label){
-                                                        var strtDate = start.format('Y-MM-DD');
-                                                        var endDate = end.format('Y-MM-DD');
+                                                        var strtDate = start.format('Y-MM-DD HH:mm');
+                                                        var endDate = end.format('Y-MM-DD HH:mm');
                                                         // console.log(endDate);
                                                         var isValid = true;
                                                         for (const elmnt of res) {

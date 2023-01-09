@@ -9,7 +9,15 @@
         require_once '../Controller/Controller.php'; 
 
         $controller = new Controller(); 
-        $getTheFacilities = $controller->getFacility();
+        $getTheFacilities = $controller->getFacilityAndCat();
+        // echo '<pre>';
+        // print_r($getTheFacilities);
+
+        // foreach ($getTheFacilities as $key => $value) {
+        //     print_r($value);
+        // }
+
+        // die();
     ?>
     <?php include 'head.php'; ?>
     <body>
@@ -246,7 +254,7 @@
                                                                             <label style="display: block;
                                             margin: 0;
                                             line-height: 1;"><b>Children:</b> Php 20.00</label> 
-                            
+                                    
                             </div>
                             <div style="margin-top: 10px">
                                 <!-- <h4>Facility prices</h4>
@@ -274,202 +282,81 @@
         <!--================Banner Area =================-->
         
         <!--================ Accomodation Area  =================-->
-        <section class="accomodation_area section_gap" id="reservation-section">
-            <div class="container">
-                <div class="section_title text-center">
-                    <h2 class="title_color">Available Rooms</h2>
-                </div>
-                <div class="row mb_30">
+    
 
-                    <?php
-                        $partialReservedFacilityIds = [];
-                        if(isset($_SESSION['Facilities'])){
-                            foreach ($_SESSION['Facilities'] as $facility) {
-                                array_push($partialReservedFacilityIds, $facility['facilityId']);
-                            }
-                        }
-                        foreach ($getTheFacilities as $getTheFacility) {
-                            if($getTheFacility['Category'] == 'Rooms'){
+        <?php
+            
+            foreach ($getTheFacilities as $key => $value) {
+                ?>
 
-                                if($getTheFacility['status'] == 'Activated' || $getTheFacility['status'] == ''){
-                                    ?>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="accomodation_item text-center">
-                                                <div class="hotel_img">
-                                                    <img src="../public/uploads/images/<?php echo $getTheFacility['Image'] ?>" alt="" class="facility-image">
-                                                    <div class="checkAvail" style="position: absolute;
-                                                                                    bottom: 50%;
-                                                                                    left: 50%;
-                                                                                    -webkit-transform: translate(-50%);
-                                                                                    -ms-transform: translate(-50%);
-                                                                                    transform: translate(-50%);
-                                                                                    max-width: 128px;">
-                                                                                    
-                                                        <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
-                                                    </div>
-
-
-                                                    <div class="checkAvail" style="position: absolute;
-                                                                                    bottom: 65%;
-                                                                                    left: 50%;
-                                                                                    -webkit-transform: translate(-50%);
-                                                                                    -ms-transform: translate(-50%);
-                                                                                    transform: translate(-50%);
-                                                                                    max-width: 128px;">
-                                                                                    
-                                                        <a class="btn btn-primary" href="index.php?facilityId=<?php echo $getTheFacility['Facility_id'] ?>" style="color: white;">Check info</a>
-                                                    </div>
-
-                                                    <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
-                                                        <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
-                                                    <?php else : ?>
-                                                        <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>" faclity-img="<?php echo $getTheFacility['Image'] ?>">ADD</button>
-                                                    <?php endif; ?>
-                                                    
-                                                </div>
-                                                <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
-                                                <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
-                                            </div>
-                                        </div>
-                                    <?php
+                <section class="accomodation_area section_gap" id="reservation-section">
+                    <div class="container">
+                        <div class="section_title text-center">
+                            <h2 class="title_color"><?php echo ucfirst($value['categoryName']); ?></h2>
+                        </div>
+                        <div class="row mb_30">
+                            <?php
+                                $partialReservedFacilityIds = [];
+                                if(isset($_SESSION['Facilities'])){
+                                    foreach ($_SESSION['Facilities'] as $facility) {
+                                        array_push($partialReservedFacilityIds, $facility['facilityId']);
+                                    }
                                 }
-                            }
-                        }
-                    ?>
-                </div>
-            </div>
-        </section>
+                                $getTheFacilitiesData = $value['facilties'];
+                                foreach ($getTheFacilitiesData as $getTheFacility) {
+   
+                                    if($getTheFacility['status'] == 'Activated' || $getTheFacility['status'] == ''){
+                                        ?>
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div class="accomodation_item text-center">
+                                                    <div class="hotel_img">
+                                                        <img src="../public/uploads/images/<?php echo  explode(',', $getTheFacility['Image'])[0]; ?>" alt="" class="facility-image">
+                                                        <div class="checkAvail" style="position: absolute;
+                                                                                        bottom: 50%;
+                                                                                        left: 50%;
+                                                                                        -webkit-transform: translate(-50%);
+                                                                                        -ms-transform: translate(-50%);
+                                                                                        transform: translate(-50%);
+                                                                                        max-width: 128px;">
+                                                            <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
+                                                        </div>
 
-
-        <section class="accomodation_area section_gap" id="reservation-section">
-            <div class="container">
-                <div class="section_title text-center">
-                    <h2 class="title_color">Available Cottages</h2>
-                </div>
-                <div class="row mb_30">
-
-                    <?php
-                        $partialReservedFacilityIds = [];
-                        if(isset($_SESSION['Facilities'])){
-                            foreach ($_SESSION['Facilities'] as $facility) {
-                                array_push($partialReservedFacilityIds, $facility['facilityId']);
-                            }
-                        }
-                        foreach ($getTheFacilities as $getTheFacility) {
-
-                            if($getTheFacility['Category'] == 'Cottages'){
-                                if($getTheFacility['status'] == 'Activated' || $getTheFacility['status'] == ''){
-                                    ?>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="accomodation_item text-center">
-                                                <div class="hotel_img">
-                                                    <img src="../public/uploads/images/<?php echo $getTheFacility['Image'] ?>" alt="" class="facility-image">
-                                                    <div class="checkAvail" style="position: absolute;
-                                                                                    bottom: 50%;
-                                                                                    left: 50%;
-                                                                                    -webkit-transform: translate(-50%);
-                                                                                    -ms-transform: translate(-50%);
-                                                                                    transform: translate(-50%);
-                                                                                    max-width: 128px;">
-                                                        <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
+                                                        <div class="checkAvail" style="position: absolute;
+                                                                                        bottom: 65%;
+                                                                                        left: 50%;
+                                                                                        -webkit-transform: translate(-50%);
+                                                                                        -ms-transform: translate(-50%);
+                                                                                        transform: translate(-50%);
+                                                                                        max-width: 128px;">
+                                                        
+                                                            <a class="btn btn-primary" href="index.php?facilityId=<?php echo $getTheFacility['Facility_id'] ?>" style="color: white;">Check info</a>
+                                                        </div>
+                                                        <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
+                                                            <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
+                                                        <?php else : ?>
+                                                            <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>" faclity-img="<?php echo $getTheFacility['Image'] ?>">ADD</button>
+                                                        <?php endif; ?>
+                                                        
                                                     </div>
-
-                                                    
-                                                    <div class="checkAvail" style="position: absolute;
-                                                                                    bottom: 65%;
-                                                                                    left: 50%;
-                                                                                    -webkit-transform: translate(-50%);
-                                                                                    -ms-transform: translate(-50%);
-                                                                                    transform: translate(-50%);
-                                                                                    max-width: 128px;">
-                                                                                    
-                                                        <a class="btn btn-primary" href="index.php?facilityId=<?php echo $getTheFacility['Facility_id'] ?>" style="color: white;">Check info</a>
-                                                    </div>
-
-                                                    <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
-                                                        <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
-                                                    <?php else : ?>
-                                                        <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>" faclity-img="<?php echo $getTheFacility['Image'] ?>">ADD</button>
-                                                    <?php endif; ?>
-                                                    
+                                                    <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
+                                                    <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
                                                 </div>
-                                                <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
-                                                <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
-                                                <!-- <p><?php echo $getTheFacility['description']; ?></p> -->
                                             </div>
-                                        </div>
-                                    <?php
+                                        <?php
+                                    }
+                                    
                                 }
-                            }
-                        }
-                    ?>
-                </div>
-            </div>
-        </section>
 
+                            ?>
+                        </div>
+                    </div>
+                </section>
 
-        <section class="accomodation_area section_gap" id="reservation-section">
-            <div class="container">
-                <div class="section_title text-center">
-                    <h2 class="title_color">Available for Entertainment</h2>
-                </div>
-                <div class="row mb_30">
+                <?php
+            }
 
-                    <?php
-                        $partialReservedFacilityIds = [];
-                        if(isset($_SESSION['Facilities'])){
-                            foreach ($_SESSION['Facilities'] as $facility) {
-                                array_push($partialReservedFacilityIds, $facility['facilityId']);
-                            }
-                        }
-
-                        foreach ($getTheFacilities as $getTheFacility) {
-                            if($getTheFacility['Category'] == 'Entertainment'){
-                                if($getTheFacility['status'] == 'Activated' || $getTheFacility['status'] == ''){
-                                    ?>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="accomodation_item text-center">
-                                                <div class="hotel_img">
-                                                    <img src="../public/uploads/images/<?php echo $getTheFacility['Image'] ?>" alt="" class="facility-image">
-                                                    <div class="checkAvail" style="position: absolute;
-                                                                                    bottom: 50%;
-                                                                                    left: 50%;
-                                                                                    -webkit-transform: translate(-50%);
-                                                                                    -ms-transform: translate(-50%);
-                                                                                    transform: translate(-50%);
-                                                                                    max-width: 128px;">
-                                                        <button class="btn btn-secondary availabilty-button" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>">Availability</button>
-                                                    </div>
-
-                                                    <div class="checkAvail" style="position: absolute;
-                                                                                    bottom: 65%;
-                                                                                    left: 50%;
-                                                                                    -webkit-transform: translate(-50%);
-                                                                                    -ms-transform: translate(-50%);
-                                                                                    transform: translate(-50%);
-                                                                                    max-width: 128px;">
-                                                    
-                                                        <a class="btn btn-primary" href="index.php?facilityId=<?php echo $getTheFacility['Facility_id'] ?>" style="color: white;">Check info</a>
-                                                    </div>
-                                                    <?php if(in_array($getTheFacility['Facility_id'], $partialReservedFacilityIds)) :?>
-                                                        <button class="btn theme_btn btn-disabled" dsiabled style="background: #c3b88d">ADDED</button>
-                                                    <?php else : ?>
-                                                        <button class="btn theme_btn button_hover book_btn" facility-description="<?php echo $getTheFacility['description'] ?>" facility-Id="<?php echo $getTheFacility['Facility_id'] ?>" facility-Name="<?php echo $getTheFacility['Facility_name'] ?>" facility-price="<?php echo $getTheFacility['Price'] ?>" faclity-img="<?php echo $getTheFacility['Image'] ?>">ADD</button>
-                                                    <?php endif; ?>
-                                                    
-                                                </div>
-                                                <a href="#"><h4 class="sec_h4"><?php echo $getTheFacility['Facility_name'] ?></h4></a>
-                                                <h5>₱<?php echo $getTheFacility['Price'] ?></h5>
-                                            </div>
-                                        </div>
-                                    <?php
-                                }
-                            }
-                        }
-                    ?>
-                </div>
-            </div>
-        </section>
+        ?>
+        
 
         <!--================ Accomodation Area  =================-->
         
@@ -593,6 +480,7 @@
                         // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                         // var yyyy = today.getFullYear();
                         $('[name=reserveDate]').daterangepicker({
+                                                                    timePicker: true,
                                                                     locale : {
                                                                         format : 'YYYY/MM/DD'
                                                                     },
@@ -603,8 +491,8 @@
                                                                     autoUpdateInput: false,
                                                                     minDate: today ,
                                                                 },function(start, end, label){
-                                                                    var strtDate = start.format('Y-MM-DD');
-                                                                    var endDate = end.format('Y-MM-DD');
+                                                                    var strtDate = start.format('Y-MM-DD HH:mm');
+                                                                    var endDate = end.format('Y-MM-DD HH:mm');
                                                                     // console.log(endDate);
                                                                     var isValid = true;
                                                                     for (const elmnt of res) {
@@ -627,6 +515,14 @@
                                                                 });
                     }
                 });
+            });
+
+            $(".owl-carousel").owlCarousel({
+                items:1,
+                // loop:true,
+                // nav:true,
+                merge:true,
+                autoHeight:true
             });
         })
     </script>

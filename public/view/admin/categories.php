@@ -29,9 +29,10 @@
     <div class="container-fluid">
 
         <!-- Main content here -->
+        
         <div class="card">
         <div class="card-header">
-                <a class="btn btn-primary" href="?page=newOrEditCat&action=Create Category">New Reservation</a>
+                <a class="btn btn-primary" href="?page=newOrEditCat&action=Create Category">New Category</a>
             </div>
             <table class="table">
                 <thead>

@@ -72,7 +72,7 @@
                                             <div class="card-body">
                                                 <div class="card-content-divider">
                                                     <div class="card-image">
-                                                        <img class="card-img-top d-block" src="../public/uploads/images/<?php echo $facility['faclityImg']; ?>" alt="Card image cap">
+                                                        <img class="card-img-top d-block" src="../public/uploads/images/<?php echo explode(',', $facility['faclityImg'])[0] ?>" alt="Card image cap">
                                                     </div>
                                                     <div class="card-content pl-3">
                                                         <h5 class="card-title"><?php echo $facility['facilityName']; ?></h5>

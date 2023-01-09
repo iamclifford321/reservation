@@ -148,59 +148,67 @@ class Controller extends Model{
                 'status'    =>  'success'
         ];
 
-    }
+    } 
     public function insertFacility(){
 
         $valid_extensions = array('jpeg', 'jpg', 'png'); // valid 
         $path = getcwd() . '/public/uploads/images/'; // upload directory
-        
-        if(isset($_FILES['file']) && $_FILES['file']){
-            $img = $_FILES['file']['name'];
-            $tmp = $_FILES['file']['tmp_name'];
 
-            $final_image = rand(1000,1000000).$img;
-            $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
-            if(in_array($ext, $valid_extensions)){
-                // valid
-                $path = $path . strtolower($final_image); 
-                if(move_uploaded_file($tmp,$path)){
-                    // Insert
+        if(isset($_FILES['files']) && $_FILES['files']){
 
-                    $sql = "INSERT 
-                                INTO 
-                                    facility(Facility_name,Price,Image, Category, description, status)
-                                VALUES
-                                    (:Facility_name,:Price,:Image, :Category, :description, :status)";
+            $imageName = "";
+            foreach ($_FILES as $key => $file) {
+                # code...
 
+                foreach ($file as $key => $valueFile) {
+                    
 
-                    $placeholders = array(
-                        ':Facility_name'    => $_POST['facility_name'],
-                        ':Price'            => $_POST['price'],
-                        ':Image'            => $final_image,
-                        ':Category'         => $_POST['category'],
-                        ':description'      => $_POST['Description'],
-                        ':status'           => 'Activated'
-                    );
+                    $img = $file['name'];
+                    
+                    foreach ($img as $key => $valueImage) {
+                        $ext = strtolower(pathinfo($valueImage, PATHINFO_EXTENSION));
+                        $final_image = rand(1000,1000000) . rand(1100,1000000). '.' . $ext;
+                        $path2 = $path . strtolower($final_image); 
+                        
+                        $tmp = $file['tmp_name'][$key];
 
-                    $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
+                        if(move_uploaded_file($tmp,$path2)){
+                            if($imageName != ""){
+                                
+                                $imageName .= ',' . $final_image;
+                            }else{
+                                $imageName .= $final_image;
+                            }
+                            
+                        }
+                        
+                    }
 
-                    return array(
-                        'status' => 'success',
-                        'message' => 'Successfully uploaded!'
-                    );
-                }else{
-                    return array(
-                        'status' => 'error',
-                        'message' => 'Upload error'
-                    );
                 }
-            }else{
-                return array(
-                    'status' => 'error',
-                    'message' => 'Invalid file'
-                );
-            }
+                        $sql = "INSERT 
+                                    INTO 
+                                        facility(Facility_name,Price,Image, Category, description, status)
+                                    VALUES
+                                        (:Facility_name,:Price,:Image, :Category, :description, :status)";
 
+                        $placeholders = array(
+                            ':Facility_name'    => $_POST['facility_name'],
+                            ':Price'            => $_POST['price'],
+                            ':Image'            => $imageName,
+                            ':Category'         => $_POST['category'],
+                            ':description'      => $_POST['Description'],
+                            ':status'           => 'Activated'
+                        );
+
+                        $dml = $this->dynamicDMLLabeledQuery($sql, $placeholders);
+
+                        return array(
+                            'status' => 'success',
+                            'message' => 'Successfully uploaded!'
+                        );
+
+
+            }
         }else{
                 return array(
                     'status' => 'error',
@@ -215,8 +223,33 @@ class Controller extends Model{
     }
     public function getFacility(){
 
-        $facility = $this->dynamicSLCTQuery("SELECT * FROM facility ORDER BY Facility_id ASC");
+        $facility = $this->dynamicSLCTQuery("SELECT * FROM facility LEFT JOIN category ON facility.Category = category.categoryId ORDER BY Facility_id ASC");
         return $facility['data']->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    public function getFacilityAndCat(){
+
+        $facility = $this->dynamicSLCTQuery("SELECT * FROM facility LEFT JOIN category ON facility.Category = category.categoryId ORDER BY Facility_id ASC");
+        $data = $facility['data']->fetchAll(PDO::FETCH_ASSOC);
+        // echo '<pre>';
+
+        
+        $outerArray = array();
+        foreach ($data as $key => $value) {
+
+            if(array_key_exists($value['categoryId'], $outerArray)){
+                array_push( $outerArray[$value['categoryId']]['facilties'], $value );
+            }else{
+                $outerArray[$value['categoryId']] = array(
+                    'categoryName' => $value['Name'],
+                    'facilties' => array($value)
+                );
+            }
+        }
+
+        return $outerArray;
+
     }
     public function getSpecificFacility(){
         $facility = $this->dynamicSLCTLabeledQuery("SELECT * FROM facility WHERE Facility_id =:facilityId", array(
@@ -377,7 +410,7 @@ class Controller extends Model{
     public function getReservation(){
         $reservations;
         $str = "SELECT 
-                    * 
+                    *, reservation.createdDate as cretDate  
                 FROM 
                     reservation 
                 LEFT JOIN 
@@ -411,7 +444,7 @@ class Controller extends Model{
         foreach ($reservationData as $data) {
 
             $innerArr = array(
-                'date' => date('M. d Y', strtotime($data['createdDate'])),
+                'date' => date('M. d Y', strtotime($data['cretDate'])),
                 'customer' => $data['FirstName'] . ' ' . $data['LastName'],
                 'numberOfCustomer' => $data['Number_of_guest'],
                 'status' => $data['Reservation_status'],
@@ -451,7 +484,7 @@ class Controller extends Model{
                 array_push($facilitiesArr, 
                     array(
                         'faclityName' => $facility['Facility_name'],
-                        'facilityDate' => date('M. d Y', strtotime($facility['dateIn'])) . ' to ' . date('M. d Y', strtotime($facility['dateOut'])),
+                        'facilityDate' => date('M. d Y @ H:m', strtotime($facility['dateIn'])) . ' to ' . date('M. d Y @ H:m', strtotime($facility['dateOut'])),
                         'facilityId' => $facility['facilityId']
                     )
                 );
@@ -1840,6 +1873,17 @@ class Controller extends Model{
                     * 
                 FROM 
                     category";
+
+        return $this->dynamicSLCTQuery($str);
+    }
+    function getCategoriesFac(){
+
+        $str = "SELECT 
+                    * 
+                FROM 
+                    category
+                ORDER BY
+                categoryId DESC";
 
         return $this->dynamicSLCTQuery($str);
     }

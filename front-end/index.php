@@ -239,8 +239,8 @@
             	<div class="" ></div> 
 				<div class="container">
 					<div class="banner_content text-center">
-						<h6>Away from monotonous life</h6>
-						<h2>Relax Your Mind</h2>
+						<!-- <h6>Away from monotonous life</h6> -->
+						<!-- <h2>Relax Your Mind</h2> -->
 						
 						<div class="entrance-info">
                             <div>
@@ -251,13 +251,13 @@
                        
                                     <label style="display: block;
                                             margin: 0;
-                                            line-height: 1;"> <b>Adult:</b> Php 30.00</label>
+                                            line-height: 1; font-size:30px;"> <b>Adult:</b> Php 30.00</label>
                                                                             <label style="display: block;
                                             margin: 0;
-                                            line-height: 1;"><b>Children:</b> Php 20.00</label> 
+                                            line-height: 1; font-size:30px;"><b>Children:</b> Php 20.00</label> 
                                     
                             </div>
-                            <div style="margin-top: 10px">
+                            <div style="margin-top: 10px; font-size:30px;">
                                 <!-- <h4>Facility prices</h4>
                        
                                 <label style="display: block;
@@ -365,16 +365,29 @@
         <section class="about_history_area section_gap">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6 d_flex align-items-center">
+                    <!-- <div class="col-md-6 d_flex align-items-center">
                         <div class="about_content ">
                             <h2 class="title title_color">About Us <br>Our History<br>Mission & Vision</h2>
                             <p>inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially in the workplace. That’s why it’s crucial that, as women, our behavior on the job is beyond reproach. inappropriate behavior is often laughed.</p>
                             <a href="#" class="button_hover theme_btn_two">Request Custom Price</a>
                         </div>
-                    </div>
-                    <div class="col-md-6">
+                    </div> -->
+                    <div class="col-md-6" style="margin: 0px">
                         <img class="img-fluid" src="image/315428876_2219123081593320_5842634044671867908_n.jpg" alt="img">
                     </div>
+
+                    <div class="col-md-6" style="margin: 0px">
+                        <img class="img-fluid" src="image/315309838_1255862745191327_1797608035436533867_n.jpg" alt="img">
+                    </div>
+                    
+                    <div class="col-md-6" style="margin: 0px">
+                        <img class="img-fluid" src="image/315333879_1684836628597836_1472535249096587123_n.jpg" alt="img">
+                    </div>
+                    
+                    <div class="col-md-6" style="margin: 0px">
+                        <img class="img-fluid" src="image/315501084_1995454697314149_1894333834487987860_n.jpg" alt="img">
+                    </div>
+
                 </div>
             </div>
             

@@ -1,4 +1,6 @@
 <?php
+    require_once 'vendor/autoload.php';
+    use Twilio\Rest\Client;
     session_start();
     if(!isset($_POST['action'])) die('<h1> Opps.. </h1>');
     require_once 'loader.php';
@@ -60,7 +62,16 @@
 
     if($_POST['action'] == 'makePayment'){
         $rtrn = $controller->makePayment();
-        echo json_encode($rtrn);
+
+        $sid = "ACb6b586f5528e9ec1ff5249412c9f18b5";
+        $token = "849e1d62d4a037a1534422beda596c42";
+        $twilio = new Client($sid, $token);
+
+        $message = $twilio->messages
+                        ->create("+639708712705", // to
+                                ["body" => "A reservation payment worth PHP" . number_Format($_POST['payment-amount'], 2) . " for reservation number " . $_POST['resId'] . " has been paid.", "from" => "+12535288255"]
+                        );
+
         header('Location:front-end/reserved.php');
     }
     if($_POST['action'] == 'getTheResInDate'){
@@ -69,6 +80,15 @@
     }
     if($_POST['action'] == 'cancelReservation'){
         $rtrn = $controller->cancelReservation();
+        $sid = "ACb6b586f5528e9ec1ff5249412c9f18b5";
+        $token = "849e1d62d4a037a1534422beda596c42";
+        $twilio = new Client($sid, $token);
+        
+        $message = $twilio->messages
+                        ->create("+639708712705", // to
+                                ["body" => "The reservation number " . $_POST['reservationId'] . " has been cancelled", "from" => "+12535288255"]
+                        );
+
         echo json_encode($rtrn);
         header('location:front-end/reserved.php?msg=Cancelled');
     }

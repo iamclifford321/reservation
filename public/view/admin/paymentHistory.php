@@ -51,7 +51,7 @@
                                 
                                 ?>
                                     <tr>
-                                        <td><?php echo date('M d, Y', strtotime($payment['createdDate'])); ?></td>
+                                        <td><?php echo date('M. d Y @ H:m', strtotime($payment['createdDate'])); ?></td>
                                         <td><?php echo $payment['type']; ?></td>
                                         <td><?php echo $payment['Gcash_number']; ?></td>
                                         <td>

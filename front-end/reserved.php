@@ -40,6 +40,7 @@
                     <thead>
                         <th>Reserved Date</th>
                         <th>Customer</th>
+                        <th>Payment status</th>
                         <th>Number of Guest</th>
                         <th style="min-width:200px">Facility</th>
                         <th>Status</th>
@@ -108,6 +109,7 @@
                         table.row.add([
                             element['date'],
                             element['customer'],
+                            element['paymentStatus'],
                             element['numberOfCustomer'],
                             elmnt,
                             element['status'],

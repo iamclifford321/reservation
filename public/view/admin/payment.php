@@ -89,7 +89,7 @@
                                                 ?>
                                                 <tr>
                                                     <td><?php echo $resrvation['Facility_name'] ?></td>
-                                                    <td><?php echo $resrvation['dateIn'] ?> to <?php echo $resrvation['dateOut'] ?></td>
+                                                    <td><?php echo date('M. d Y @ H:m', strtotime($resrvation['dateIn'])); ?> to <?php echo date('M. d Y @ H:m', strtotime($resrvation['dateOut'])); ?></td>
                                                     <td><?php echo number_format($resrvation['Price'], 2) . ' × ' . $daysDiff ?></td>
                                                     <td>₱<?php echo number_format($resrvation['totalAmout'], 2) ?></td>
                                                 </tr>
@@ -116,7 +116,7 @@
                                                 <?php $total = 0; foreach($payments as $payment) : ?>
                                                 <?php $total += $payment['Amount']; ?>
                                                 <tr>
-                                                    <td><?php echo $payment['Payment_date'] ?></td>
+                                                    <td><?php echo date('M. d Y @ H:m', strtotime($payment['Payment_date'])); ?></td>
                                                     <td><?php echo $payment['type'] ?></td>
                                                     <td>₱<?php echo number_format($payment['Amount'], 2) ?></td>
                                                 </tr>

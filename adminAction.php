@@ -1,5 +1,30 @@
 <?php
+    require_once 'vendor/autoload.php';
+
+    use Twilio\Rest\Client;
+
+    if(isset($_GET['text'])){
+
+
+        // Update the path below to your autoload.php,
+        // see https://getcomposer.org/doc/01-basic-usage.md
+
+
+        // Find your Account SID and Auth Token at twilio.com/console
+        // and set the environment variables. See http://twil.io/secure
+        $sid = "ACff3133d297b2efc5a9ec6eb854b52ed8";
+        $token = "85f01ba4ccf70ee4d31c14744e092ab1";
+        $twilio = new Client($sid, $token);
+
+        $message = $twilio->messages
+                        ->create("+639094373300", // to
+                                ["body" => "Hi there", "from" => "+18455721517"]
+                        );
+
+        print($message->sid);
+    }
     session_start();
+    
     if(!isset($_POST['action'])) die('<h1> Opps.. </h1>');
     require_once 'loader.php';
     $controller = new Controller();
@@ -128,6 +153,12 @@
         $rtrn = $controller->getFacilityReservation();
         echo json_encode($rtrn);
     }
+    if($_POST['action'] == 'getFacilityReservation2'){
+        $rtrn = $controller->getFacilityReservation2();
+        echo json_encode($rtrn);
+    }
+
+    
     if($_POST['action'] == 'saveaminity'){
         
         $rtrn = $controller->saveAminities();

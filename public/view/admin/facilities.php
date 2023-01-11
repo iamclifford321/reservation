@@ -214,6 +214,40 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="modal fade" id="InfoModal" tabindex="100" role="dialog" aria-labelledby="InfoModalLabel" aria-hidden="true" style="z-index: 30000">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="InfoModalLabel"></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="">Customer</label>
+                    <input type="text" readonly class="form-control" id="customer">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="">Phone number</label>
+                    <input type="text" readonly class="form-control" id="phoneNum">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="">Date Reserved</label>
+                    <input type="text" readonly class="form-control" id="DateRes">
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
         <!-- / Modal -->
 
 <style>
@@ -259,7 +293,11 @@ $(document).ready(function() {
     
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl,{
-        initialView: 'dayGridMonth'
+        initialView: 'dayGridMonth',
+        eventClick: function(info) {
+            $('#InfoModal').modal('show');
+            console.log(info.event.extendedProps.customer);
+        }
     });
     
     calendar.render();
@@ -339,7 +377,7 @@ $(document).ready(function() {
                 method : "POST",
                 dataType: 'JSON',
                 data : {
-                    action : 'getFacilityReservation',
+                    action : 'getFacilityReservation2',
                     faciltyId : facId
                 },
                 success: function(res){
@@ -351,6 +389,7 @@ $(document).ready(function() {
                                 calendar.addEvent({
                                     title: 'Reserved',
                                     start: date,
+                                    customer: 'Test',
                                     allDay: true,
                                     backgroundColor: '#ff5b5b'
                                 });

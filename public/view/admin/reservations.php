@@ -548,7 +548,6 @@
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                             <a href="?page=paymentHistory&reservationId=${element.reservationId}&customerId=${element.customerId}&totalAmountFac=${element.totalAmountFac}&status=${res[index]['status']}" class="dropdown-item make-payment">Payment history</a>
                                             ${cancel}
-                                            ${approve}
                                             <a class="dropdown-item make-payment" href="?page=reservationDetails&reservationId=${element.reservationId}">Details</a>
                                         </div>
                                     </div>

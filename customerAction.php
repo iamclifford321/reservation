@@ -2,6 +2,8 @@
     require_once 'vendor/autoload.php';
     use Twilio\Rest\Client;
     session_start();
+    $sid = "ACb6b586f5528e9ec1ff5249412c9f18b5";
+    $token = "849e1d62d4a037a1534422beda596c42";
     if(!isset($_POST['action'])) die('<h1> Opps.. </h1>');
     require_once 'loader.php';
     $controller = new Controller();
@@ -63,8 +65,7 @@
     if($_POST['action'] == 'makePayment'){
         $rtrn = $controller->makePayment();
 
-        $sid = "ACb6b586f5528e9ec1ff5249412c9f18b5";
-        $token = "849e1d62d4a037a1534422beda596c42";
+
         $twilio = new Client($sid, $token);
 
         $message = $twilio->messages
@@ -80,8 +81,6 @@
     }
     if($_POST['action'] == 'cancelReservation'){
         $rtrn = $controller->cancelReservation();
-        $sid = "ACb6b586f5528e9ec1ff5249412c9f18b5";
-        $token = "849e1d62d4a037a1534422beda596c42";
         $twilio = new Client($sid, $token);
         
         $message = $twilio->messages

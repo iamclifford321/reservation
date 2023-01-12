@@ -12,6 +12,8 @@
      $payment       = '';
      $customer      = '';
      $refund        = '';
+     $SalesReport   = '';
+     $report        = '';
 
      if($_GET['page']=='dashboard'){
 
@@ -47,9 +49,11 @@
 
      }elseif ($_GET['page']=='SalesReport') {
 
+        $SalesReport  = 'active';
 
-     }elseif ($_GET['page']=='editProfile') {
+     }elseif ($_GET['page']=='report') {
 
+        $report = 'active';
 
     }elseif($_GET['page'] == 'amenities'){
         $amenities = 'active';
@@ -366,10 +370,18 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="?page=SalesReport&type=Weekly&value=This Week" class="nav-link">
+                            <a href="?page=SalesReport&type=Weekly&value=This Week" class="nav-link <?php echo $SalesReport ?>">
                                 <i class="nav-icon fas fa-file-invoice"></i>
                                 <p>
                                     Report
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="?page=report" class="nav-link <?php echo $report ?>">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    Customer Report
                                 </p>
                             </a>
                         </li>

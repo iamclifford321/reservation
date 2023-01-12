@@ -202,3 +202,8 @@
             header('Location:./adminIndex.php?page=categories');
         }
     }
+
+    if($_POST['action'] == 'customerReport'){
+        $rtrn = $controller->createCategory();
+        echo json_encode($rtrn);
+    }

@@ -834,6 +834,60 @@ class Controller extends Model{
         }
         return $dataReserved;
     }
+
+
+    public function getFacilityReservation2(){
+
+        $query = "SELECT 
+                        * 
+                    FROM 
+                        reservation_facility 
+                    LEFT JOIN 
+                        reservation 
+                    ON 
+                        reservation_facility.reservationId=reservation.Reservation_id 
+                    LEFT JOIN 
+                        customer 
+                    ON 
+                        reservation.Customer_id = customer.customer_id 
+                    WHERE 
+                        facilityId = :facilityId 
+                    AND 
+                        (reservation.Reservation_status = 'Reserved' 
+                    OR 
+                        reservation.Reservation_status = 'Partially paid')";
+
+        $dataReserved = [];
+        $param = array(
+            ':facilityId' => $_POST['faciltyId']
+        );
+        $reservedFacilities = $this->dynamicSLCTLabeledQuery($query, $param);
+        $reservedFacilitiesData = $reservedFacilities['data']->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($reservedFacilitiesData as $reservedFacility) {
+
+            $dateIn = strtotime($reservedFacility['dateIn']);
+            $dateOut = strtotime($reservedFacility['dateOut']);
+            $dateDiff = $dateOut - $dateIn;
+            
+            $daysDiff = round($dateDiff / (60 * 60 * 24));
+            array_push($dataReserved, $reservedFacility['dateIn']);
+            for ($i=1; $i <= $daysDiff; $i++) {
+
+                $dateStr = $reservedFacility['dateIn'];
+                $tobePushed = date('Y-m-d', strtotime($dateStr . '+ ' . $i . ' days'));
+
+                array_push($dataReserved,                 array(
+                    'date' => $tobePushed,
+                    'customer' => ucfirst($reservedFacility['FirstName']) . ' ' . ucfirst($reservedFacility['LastName']),
+                    'phone' => $reservedFacility['PhoneNumber']
+                ));
+
+            }
+        }
+        return $dataReserved;
+    }
+
+
     public function submitReservation(){
 
         $insertReservationQry = "INSERT INTO reservation (Number_of_guest, number_of_children, number_of_adults, Reservation_status, Event, Customer_id, aminities, paymentStatus)VALUES(:Number_of_guest, :number_of_children, :number_of_adults, :Reservation_status, :Event, :CustomerId, :aminities, :paymentStatus)";
@@ -1910,6 +1964,17 @@ class Controller extends Model{
         
         return $this->dynamicDMLLabeledQuery($str, $param);
         
+    }
+
+    function customerReport(){
+
+        $sql = "SELECT * FROM reservation LEFT JOIN customer on reservaion.Customer_id = customer.customer_id WHERE reservaion.createdDate = :dateSelected";
+        $customers = $this->dynamicSLCTLabeledQuery($sql, array(
+            ':dateSelected' => $_POST['dateSelected']
+        ));
+        
+        $facilitiesData = $facilities['data']->fetchAll(PDO::FETCH_ASSOC);
+
     }
     
 }

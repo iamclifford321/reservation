@@ -296,7 +296,9 @@ $(document).ready(function() {
         initialView: 'dayGridMonth',
         eventClick: function(info) {
             $('#InfoModal').modal('show');
-            console.log(info.event.extendedProps.customer);
+            $('input#customer').val(info.event.extendedProps.customer);
+            $('input#phoneNum').val(info.event.extendedProps.phone);
+            $('input#DateRes').val(info.event.extendedProps.date2);
         }
     });
     
@@ -385,14 +387,19 @@ $(document).ready(function() {
                         if(res.length > 0){
                             for (let index = 0; index < res.length; index++) {
                                 const element = res[index];
-                                var date = new Date(element + 'T00:00:00'); // will be in local time
+                                console.log(element);
+                                var date = new Date(element.date + 'T00:00:00'); // will be in local time
+                                
                                 calendar.addEvent({
-                                    title: 'Reserved',
+                                    title: 'Reserved - ' + element.customer,
                                     start: date,
-                                    customer: 'Test',
+                                    customer: element.customer,
+                                    phone: element.phone,
+                                    date2: element.date,
                                     allDay: true,
                                     backgroundColor: '#ff5b5b'
                                 });
+                                
                             }
                         }
                 }

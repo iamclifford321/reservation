@@ -1,15 +1,22 @@
+<?php 
+    // require_once 'Config/Config.php';
+	// require_once 'Model/Model.php';
+	// require_once 'Controller/Controller.php';
+	// $controller = new Controller(); 
+	// $getReservations = $controller->customerReport();
+?>
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1>Customers</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Customers</li>
-            </ol>
-        </div>
+            <div class="col-sm-6">
+                <h1>Customers</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Customers</li>
+                </ol>
+            </div>
         </div>
     </div><!-- /.container-fluid -->
 </section>
@@ -37,19 +44,10 @@
                         <tr>
                             <th>Name</th>
                             <th>Reservation</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Customer Name</td>
-                            <td>Reservation</td>
-                            <td>Start Date</td>
-                            <td>End Date</td>
-                            <td>Status</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -63,8 +61,23 @@
     $(document).ready(function() {
         // Create date inputs
         $('#min').datepicker({
-            format: 'MMMM Do YYYY'
+            dateFormat: "yy-mm-dd"
         });
+        $('#min').on('change', function(){
+            $.ajax({
+                url : "adminAction.php",
+                method : "POST",
+                dataType: 'JSON',
+                data : {
+                    action : 'customerReport',
+                    dateSelected: $(this).val()
+
+                },
+                success: function(){
+                    
+                }
+            })
+        })
     });
 </script>
 

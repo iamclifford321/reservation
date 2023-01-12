@@ -43,7 +43,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Reservation</th>
+                            <th>Date</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -64,6 +64,7 @@
             dateFormat: "yy-mm-dd"
         });
         $('#min').on('change', function(){
+            alert($(this).val());
             $.ajax({
                 url : "adminAction.php",
                 method : "POST",
@@ -71,10 +72,20 @@
                 data : {
                     action : 'customerReport',
                     dateSelected: $(this).val()
-
                 },
-                success: function(){
-                    
+                success: function(res){
+                    for (let index = 0; index < res.length; index++) {
+                        const element = res[index];
+                        $('#customerTable').append(
+                            `
+                                <tr>
+                                    <td>${element['FirstName']} ${element['LastName']}</td>
+                                    <td>${element['creDate']}</td>
+                                    <td>${element['Reservation_status']}</td>
+                                </tr>
+                            `
+                        );
+                    }
                 }
             })
         })

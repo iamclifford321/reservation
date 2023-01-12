@@ -30,8 +30,8 @@
                             <th>Name</th>
                             <th>Phone number</th>
                             <th>Address</th>
-                            <th>Gender</th>
                             <th>Email</th>
+                            <th>Gender</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -307,7 +307,6 @@ $(document).ready(function(){
                     $('#exsting-gender').append(
                         `<option value="${element}" ${$slctd}>${element}</option>`
                     )
-                    
                 }
             }
         })

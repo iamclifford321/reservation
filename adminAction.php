@@ -204,6 +204,6 @@
     }
 
     if($_POST['action'] == 'customerReport'){
-        $rtrn = $controller->createCategory();
+        $rtrn = $controller->customerReport();
         echo json_encode($rtrn);
     }

@@ -743,6 +743,7 @@ class Controller extends Model{
                 'customer' => $data['FirstName'] . ' ' . $data['LastName'],
                 'numberOfCustomer' => $data['Number_of_guest'],
                 'status' => $data['Reservation_status'],
+                'paymentStatus' => $data['Reservation_status'],
                 'reservationId' => $data['Reservation_id'],
                 'customerID' => $customerID
             );
@@ -1968,13 +1969,17 @@ class Controller extends Model{
 
     function customerReport(){
 
-        $sql = "SELECT * FROM reservation LEFT JOIN customer on reservaion.Customer_id = customer.customer_id WHERE reservaion.createdDate = :dateSelected";
-        $customers = $this->dynamicSLCTLabeledQuery($sql, array(
-            ':dateSelected' => $_POST['dateSelected']
-        ));
+        $sql = "SELECT *, reservation.createdDate as creDate FROM reservation LEFT JOIN customer on reservation.Customer_id = customer.customer_id";
+        $customers = $this->dynamicSLCTQuery($sql);
         
-        $facilitiesData = $facilities['data']->fetchAll(PDO::FETCH_ASSOC);
-
+        $customersDatas = $customers['data']->fetchAll(PDO::FETCH_ASSOC);
+        $arr = [];
+        foreach ($customersDatas as $key => $value) {
+            if( date('Y-m-d', strtotime($value['creDate'])) == $_POST['dateSelected']){
+                array_push($arr, $value);
+            }
+        }
+        return $arr;
     }
     
 }

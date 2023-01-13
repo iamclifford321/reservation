@@ -179,7 +179,7 @@
                                                 <input type="hidden" value="<?php echo $balance; ?>" name="balance">
                                                 <div class="form-group">
                                                     <label for="payment-amount">Amount</label>
-                                                    <input type="text" required id="payment-amount" readonly="true" value="₱<?php echo number_format($balance, 2) ?>" class="form-control" totalAll=<?php echo $balance; ?>>
+                                                    <input type="number" step="any" required id="payment-amount" readonly="true" value="<?php echo $balance ?>" class="form-control" totalAll=<?php echo $balance; ?>>
                                                     <input type="hidden" required name="payment-amount" id="payment-amount-hidden" class="form-control" value="<?php echo $balance; ?>">
                                                 </div>
                                                 <div class="form-group">
@@ -234,18 +234,18 @@
 
             $('#payment-amount').on('change', function(){
 
-                var valueFormat = '₱' + $(this).val();
-                let isnum = /^\d+$/.test($(this).val());
-                if(!isnum){
-                    if($(this).val() == '₱'){
-                        $(this).val('');
-                        return false;
-                    }
-                    alert('only number is allowed')
-                    return false;
-                }
+                // var valueFormat = '₱' + $(this).val();
+                // let isnum = /^\d+$/.test($(this).val());
+                // if(!isnum){
+                //     if($(this).val() == '₱'){
+                //         $(this).val('');
+                //         return false;
+                //     }
+                //     // alert('only number is allowed')
+                //     // return false;
+                // }
                 $('#payment-amount-hidden').val($(this).val());
-                $(this).val(valueFormat);
+                // $(this).val(valueFormat);
 
             });
 

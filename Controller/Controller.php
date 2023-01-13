@@ -743,7 +743,7 @@ class Controller extends Model{
                 'customer' => $data['FirstName'] . ' ' . $data['LastName'],
                 'numberOfCustomer' => $data['Number_of_guest'],
                 'status' => $data['Reservation_status'],
-                'paymentStatus' => $data['Reservation_status'],
+                'paymentStatus' => $data['paymentStatus'],
                 'reservationId' => $data['Reservation_id'],
                 'customerID' => $customerID
             );
@@ -1035,19 +1035,18 @@ class Controller extends Model{
         $isPartial = false;
         
         if($balance > 0){
-            echo 'test';
+    
             $isPartial = true;
         }
-        echo 'isPartial ' . $isPartial;
-        echo 'balance ' .$balance;
 
+        echo 'test - ' . $_POST['payment-amount'];
         $paymentStatus = 'Partially paid';
 
         // $paymentStatus = 
         if(!$isPartial){
             $paymentStatus = 'Paid';
         }
-        echo $paymentStatus;
+
         // die();
         $srcStr = 'public/uploads/images/';
         $fileName = $_POST['resId'] . basename($_FILES["payment-receipt"]["name"]);

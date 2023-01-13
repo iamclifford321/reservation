@@ -70,7 +70,7 @@
 
         $message = $twilio->messages
                         ->create("+639708712705", // to
-                                ["body" => "A reservation payment worth PHP" . number_Format($_POST['payment-amount'], 2) . " for reservation number " . $_POST['resId'] . " has been paid.", "from" => "+12535288255"]
+                                ["body" => "A reservation payment worth PHP" . $_POST['payment-amount'] . " for reservation number " . $_POST['resId'] . " has been paid.", "from" => "+12535288255"]
                         );
 
         header('Location:front-end/reserved.php');

@@ -1030,7 +1030,7 @@ class Controller extends Model{
         // $rtrnIgetRerservedData = $rtrnIgetRerserved['data']->fetchAll(PDO::FETCH_ASSOC);
 
 
-        $balance = $_POST['balance'] - $_POST['payment-amount'];
+        $balance = floatval($_POST['balance']) - floatval($_POST['payment-amount']);
         
         $isPartial = false;
         

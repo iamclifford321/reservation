@@ -383,6 +383,7 @@ $(document).ready(function() {
                     faciltyId : facId
                 },
                 success: function(res){
+                    
                     $('.custom-modal').fadeIn();
                         if(res.length > 0){
                             for (let index = 0; index < res.length; index++) {

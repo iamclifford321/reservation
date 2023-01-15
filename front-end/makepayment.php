@@ -258,7 +258,7 @@
                 }else{
 
                     $('#payment-amount').prop('readonly', true);
-                    $('#payment-amount').val('₱' + parseFloat($('#payment-amount').attr('totalAll')).toFixed(2));
+                    $('#payment-amount').val(parseFloat($('#payment-amount').attr('totalAll')));
                     $('#payment-amount-hidden').val($('#payment-amount').attr('totalAll'));
                     // $('#payment-amount').removeAttr('readonly');
                 }

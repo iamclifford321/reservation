@@ -1,4 +1,5 @@
 <?php
+    
     include 'Config/sessionAdmin.php';
     require_once 'Config/Config.php'; 
     require_once 'Model/Model.php'; 
@@ -64,14 +65,18 @@
     elseif ($_GET['page'] == 'reservationDetails') {
         # code...
     }
-    elseif ($_GET['page'] == 'categories' || $_GET['page'] = 'newOrEditCat') {
+    elseif ($_GET['page'] == 'categories' || $_GET['page'] == 'newOrEditCat') {
         $categories = 'active';
+    }
+
+    elseif ($_GET['page'] == 'editProfile') {
+        // $categories = 'active';
     }
     
      else{
         die("<center><h1 class='text-align: center'>Page not found</h1></center>");
      }
-     
+
 ?>
 
 
@@ -430,8 +435,9 @@
         <div class="content-wrapper">
 
             <?php
-        require_once 'public/view/admin/' . $_GET['page'] . '.php';
-    ?>
+            
+                 require_once 'public/view/admin/' . $_GET['page'] . '.php';
+            ?>
 
         </div>
         <!-- /.content-wrapper -->

@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Customers</h1>
+                <h1>Customers' reservation report</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -44,6 +44,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Date</th>
+                            <th>Facilty</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -64,7 +65,7 @@
             dateFormat: "yy-mm-dd"
         });
         $('#min').on('change', function(){
-            alert($(this).val());
+            $('#customerTable').html('');
             $.ajax({
                 url : "adminAction.php",
                 method : "POST",
@@ -74,14 +75,16 @@
                     dateSelected: $(this).val()
                 },
                 success: function(res){
+                    
                     for (let index = 0; index < res.length; index++) {
                         const element = res[index];
                         $('#customerTable').append(
                             `
                                 <tr>
-                                    <td>${element['FirstName']} ${element['LastName']}</td>
-                                    <td>${element['creDate']}</td>
-                                    <td>${element['Reservation_status']}</td>
+                                    <td>${element['customer']}</td>
+                                    <td>${element['date']}</td>
+                                    <td>${element['facility']}</td>
+                                    <td>${element['Status']}</td>
                                 </tr>
                             `
                         );

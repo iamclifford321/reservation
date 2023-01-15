@@ -871,13 +871,12 @@ class Controller extends Model{
             $dateDiff = $dateOut - $dateIn;
             
             $daysDiff = round($dateDiff / (60 * 60 * 24));
-            array_push($dataReserved, $reservedFacility['dateIn']);
-            for ($i=1; $i <= $daysDiff; $i++) {
-
+            // array_push($dataReserved, $reservedFacility['dateIn']);
+            for ($i=0; $i <= $daysDiff; $i++) {
                 $dateStr = $reservedFacility['dateIn'];
                 $tobePushed = date('Y-m-d', strtotime($dateStr . '+ ' . $i . ' days'));
 
-                array_push($dataReserved,                 array(
+                array_push($dataReserved, array(
                     'date' => $tobePushed,
                     'customer' => ucfirst($reservedFacility['FirstName']) . ' ' . ucfirst($reservedFacility['LastName']),
                     'phone' => $reservedFacility['PhoneNumber']
@@ -1002,10 +1001,11 @@ class Controller extends Model{
             $paymentStatus = 'Paid';
         }
 
-        $updateReservation = "UPDATE reservation set paymentStatus = :paymentStatus WHERE Reservation_id = :reservationId";
+        $updateReservation = "UPDATE reservation set paymentStatus = :paymentStatus, Reservation_status = :ReservationStatus WHERE Reservation_id = :reservationId";
         $updateReservationParam = array(
             ':paymentStatus' => $paymentStatus,
-            ':reservationId' => $_POST['resId']
+            ':reservationId' => $_POST['resId'],
+            ':ReservationStatus' => 'Reserved'
         );
         $rtrnupdateReservation = $this->dynamicDMLLabeledQuery($updateReservation, $updateReservationParam);
         return $rtrnupdateReservation;
@@ -1077,11 +1077,12 @@ class Controller extends Model{
 
             $rtrnInsertPayment = $this->dynamicDMLLabeledQuery($paymentInsert, $paymentInsertParam);
 
-            $updateReservation = "UPDATE reservation set paymentStatus = :paymentStatus WHERE Reservation_id = :reservationId";
+            $updateReservation = "UPDATE reservation set paymentStatus = :paymentStatus, Reservation_status = :ReservationStatus WHERE Reservation_id = :reservationId";
             
             $updateReservationParam = array(
                 ':paymentStatus' => $paymentStatus,
-                ':reservationId' => $_POST['resId']
+                ':reservationId' => $_POST['resId'],
+                ':ReservationStatus' => 'Reserved'
             );
             $rtrnupdateReservation = $this->dynamicDMLLabeledQuery($updateReservation, $updateReservationParam);
             return $rtrnupdateReservation;
@@ -1957,7 +1958,6 @@ class Controller extends Model{
     function createCategory(){
 
         $str = "INSERT INTO category (Name)Values(:name)";
-
         $param = array(
             ':name' => $_POST['name']
         );
@@ -1968,17 +1968,60 @@ class Controller extends Model{
 
     function customerReport(){
 
-        $sql = "SELECT *, reservation.createdDate as creDate FROM reservation LEFT JOIN customer on reservation.Customer_id = customer.customer_id";
-        $customers = $this->dynamicSLCTQuery($sql);
-        
-        $customersDatas = $customers['data']->fetchAll(PDO::FETCH_ASSOC);
-        $arr = [];
-        foreach ($customersDatas as $key => $value) {
-            if( date('Y-m-d', strtotime($value['creDate'])) == $_POST['dateSelected']){
-                array_push($arr, $value);
+        $query = "SELECT 
+                * 
+            FROM 
+                reservation_facility
+            LEFT JOIN
+                facility
+            ON
+                reservation_facility.facilityId = facility.Facility_id
+            LEFT JOIN 
+                reservation 
+            ON 
+                reservation_facility.reservationId=reservation.Reservation_id 
+            LEFT JOIN 
+                customer 
+            ON 
+                reservation.Customer_id = customer.customer_id 
+            WHERE 
+              reservation.Reservation_status = 'Reserved' 
+            OR 
+                reservation.Reservation_status = 'Partially paid'";
+
+        $dataReserved = [];
+        $reservedFacilities = $this->dynamicSLCTQuery($query);
+        $reservedFacilitiesData = $reservedFacilities['data']->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($reservedFacilitiesData as $reservedFacility) {
+
+            $dateIn = strtotime($reservedFacility['dateIn']);
+            $dateOut = strtotime($reservedFacility['dateOut']);
+            $dateDiff = $dateOut - $dateIn;
+
+            $daysDiff = round($dateDiff / (60 * 60 * 24));
+            for ($i=0; $i <= $daysDiff; $i++) {
+
+                $dateStr = $reservedFacility['dateIn'];
+                $tobePushed = date('Y-m-d', strtotime($dateStr . '+ ' . $i . ' days'));
+                // echo ;
+                // if( date('Y-m-d', strtotime($value['creDate'])) == $_POST['dateSelected']){
+                //     array_push($arr, $value);
+                // }
+                if( $tobePushed == $_POST['dateSelected']){
+
+                    array_push($dataReserved, array(
+                        'date' => $tobePushed,
+                        'customer' => ucfirst($reservedFacility['FirstName']) . ' ' . ucfirst($reservedFacility['LastName']),
+                        'phone' => $reservedFacility['PhoneNumber'],
+                        'Status' => $reservedFacility['Reservation_status'],
+                        'facility' => $reservedFacility['Facility_name']
+                    ));
+
+                }
+
             }
         }
-        return $arr;
+        return $dataReserved;
     }
     
 }
